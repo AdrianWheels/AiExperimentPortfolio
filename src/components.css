@@ -1,0 +1,219 @@
+/* 
+ * COMPONENTES CSS PERSONALIZADOS
+ * Este archivo contiene estilos específicos que no se pueden hacer fácilmente con Tailwind
+ * Principalmente efectos metálicos, gradientes complejos y animaciones especiales
+ */
+
+/* ===== VARIABLES CSS PARA EFECTOS METÁLICOS ===== */
+:root {
+  --gunmetal-1: #5a6469;
+  --gunmetal-2: #2f3639;
+  --gunmetal-highlight: rgba(255,255,255,0.06);
+  --visor-metal: rgba(255,255,255,0.04);
+}
+
+/* ===== COMPONENTE: AVATAR METÁLICO ===== */
+.avatar-metal {
+  position: relative;
+  background: 
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25)),
+    linear-gradient(180deg, var(--gunmetal-1), var(--gunmetal-2));
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 
+    inset 0 3px 12px rgba(0,0,0,0.6), 
+    0 8px 24px rgba(0,0,0,0.6);
+  overflow: hidden;
+  border-radius: 999px;
+  transform: translateZ(0);
+}
+
+/* Líneas de textura metálica */
+.avatar-metal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg, 
+    rgba(255,255,255,0.015) 0 1px, 
+    rgba(255,255,255,0.0) 1px 5px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+/* Reflejo especular suave */
+.avatar-metal::before {
+  content: '';
+  position: absolute;
+  left: -10%;
+  top: -30%;
+  width: 120%;
+  height: 60%;
+  background: linear-gradient(
+    90deg, 
+    rgba(255,255,255,0.14), 
+    rgba(255,255,255,0.02), 
+    rgba(255,255,255,0)
+  );
+  transform: rotate(-18deg);
+  filter: blur(6px);
+  opacity: 0.6;
+}
+
+/* ===== COMPONENTE: HEADER METÁLICO ===== */
+.header-metal {
+  background-color: var(--gunmetal-1);
+  background-image:
+    /* Reflejo especular frío y suave */
+    linear-gradient(90deg, rgba(167,173,178,0.18), rgba(167,173,178,0.04) 30%, rgba(0,0,0,0) 60%),
+    /* Viñeta vertical sutil */
+    linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.18)),
+    /* Líneas de cepillado micro (horizontales, más finas) */
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 0.6px, rgba(255,255,255,0) 0.6px 4px);
+  border-bottom: 1px solid rgba(0,0,0,0.45);
+  box-shadow: 
+    inset 0 2px 8px rgba(42,47,51,0.7), 
+    0 6px 18px rgba(0,0,0,0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Anillo de resaltado biselado en la parte superior */
+.header-metal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  background: linear-gradient(180deg, rgba(167,173,178,0.12), rgba(167,173,178,0.01));
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* ===== COMPONENTE: NOMBRE ESTILIZADO ===== */
+.groovy-name {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  text-align: right;
+  color: #e6eef9;
+  line-height: 0.95;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.6px;
+  text-shadow: 
+    0 2px 6px rgba(0,0,0,0.6), 
+    0 0 6px rgba(167,173,178,0.06);
+  transform: skewX(-6deg) rotate(-1deg);
+  font-family: 'Baloo 2', 'Fredoka One', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* ===== COMPONENTE: LISTA DE DATOS TÉCNICOS ===== */
+.bezel-list {
+  position: absolute;
+  left: 80px;
+  top: 68px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  background: rgba(2,6,23,0.25);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.bezel-list pre {
+  margin: 0;
+  white-space: pre-wrap;
+  tab-size: 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+}
+
+/* ===== ESTILOS DE TERMINAL ===== */
+.term-line { 
+  padding: 2px 0; 
+  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Colores por tipo de mensaje */
+.term-system { color: #60a5fa; font-weight: 600; }  /* Azul para sistema */
+.term-boot { color: #34d399; }                      /* Verde para boot */
+.term-info { color: #c7d2fe; }                      /* Azul claro para info */
+.term-aria { color: #f0abfc; font-weight: 500; }    /* Rosa para A.R.I.A. */
+.term-warning { color: #fbbf24; }                   /* Amarillo para warnings */
+.term-error { color: #f87171; font-weight: 600; }   /* Rojo para errores */
+.term-success { color: #86efac; }                   /* Verde claro para éxitos */
+.term-locked { color: #ef4444; }                    /* Rojo para bloqueados */
+.term-border { color: #6b7280; }                    /* Gris para bordes */
+.term-help { color: #a78bfa; font-weight: 500; }    /* Púrpura para ayuda */
+.term-command { color: #fde047; }                   /* Amarillo claro para comandos */
+.term-default { color: #e5e7eb; }                   /* Blanco por defecto */
+.term-bg { color: #94a3b8; }                        /* Gris para fondo */
+
+/* Efectos especiales */
+.term-system::before { content: "► "; color: #3b82f6; }
+.term-boot::before { content: "⚡ "; }
+.term-aria::before { content: "🤖 "; }
+.term-warning::before { content: "⚠ "; }
+.term-error::before { content: "❌ "; }
+.term-success::before { content: "✅ "; }
+
+/* Animación de typing para nuevas líneas */
+@keyframes typing {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.term-line {
+  animation: typing 0.3s ease-out;
+}
+@keyframes ledBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes avatarPulse {
+  0%, 100% { 
+    box-shadow: 
+      inset 0 3px 12px rgba(0,0,0,0.6), 
+      0 8px 24px rgba(0,0,0,0.6),
+      0 0 0 0 rgba(34,197,94,0.4);
+  }
+  50% { 
+    box-shadow: 
+      inset 0 3px 12px rgba(0,0,0,0.6), 
+      0 8px 24px rgba(0,0,0,0.6),
+      0 0 0 8px rgba(34,197,94,0.1);
+  }
+}
+
+.led-blink {
+  animation: ledBlink 0.14s ease-in-out;
+}
+
+.avatar-pulse {
+  animation: avatarPulse 2s ease-in-out infinite;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1100px) {
+  header {
+    padding: 1rem;
+  }
+  
+  .bezel-list {
+    left: 20px;
+    top: 20px;
+    font-size: 0.7rem;
+  }
+  
+  .groovy-name {
+    right: 12px;
+    top: 8px;
+    font-size: 0.8rem;
+  }
+}

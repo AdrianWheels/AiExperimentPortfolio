@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "id": "proj-1", "title": "Proyecto: Visor Interactivo", "tags":["visor","ui","react"], "body":"Demo de visor con micro-interacciones." },
+    { "id": "proj-2", "title": "Proyecto: Pipeline", "tags":["infra","ci"], "body":"Descripción corta del pipeline." }
+  ]
+}

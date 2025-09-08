@@ -1,0 +1,42 @@
+/* 
+ * ARCHIVO PRINCIPAL DE ESTILOS
+ * 
+ * Orden de importación:
+ * 1. Componentes CSS personalizados (debe ir antes de Tailwind)
+ * 2. Tailwind CSS (base, components, utilities)
+ * 3. Estilos base globales (si es necesario)
+ */
+
+/* ===== COMPONENTES PERSONALIZADOS ===== */
+@import './components.css';
+
+/* ===== TAILWIND CSS ===== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== ESTILOS BASE GLOBALES ===== */
+/* Solo estilos que no se pueden hacer con Tailwind o que son muy específicos */
+
+/* Layout del header - ajustes específicos que complementan Tailwind */
+header {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+
+/* Posicionamiento específico para componentes del header */
+.bezel-list {
+  position: absolute;
+  left: 80px;
+  top: 68px;
+}
+
+.groovy-name {
+  right: 18px;
+  top: 10px;
+}
+
+/* ===== UTILIDADES ESPECÍFICAS DEL PROYECTO ===== */
+/* Solo agregar aquí estilos que son muy específicos de este proyecto 
+   y que no se pueden hacer fácilmente con Tailwind */
+

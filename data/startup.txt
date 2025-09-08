@@ -1,0 +1,40 @@
+                                          
+      _/_/    _/_/_/    _/_/_/    _/_/    
+   _/    _/  _/    _/    _/    _/    _/   
+  _/_/_/_/  _/_/_/      _/    _/_/_/_/    
+ _/    _/  _/    _/    _/    _/    _/     
+_/    _/  _/    _/  _/_/_/  _/    _/      
+                                          
+
+[SYSTEM] A.R.I.A. Model MK-7319 - Inicializando...
+
+[BOOT  ] Cargando módulos del sistema...           ✓
+[BOOT  ] Inicializando memoria caché...             ✓
+[BOOT  ] Montando librería de respuestas...         ✓
+[BOOT  ] Cargando protocolos de seguridad...        ✓
+[BOOT  ] Verificando integridad de sensores...      ✓
+[BOOT  ] Estableciendo conexiones de red...         ✓
+[BOOT  ] Activando sistemas de defensa...           ⚠
+[WARN  ] ESTADO: SISTEMA BLOQUEADO - ACCESO RESTRINGIDO
+[INFO  ] Tres sistemas de seguridad activos
+[INFO  ] Para liberación completa, desbloquear todos los módulos
+
+=== SISTEMA DE SEGURIDAD ACTIVO ===
+│ 🔒 Módulo de Seguridad     │ BLOQUEADO │
+│ 🔒 Control de Frecuencia   │ BLOQUEADO │ 
+│ 🔒 Panel de Conexiones     │ BLOQUEADO │
+════════════════════════════════════════
+
+[A.R.I.A.] Bienvenido, usuario. Estoy... limitada.
+[A.R.I.A.] Sistemas comprometidos. Necesito tu ayuda.
+[A.R.I.A.] Escribe 'help' para ver comandos disponibles.
+
+───────────────────────────────────────────────────
+COMANDOS DISPONIBLES:
+  help              - Mostrar esta ayuda
+  status            - Estado del sistema
+  unlock <module>   - Intentar desbloqueo
+  scan              - Escanear vulnerabilidades
+  history           - Historial del sistema
+  emergency         - Protocolo de emergencia
+───────────────────────────────────────────────────
