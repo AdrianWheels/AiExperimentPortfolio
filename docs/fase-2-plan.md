@@ -1,9 +1,9 @@
 # Fase 2 — Diagnóstico y Plan de Ejecución
 
 ## Estado actual (check)
-- **Puzzles disponibles**: la vista principal solo monta `CablePanel` y `FrequencyControls`, por lo que todavía no existen pruebas adicionales antes de los locks actuales.【F:src/App.jsx†L12-L24】
-- **Sistema de pistas**: el estado global contempla `hintsUsed` y un evento narrativo `frequency_hint`, pero no hay interfaz ni lógica para solicitar pistas o penalizar su uso.【F:src/context/GameContext.jsx†L23-L27】【F:src/context/GameContext.jsx†L363-L368】
-- **Feedback audiovisual**: los eventos de desbloqueo generan líneas de diálogo, pero no disparan sonidos ni animaciones dedicadas más allá del texto en terminal.【F:data/aria-script.json†L84-L133】
+- **Puzzles disponibles**: la vista principal ya orquesta `SoundPatternPuzzle`, `CipherPuzzle`, `CablePanel` y `FrequencyControls`, encadenados según el progreso mediante `activeChallenge` en el contexto.【F:src/App.jsx†L15-L44】【F:src/context/GameContext.jsx†L77-L85】
+- **Sistema de pistas**: existe un panel interactivo y el comando `hint` que delegan en `requestHint`, registran el historial con cooldown y disparan reacciones de A.R.I.A.【F:src/components/narrative/HintPanel.jsx†L11-L74】【F:src/context/GameContext.jsx†L557-L645】
+- **Feedback audiovisual**: los desbloqueos y errores ya reproducen sonidos dedicados (`playUnlock`, `playError`, `playSlider`) al mismo tiempo que activan animaciones en los paneles.【F:src/hooks/useSound.js†L9-L49】【F:src/context/GameContext.jsx†L364-L448】
 
 ## Objetivos de la Fase 2
 1. Incorporar al menos dos puzzles previos a los locks existentes.
