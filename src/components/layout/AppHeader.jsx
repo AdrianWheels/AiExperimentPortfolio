@@ -1,5 +1,6 @@
 import React from 'react'
 import { useGame } from '../../context/GameContext'
+import AriaAvatar from '../narrative/AriaAvatar'
 
 function Led({ status }) {
   return (
@@ -44,14 +45,7 @@ export default function AppHeader() {
               ))}
             </div>
 
-            <div
-              className={`w-40 h-40 avatar-metal bg-zinc-900 rounded-full flex items-center justify-center border-2 ${
-                gameState.stage === 'Free' ? 'avatar-pulse' : ''
-              }`}
-              style={{ borderColor: 'var(--visor-metal)' }}
-            >
-              <img src={gameState.stage === 'Trapped' ? '/VisorRed.png' : '/VisorGreen.png'} alt="avatar" className="w-32 h-32" />
-            </div>
+            <AriaAvatar />
           </div>
 
           <div className="text-sm text-slate-300 flex gap-2 items-center" role="status" aria-live="polite">
@@ -59,9 +53,10 @@ export default function AppHeader() {
           </div>
         </div>
 
-        <div className="w-48 text-right text-sm text-slate-300">
+        <div className="w-48 text-right text-sm text-slate-300 space-y-1">
           <div>Model: {MODEL}</div>
-          <div className="text-xs text-slate-400 mt-1">Status: {gameState.stage}</div>
+          <div className="text-xs text-slate-400">Status: {gameState.stage}</div>
+          <div className="text-[10px] text-slate-500 uppercase tracking-wide">Pistas: {gameState.hintsUsed}</div>
         </div>
       </div>
 

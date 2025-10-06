@@ -2,11 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useGame } from '../../context/GameContext'
 
 export default function CablePanel() {
-  const { plateConnections, connectPlate, plateOpen, setPlateOpen } = useGame()
+  const { plateConnections, connectPlate, plateOpen, setPlateOpen, gameState, unlockAnimations } = useGame()
   const plateRef = useRef(null)
   const originsRef = useRef({})
   const destinationsRef = useRef({})
   const [cablePosition, setCablePosition] = useState({})
+  const canInteract = Boolean(
+    gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved,
+  )
+  const isPulsing = Boolean(unlockAnimations?.locks?.wiring)
 
   useEffect(() => {
     function onKeyDown(event) {
@@ -52,13 +56,24 @@ export default function CablePanel() {
 
   const handleDrop = (event, target) => {
     event.preventDefault()
+    if (!canInteract) return
     const source = event.dataTransfer.getData('text/plain')
     if (!source) return
     connectPlate(source, target)
   }
 
   return (
-    <aside ref={plateRef} className="bg-panel p-4 rounded-lg border border-border relative">
+    <aside
+      ref={plateRef}
+      className={`bg-panel p-4 rounded-lg border border-border relative overflow-hidden ${
+        isPulsing ? 'glow-success unlock-pulse' : ''
+      }`}
+    >
+      {!canInteract && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-center px-4 text-xs text-slate-300 font-mono">
+          <span>Descifra el Buffer y estabiliza el sonido para acceder al panel de cables.</span>
+        </div>
+      )}
       <div className="flex gap-4 items-start h-full">
         <div className="w-1/2">
           <div className="mb-3 text-sm font-medium">Orígenes</div>
