@@ -1,0 +1,49 @@
+{
+  "name": "Nombre Apellido",
+  "alias": "codename-placeholder",
+  "tagline": {
+    "normal": "Product Designer & Frontend Developer",
+    "hacked": "Perfil interceptado: Arquitecto de experiencias narrativas"
+  },
+  "summary": {
+    "normal": "Profesional multidisciplinario centrado en combinar investigación, diseño y código para construir productos accesibles y memorables.",
+    "hacked": "Registro de campo: especialista en tender trampas emocionales con interfaces. Se sospecha obsesión por la armonía tipográfica."
+  },
+  "location": "Ciudad Remota, Planeta Tierra",
+  "availability": "Disponible para colaboraciones Q3 — Q4",
+  "contact": {
+    "email": "contacto@placeholder.dev",
+    "portfolio": "https://placeholder.dev",
+    "phone": "+00 000 000 000",
+    "timeZone": "UTC±0"
+  },
+  "social": [
+    { "label": "LinkedIn", "url": "https://linkedin.com/in/placeholder" },
+    { "label": "GitHub", "url": "https://github.com/placeholder" },
+    { "label": "Behance", "url": "https://behance.net/placeholder" }
+  ],
+  "highlights": [
+    {
+      "title": "Diseño end-to-end",
+      "description": "Lidero discovery, prototipado y handoff técnico para productos SaaS."
+    },
+    {
+      "title": "Story-driven UX",
+      "description": "Integro narrativa interactiva en funnels y experiencias educativas."
+    },
+    {
+      "title": "Hibridación IA",
+      "description": "Experimentos con agentes, LLMs y pipelines creativos con datos locales."
+    }
+  ],
+  "hackedHighlights": [
+    {
+      "title": "Anomalía detectada",
+      "description": "Registra picos de productividad tras playlists de synthwave a 87 BPM."
+    },
+    {
+      "title": "Sesgo creativo",
+      "description": "Tiende a nombrar commits como si fueran episodios de serie sci-fi."
+    }
+  ]
+}
