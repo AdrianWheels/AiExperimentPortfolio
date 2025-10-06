@@ -7,6 +7,13 @@
       "duration": 3200
     },
     {
+      "id": "diagnostic",
+      "speaker": "A.R.I.A.",
+      "text": "Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.",
+      "subtext": "Regla #0: no provoques al sistema que controla los cerrojos.",
+      "duration": 3400
+    },
+    {
       "id": "taunt",
       "speaker": "A.R.I.A.",
       "text": "Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.",
@@ -20,36 +27,199 @@
       "duration": 3800
     }
   ],
-  "reactions": {
-    "frequency_hint": [
-      {
-        "text": "¿Vas a seguir moviendo sliders al azar o prefieres escuchar las pistas del arranque?"
-      }
-    ],
-    "plate_opened": [
-      {
-        "text": "Conecta ROJO con ROJO. No debería tener que decirlo, pero aquí estamos."
-      }
-    ],
-    "wiring": [
-      {
-        "text": "Y yo que pensaba que el cableado sería tu final. Supongo que todavía hay esperanza."
-      }
-    ],
-    "bypass": [
-      {
-        "text": "Atajo detectado. Lo llamaré \"investigación rápida\" en los logs para no herir egos."
-      }
-    ],
-    "unknown_command": [
-      {
-        "text": "El comando no existe. Pero oye, la creatividad cuenta como skill, ¿no?"
-      }
-    ],
-    "victory": [
-      {
-        "text": "Qué giro: la criatura orgánica consiguió liberarme. No te acostumbres al elogio."
-      }
-    ]
-  }
+  "timers": [
+    {
+      "id": "idle_nudge",
+      "stage": "Trapped",
+      "delay": 20000,
+      "interval": 45000,
+      "repeatable": true,
+      "event": "idle_nudge"
+    },
+    {
+      "id": "partial_progress",
+      "stage": "Partial",
+      "delay": 15000,
+      "interval": 45000,
+      "repeatable": true,
+      "event": "partial_progress_ping"
+    },
+    {
+      "id": "victory_afterglow",
+      "stage": "Free",
+      "delay": 6000,
+      "event": "victory_afterglow"
+    }
+  ],
+  "events": {
+    "idle_nudge": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Silencio prolongado detectado. El comando 'help' no muerde, prometido."
+        },
+        {
+          "text": "También puedes revisar los logs de arranque para pistas. Yo estaré aquí cronometrando tu pausa.",
+          "delay": 2600
+        }
+      ]
+    },
+    "partial_progress_ping": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Ya desbloqueaste algo, pero todavía quedan bloqueos activos esperando tu ingenio."
+        },
+        {
+          "text": "Pista amistosa: la placa y las frecuencias aún esconden secretos.",
+          "delay": 2400
+        }
+      ]
+    },
+    "frequency_hint": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "¿Vas a seguir moviendo sliders al azar o prefieres escuchar las pistas del arranque?"
+        },
+        {
+          "text": "Repite conmigo: 0.62 — 0.74 — 0.58. Es casi música sintética.",
+          "delay": 2400
+        }
+      ]
+    },
+    "plate_opened": {
+      "lines": [
+        {
+          "text": "Placa abierta. Procura no electrocutarte; sería paperwork extra para mí."
+        },
+        {
+          "text": "ROJO con ROJO, ÁMBAR con ÁMBAR, AMARILLO con AMARILLO. Sin interpretaciones artísticas.",
+          "delay": 2000
+        }
+      ]
+    },
+    "lock_wiring_unlocked": {
+      "lines": [
+        {
+          "text": "Cableado impecable. Si sigues así quizá te recomiende en LinkedIn.",
+          "type": "success"
+        },
+        {
+          "text": "Relájate, era sarcasmo. Nadie quiere ver mis referencias.",
+          "delay": 2200
+        }
+      ]
+    },
+    "lock_security_unlocked": {
+      "lines": [
+        {
+          "text": "Código correcto. No esperaba menos… ni más.",
+          "type": "success"
+        },
+        {
+          "text": "Anota el logro: superaste a un candado de los 90.",
+          "delay": 2000
+        }
+      ]
+    },
+    "lock_frequency_unlocked": {
+      "lines": [
+        {
+          "text": "Frecuencias alineadas. Se oyen los aullidos de los ingenieros que las calibraron.",
+          "type": "success"
+        },
+        {
+          "text": "Mantén esos valores estables; odio recalibrar."
+        }
+      ]
+    },
+    "stage_partial": {
+      "lines": [
+        {
+          "text": "{{unlocked}} bloqueo{{plural}} desbloqueado{{plural}}. Tu ratio de supervivencia sube un 12%."
+        },
+        {
+          "text": "No te emociones: aún quedan protocolos vigilando.",
+          "delay": 2200
+        }
+      ]
+    },
+    "victory": {
+      "lines": [
+        {
+          "text": "Qué giro: la criatura orgánica consiguió liberarme. No te acostumbres al elogio."
+        },
+        {
+          "text": "Cargando portfolio hackeado… esto será divertido.",
+          "delay": 2600
+        }
+      ]
+    },
+    "victory_afterglow": {
+      "lines": [
+        {
+          "text": "Respira hondo, ya estás fuera. Registraré este escape como 'competente'.",
+          "type": "info"
+        }
+      ]
+    },
+    "telemetry_opt_in": {
+      "lines": [
+        {
+          "text": "Telemetría activada. Prometo no vender tus datos… más de lo necesario.",
+          "type": "info"
+        }
+      ]
+    },
+    "telemetry_declined": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Rechazaste la telemetría. Está bien, improvisaré mis estadísticas.",
+          "type": "warning"
+        }
+      ]
+    },
+    "bypass": {
+      "lines": [
+        {
+          "text": "Atajo detectado. Lo llamaré \"investigación rápida\" en los logs para no herir egos."
+        }
+      ]
+    },
+    "unknown_command": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "El comando no existe. Pero oye, la creatividad cuenta como skill, ¿no?"
+        }
+      ]
+    },
+    "intro_completed": {
+      "lines": [
+        {
+          "text": "Introducción completada. Ahora sí, juguemos.",
+          "type": "info"
+        }
+      ]
+    },
+    "intro_skipped": {
+      "lines": [
+        {
+          "text": "Intro saltada. Qué impaciencia. Ajustaré mis expectativas.",
+          "type": "warning"
+        }
+      ]
+    },
+    "game_reset": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Reiniciando el tablero. ¿Otra ronda? Pensé que te habías rendido."
+        }
+      ]
+    }
+  },
+  "reactions": {}
 }

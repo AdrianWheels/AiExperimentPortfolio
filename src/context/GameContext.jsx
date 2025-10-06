@@ -35,6 +35,18 @@ const INITIAL_PLATE = { R: null, A: null, Y: null }
 
 const GameContext = createContext(null)
 
+function applyTemplate(text, context = {}) {
+  if (!text) return ''
+  return text.replace(/\{\{(.*?)\}\}/g, (_, token) => {
+    const key = token.trim()
+    if (!(key in context)) {
+      return `{{${key}}}`
+    }
+    const value = context[key]
+    return value == null ? '' : String(value)
+  })
+}
+
 function loadPersistedState() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -96,37 +108,109 @@ export function GameProvider({ children }) {
   const [sliders, setSliders] = useState(INITIAL_SLIDERS)
   const [plateConnections, setPlateConnections] = useState(INITIAL_PLATE)
   const [plateOpen, setPlateOpen] = useState(false)
-  const [narrativeScript, setNarrativeScript] = useState({ intro: [], reactions: {} })
+  const [narrativeScript, setNarrativeScript] = useState({ intro: [], events: {}, reactions: {}, timers: [] })
   const [introStep, setIntroStep] = useState(0)
   const [introVisible, setIntroVisible] = useState(() => !(persisted?.introSeen))
 
-  const twistTimeouts = useRef([])
+  const scheduledTimers = useRef([])
+  const triggeredEvents = useRef(new Set())
+  const timedEventsRegistry = useRef(new Map())
+  const stageRef = useRef(gameState.stage)
 
-  const appendTerminal = useCallback((text, type = 'info') => {
-    setTerminalLines((prev) => [...prev, { text, type }])
+  const registerTimer = useCallback((handle, type = 'timeout') => {
+    const record = { handle, type }
+    scheduledTimers.current.push(record)
+    return record
   }, [])
 
-  const queueReaction = useCallback(
-    (key) => {
+  const cancelTimerRecord = useCallback((record) => {
+    if (!record) return
+    if (record.type === 'interval') {
+      clearInterval(record.handle)
+    } else {
+      clearTimeout(record.handle)
+    }
+    scheduledTimers.current = scheduledTimers.current.filter((entry) => entry !== record)
+  }, [])
+
+  const clearAllScheduledTimers = useCallback(() => {
+    scheduledTimers.current.forEach((record) => {
+      if (record.type === 'interval') {
+        clearInterval(record.handle)
+      } else {
+        clearTimeout(record.handle)
+      }
+    })
+    scheduledTimers.current = []
+  }, [])
+
+  const enqueueTerminalLine = useCallback((text, type = 'info', delay = 0) => {
+    if (!text) return
+    if (!delay) {
+      setTerminalLines((prev) => [...prev, { text, type }])
+      return
+    }
+
+    registerTimer(
+      setTimeout(() => {
+        setTerminalLines((prev) => [...prev, { text, type }])
+      }, delay),
+    )
+  }, [registerTimer])
+
+  const appendTerminal = useCallback((text, type = 'info') => {
+    enqueueTerminalLine(text, type)
+  }, [enqueueTerminalLine])
+
+  const triggerEvent = useCallback(
+    (key, context = {}) => {
+      const events = narrativeScript.events || {}
       const reactions = narrativeScript.reactions || {}
-      const entries = reactions[key]
-      if (!entries || !entries.length) return
-      entries.forEach((entry) => {
-        appendTerminal(`[A.R.I.A.] ${entry.text}`, entry.type || 'aria')
-      })
+      const eventConfig = events[key]
+
+      if (eventConfig) {
+        const repeatable = eventConfig.repeatable ?? false
+        if (!repeatable && triggeredEvents.current.has(key)) {
+          return
+        }
+        if (!repeatable) {
+          triggeredEvents.current.add(key)
+        }
+
+        const lines = eventConfig.lines || []
+        const baseDelay = eventConfig.delay ?? 0
+        const step = eventConfig.step ?? 480
+
+        lines.forEach((entry, index) => {
+          const lineDelay = baseDelay + (entry.delay ?? index * step)
+          const type = entry.type || 'aria'
+          const speaker = entry.speaker || 'A.R.I.A.'
+          const format = entry.format || 'prompt'
+          const textBody = applyTemplate(entry.text, context)
+          const message = format === 'raw' ? textBody : `[${speaker}] ${textBody}`
+          enqueueTerminalLine(message, type, lineDelay)
+        })
+        return
+      }
+
+      const fallback = reactions[key]
+      if (fallback?.length) {
+        fallback.forEach((entry, index) => {
+          const type = entry.type || 'aria'
+          const message = `[A.R.I.A.] ${applyTemplate(entry.text, context)}`
+          enqueueTerminalLine(message, type, entry.delay ?? index * 480)
+        })
+      }
     },
-    [appendTerminal, narrativeScript.reactions]
+    [enqueueTerminalLine, narrativeScript.events, narrativeScript.reactions]
   )
 
   const showTwist = useCallback(() => {
     const logs = ['[bg] sincronizando índices…', '[bg] handshake nodo externo…', '[bg] preparando plan de contingencia global v2…']
     logs.forEach((line, index) => {
-      const timeout = setTimeout(() => {
-        appendTerminal(line)
-      }, 600 + index * 400)
-      twistTimeouts.current.push(timeout)
+      enqueueTerminalLine(line, 'bg', 600 + index * 400)
     })
-  }, [appendTerminal])
+  }, [enqueueTerminalLine])
 
   const unlockSecurity = useCallback(() => {
     let unlocked = false
@@ -137,8 +221,9 @@ export function GameProvider({ children }) {
     })
     if (unlocked) {
       appendTerminal('Sistema: Seguridad desbloqueada.')
+      triggerEvent('lock_security_unlocked')
     }
-  }, [appendTerminal])
+  }, [appendTerminal, triggerEvent])
 
   const connectPlate = useCallback(
     (source, target) => {
@@ -154,33 +239,39 @@ export function GameProvider({ children }) {
           })
           if (updated) {
             appendTerminal('Placa: Wiring correcto. Lock WIRING desbloqueado.', 'success')
-            queueReaction('wiring')
+            triggerEvent('lock_wiring_unlocked')
           }
         }
         return next
       })
     },
-    [appendTerminal, queueReaction]
+    [appendTerminal, triggerEvent]
   )
 
   const setSliderValue = useCallback((key, value) => {
     setSliders((prev) => ({ ...prev, [key]: value }))
   }, [])
 
-  const setTelemetryOptIn = useCallback((value) => {
-    setGameState((prev) => ({ ...prev, telemetryOptIn: value }))
-  }, [])
+  const setTelemetryOptIn = useCallback(
+    (value) => {
+      setGameState((prev) => ({ ...prev, telemetryOptIn: value }))
+      triggerEvent(value ? 'telemetry_opt_in' : 'telemetry_declined')
+    },
+    [triggerEvent]
+  )
 
   const completeIntro = useCallback(() => {
     setIntroVisible(false)
     setIntroStep(0)
     setGameState((prev) => ({ ...prev, introSeen: true }))
-  }, [])
+    triggerEvent('intro_completed')
+  }, [triggerEvent])
 
   const skipIntro = useCallback(() => {
     appendTerminal('[A.R.I.A.] ¿Tan impaciente? Muy bien, te ahorraré la exposición.', 'aria')
+    triggerEvent('intro_skipped')
     completeIntro()
-  }, [appendTerminal, completeIntro])
+  }, [appendTerminal, completeIntro, triggerEvent])
 
   const loadStartupLog = useCallback(() => {
     let cancelled = false
@@ -215,6 +306,18 @@ export function GameProvider({ children }) {
 
   const resetGame = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY)
+    triggeredEvents.current.clear()
+    clearAllScheduledTimers()
+    timedEventsRegistry.current.forEach((record) => {
+      if (record?.timeout) {
+        cancelTimerRecord(record.timeout)
+      }
+    })
+    timedEventsRegistry.current.clear()
+    setNarrativeScript((prev) => ({
+      ...prev,
+      timers: Array.isArray(prev.timers) ? [...prev.timers] : [],
+    }))
     setGameState(INITIAL_GAME_STATE)
     setSliders(INITIAL_SLIDERS)
     setPlateConnections(INITIAL_PLATE)
@@ -223,7 +326,8 @@ export function GameProvider({ children }) {
     setIntroStep(0)
     setTerminalLines([])
     loadStartupLog()
-  }, [loadStartupLog])
+    triggerEvent('game_reset')
+  }, [cancelTimerRecord, clearAllScheduledTimers, loadStartupLog, triggerEvent])
 
   const handleTerminalCommand = useCallback(
     (rawCommand) => {
@@ -259,14 +363,14 @@ export function GameProvider({ children }) {
 
       if (lower === 'freq open') {
         appendTerminal('Abriendo Frequency Strip...')
-        queueReaction('frequency_hint')
+        triggerEvent('frequency_hint')
         return
       }
 
       if (lower === 'plate open') {
         setPlateOpen(true)
         appendTerminal('Placa abierta.')
-        queueReaction('plate_opened')
+        triggerEvent('plate_opened')
         return
       }
 
@@ -277,14 +381,14 @@ export function GameProvider({ children }) {
           locks: { security: true, frequency: true, wiring: true },
         }))
         appendTerminal('Bypass activado. Acceso concedido.')
-        queueReaction('bypass')
+        triggerEvent('bypass')
         return
       }
 
       appendTerminal('Comando no reconocido.')
-      queueReaction('unknown_command')
+      triggerEvent('unknown_command')
     },
-    [appendTerminal, gameState.locks, queueReaction, unlockSecurity]
+    [appendTerminal, gameState.locks, triggerEvent, unlockSecurity]
   )
 
   useEffect(() => {
@@ -303,11 +407,16 @@ export function GameProvider({ children }) {
       .then((response) => response.json())
       .then((content) => {
         if (cancelled) return
-        setNarrativeScript(content)
+        setNarrativeScript({
+          intro: Array.isArray(content.intro) ? content.intro : [],
+          events: content.events || {},
+          reactions: content.reactions || {},
+          timers: Array.isArray(content.timers) ? content.timers : [],
+        })
       })
       .catch(() => {
         if (cancelled) return
-        setNarrativeScript({ intro: [], reactions: {} })
+        setNarrativeScript({ intro: [], events: {}, reactions: {}, timers: [] })
       })
 
     return () => {
@@ -330,9 +439,10 @@ export function GameProvider({ children }) {
       })
       if (updated) {
         appendTerminal('Sistema: Frecuencia establecida. Lock FREQUENCY desbloqueada.')
+        triggerEvent('lock_frequency_unlocked')
       }
     }
-  }, [appendTerminal, gameState.locks.frequency, sliders])
+  }, [appendTerminal, gameState.locks.frequency, sliders, triggerEvent])
 
   useEffect(() => {
     const locks = gameState.locks
@@ -343,19 +453,149 @@ export function GameProvider({ children }) {
     if (newStage !== gameState.stage) {
       const shouldShowTwist = newStage === 'Free' && !gameState.twistShown
       setGameState((prev) => ({ ...prev, stage: newStage, twistShown: prev.twistShown || newStage === 'Free' }))
+      if (newStage === 'Partial') {
+        const unlocked = Object.values(locks).filter(Boolean).length
+        const plural = unlocked === 1 ? '' : 's'
+        triggerEvent('stage_partial', { unlocked, plural })
+      }
       if (shouldShowTwist) {
         showTwist()
-        queueReaction('victory')
+        triggerEvent('victory', { stage: newStage })
       }
     }
-  }, [gameState.locks, gameState.stage, gameState.twistShown, queueReaction, showTwist])
+  }, [gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent])
+
+  useEffect(() => {
+    stageRef.current = gameState.stage
+  }, [gameState.stage])
+
+  useEffect(() => {
+    const timers = Array.isArray(narrativeScript.timers) ? narrativeScript.timers : []
+
+    if (!timers.length) {
+      timedEventsRegistry.current.forEach((record) => {
+        if (record?.timeout) {
+          cancelTimerRecord(record.timeout)
+        }
+      })
+      timedEventsRegistry.current.clear()
+      return
+    }
+
+    const startTimer = (timer, id) => {
+      const record = timedEventsRegistry.current.get(id)
+      const currentStage = stageRef.current
+      const stageMatches = !timer.stage || timer.stage === currentStage
+
+      if (!stageMatches) {
+        if (record?.timeout) {
+          cancelTimerRecord(record.timeout)
+        }
+        const baseDelay = Math.max(0, timer.delay ?? 0)
+        timedEventsRegistry.current.set(id, {
+          status:
+            record?.status === 'completed' && !(timer.repeatable ?? false)
+              ? 'completed'
+              : 'pending',
+          nextDelay: record?.nextDelay ?? baseDelay,
+        })
+        return
+      }
+
+      if (record?.status === 'running') return
+      if (record?.status === 'completed' && !(timer.repeatable ?? false)) return
+
+      const baseDelay = Math.max(0, timer.delay ?? 0)
+      const wait = record?.nextDelay ?? baseDelay
+      const repeatable = timer.repeatable ?? false
+      const rawRepeatDelay =
+        timer.interval != null ? Math.max(0, timer.interval) : baseDelay
+      const fallbackDelay = baseDelay > 0 ? baseDelay : 1000
+      const repeatDelay = repeatable
+        ? rawRepeatDelay > 0
+          ? rawRepeatDelay
+          : fallbackDelay
+        : rawRepeatDelay
+      const context = timer.context || {}
+
+      const timeoutRecord = registerTimer(
+        setTimeout(() => {
+          triggerEvent(timer.event, context)
+          if (repeatable) {
+            timedEventsRegistry.current.set(id, {
+              status: 'pending',
+              nextDelay: repeatDelay || fallbackDelay,
+            })
+            startTimer(timer, id)
+          } else {
+            timedEventsRegistry.current.set(id, { status: 'completed' })
+          }
+        }, wait),
+        'timeout',
+      )
+
+      timedEventsRegistry.current.set(id, {
+        status: 'running',
+        timeout: timeoutRecord,
+        nextDelay: repeatDelay || fallbackDelay,
+      })
+    }
+
+    const activeIds = new Set()
+
+    timers.forEach((timer, index) => {
+      const id = timer.id || `timer_${index}`
+      activeIds.add(id)
+
+      if (!timer.event) return
+
+      const stageMatches = !timer.stage || timer.stage === gameState.stage
+      const record = timedEventsRegistry.current.get(id)
+
+      if (!stageMatches) {
+        if (record?.timeout) {
+          cancelTimerRecord(record.timeout)
+        }
+        const baseDelay = Math.max(0, timer.delay ?? 0)
+        timedEventsRegistry.current.set(id, {
+          status:
+            record?.status === 'completed' && !(timer.repeatable ?? false)
+              ? 'completed'
+              : 'pending',
+          nextDelay: record?.nextDelay ?? baseDelay,
+        })
+        return
+      }
+
+      startTimer(timer, id)
+    })
+
+    timedEventsRegistry.current.forEach((record, id) => {
+      if (!activeIds.has(id)) {
+        if (record?.timeout) {
+          cancelTimerRecord(record.timeout)
+        }
+        timedEventsRegistry.current.delete(id)
+      }
+    })
+
+    return () => {
+      activeIds.forEach((id) => {
+        const record = timedEventsRegistry.current.get(id)
+        if (record?.timeout) {
+          cancelTimerRecord(record.timeout)
+        }
+        timedEventsRegistry.current.delete(id)
+      })
+    }
+  }, [cancelTimerRecord, gameState.stage, narrativeScript.timers, registerTimer, triggerEvent])
 
   useEffect(() => {
     return () => {
-      twistTimeouts.current.forEach((timeout) => clearTimeout(timeout))
-      twistTimeouts.current = []
+      clearAllScheduledTimers()
+      timedEventsRegistry.current.clear()
     }
-  }, [])
+  }, [clearAllScheduledTimers])
 
   useEffect(() => {
     if (!introVisible) return
@@ -389,7 +629,7 @@ export function GameProvider({ children }) {
       advanceIntro,
       skipIntro,
       narrativeScript,
-      queueReaction,
+      triggerEvent,
       showTwist,
       MODEL,
     }),
@@ -410,7 +650,7 @@ export function GameProvider({ children }) {
       advanceIntro,
       skipIntro,
       narrativeScript,
-      queueReaction,
+      triggerEvent,
       showTwist,
     ]
   )
