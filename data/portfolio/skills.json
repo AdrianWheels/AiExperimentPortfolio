@@ -1,0 +1,61 @@
+{
+  "core": [
+    {
+      "name": "Frontend",
+      "items": [
+        { "label": "React", "level": "avanzado" },
+        { "label": "Next.js", "level": "avanzado" },
+        { "label": "TypeScript", "level": "intermedio" },
+        { "label": "Vite", "level": "intermedio" }
+      ]
+    },
+    {
+      "name": "Product Discovery",
+      "items": [
+        { "label": "Investigación cualitativa", "level": "avanzado" },
+        { "label": "Mapeo de journeys", "level": "avanzado" },
+        { "label": "Workshops colaborativos", "level": "intermedio" }
+      ]
+    },
+    {
+      "name": "Storytelling técnico",
+      "items": [
+        { "label": "Narrativa interactiva", "level": "avanzado" },
+        { "label": "Diseño de sistemas", "level": "intermedio" },
+        { "label": "Visual prototyping", "level": "avanzado" }
+      ]
+    }
+  ],
+  "toolbelt": [
+    {
+      "title": "Stack de diseño",
+      "tools": ["Figma", "Framer", "After Effects", "Notion"],
+      "commentary": {
+        "normal": "Creo design systems auditables y documentados para escalar equipos.",
+        "hacked": "Nota de A.R.I.A.: mantiene demasiados componentes denominados 'experimento'."
+      }
+    },
+    {
+      "title": "Stack de código",
+      "tools": ["React", "Three.js", "Node.js", "GraphQL"],
+      "commentary": {
+        "normal": "Prototipo features complejas y transfiero handoff listo para producción.",
+        "hacked": "Observación: ejecuta pruebas a horas insospechadas buscando glitches felices."
+      }
+    },
+    {
+      "title": "IA y automatización",
+      "tools": ["LangChain", "OpenAI API", "Stable Diffusion", "Zapier"],
+      "commentary": {
+        "normal": "Diseño flujos asistidos por IA con foco en responsabilidad y transparencia.",
+        "hacked": "Registro: 78% de scripts nombrados con referencias a ciencia ficción."
+      }
+    }
+  ],
+  "soft": [
+    "Facilitación de workshops",
+    "Mentoría de talento junior",
+    "Comunicación intercultural",
+    "Pensamiento sistémico"
+  ]
+}

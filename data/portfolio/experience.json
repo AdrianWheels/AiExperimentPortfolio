@@ -1,0 +1,58 @@
+{
+  "timeline": [
+    {
+      "id": "exp-01",
+      "role": "Lead Product Designer",
+      "company": "Studio Placeholder",
+      "period": "2022 — Presente",
+      "summary": "Dirijo squads híbridas de diseño y desarrollo para lanzar experiencias centradas en datos.",
+      "achievements": [
+        "Rediseño de plataforma B2B elevando el NPS en +18 puntos.",
+        "Implementación de design system con tokens sincronizados a producción.",
+        "Pilotaje de features asistidas por IA generativa para soporte interno."
+      ]
+    },
+    {
+      "id": "exp-02",
+      "role": "Senior UX Engineer",
+      "company": "Collective Prototype",
+      "period": "2019 — 2022",
+      "summary": "Traduje conceptos de investigación en MVPs funcionales con React, Next.js y WebGL.",
+      "achievements": [
+        "Optimicé flujos críticos reduciendo tareas repetitivas en un 35%.",
+        "Definí patrones de accesibilidad documentados en Storybook.",
+        "Mentoricé a equipos junior en prototipado rápido basado en datos."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-01",
+      "title": "Máster en Experiencia de Usuario",
+      "institution": "Universidad Ficticia de Diseño",
+      "period": "2017 — 2018",
+      "details": "Enfoque en investigación con usuarios, service design y metodologías ágiles."
+    },
+    {
+      "id": "edu-02",
+      "title": "Grado en Ingeniería Multimedia",
+      "institution": "Instituto Tecnológico Placeholder",
+      "period": "2012 — 2016",
+      "details": "Especialización en interacción humano-computadora y narrativa digital."
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-01",
+      "name": "DesignOps Foundations",
+      "issuer": "Certificación independiente",
+      "year": "2020"
+    },
+    {
+      "id": "cert-02",
+      "name": "IA aplicada a producto",
+      "issuer": "Laboratorio de Prototipado",
+      "year": "2023"
+    }
+  ]
+}

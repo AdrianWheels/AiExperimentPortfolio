@@ -17,7 +17,8 @@ function Led({ status }) {
 }
 
 export default function AppHeader() {
-  const { gameState, handleTerminalCommand, resetGame, MODEL } = useGame()
+  const { gameState, handleTerminalCommand, resetGame, MODEL, setActiveView, setPortfolioMode } = useGame()
+  const { portfolioUnlocked, activeView, portfolioMode } = gameState
 
   return (
     <header className="relative bg-panel/60 header-metal backdrop-blur-sm border-b border-border w-full" style={{ minHeight: '200px', padding: '1rem' }}>
@@ -35,6 +36,61 @@ export default function AppHeader() {
           >
             Reset Estado
           </button>
+          {portfolioUnlocked && (
+            <div className="mt-1 flex flex-col gap-2 rounded-lg border border-white/5 bg-black/30 p-2">
+              <div className="text-[10px] uppercase tracking-[0.32em] text-slate-400">Portfolio</div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveView('game')}
+                  className={`flex-1 rounded px-2 py-1 text-[11px] uppercase tracking-widest transition-colors ${
+                    activeView === 'game'
+                      ? 'bg-slate-700 text-slate-100'
+                      : 'bg-slate-800/60 text-slate-300 hover:text-slate-100'
+                  }`}
+                >
+                  Juego
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveView('portfolio')}
+                  className={`flex-1 rounded px-2 py-1 text-[11px] uppercase tracking-widest transition-colors ${
+                    activeView === 'portfolio'
+                      ? 'bg-slate-700 text-slate-100'
+                      : 'bg-slate-800/60 text-slate-300 hover:text-slate-100'
+                  }`}
+                >
+                  Portfolio
+                </button>
+              </div>
+              {activeView === 'portfolio' && (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPortfolioMode('normal')}
+                    className={`flex-1 rounded px-2 py-1 text-[10px] uppercase tracking-[0.32em] transition-colors ${
+                      portfolioMode !== 'hacked'
+                        ? 'bg-slate-600 text-slate-100'
+                        : 'bg-slate-800/60 text-slate-300 hover:text-slate-100'
+                    }`}
+                  >
+                    Humano
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPortfolioMode('hacked')}
+                    className={`flex-1 rounded px-2 py-1 text-[10px] uppercase tracking-[0.32em] transition-colors ${
+                      portfolioMode === 'hacked'
+                        ? 'bg-purple-700 text-purple-100'
+                        : 'bg-purple-900/40 text-purple-200 hover:text-purple-100'
+                    }`}
+                  >
+                    Hackeado
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center min-h-[160px]">

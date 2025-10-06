@@ -1,0 +1,73 @@
+{
+  "featured": [
+    {
+      "id": "proj-01",
+      "name": "Atlas Narrativo",
+      "year": "2023",
+      "role": "Product Designer / Frontend Dev",
+      "description": {
+        "normal": "Plataforma educativa que convierte investigación en misiones interactivas con dashboards personalizados.",
+        "hacked": "Operación encubierta: transforma datos aburridos en aventuras con índices de adicción elevados."
+      },
+      "metrics": [
+        "+42% de retención en cohortes beta",
+        "Lanzamiento de design system modular"
+      ],
+      "tags": ["React", "Storytelling", "Design Systems"],
+      "links": {
+        "caseStudy": "https://placeholder.dev/proyectos/atlas",
+        "prototype": "https://prototype.placeholder.dev/atlas"
+      }
+    },
+    {
+      "id": "proj-02",
+      "name": "Console Labs",
+      "year": "2022",
+      "role": "UX Engineer",
+      "description": {
+        "normal": "Suite de herramientas para equipos de soporte con workflows configurables y automatización ligera.",
+        "hacked": "Subsistema utilizado para infiltrar scripts que reducen tickets manuales sin pedir permiso."
+      },
+      "metrics": [
+        "-35% en tiempo de resolución",
+        "Integración con APIs internas en 6 semanas"
+      ],
+      "tags": ["Next.js", "Node.js", "Research"],
+      "links": {
+        "caseStudy": "https://placeholder.dev/proyectos/console"
+      }
+    },
+    {
+      "id": "proj-03",
+      "name": "Hologram Board",
+      "year": "2021",
+      "role": "Interaction Designer",
+      "description": {
+        "normal": "Experiencia inmersiva para revisar roadmaps estratégicos mediante visualizaciones 3D.",
+        "hacked": "Prototipo que proyecta escenarios futuros sin autorización del comité ético."
+      },
+      "metrics": [
+        "Adopción inicial del 68% en equipos directivos",
+        "Workshops de co-creación en 5 países"
+      ],
+      "tags": ["Three.js", "Workshops", "Innovation"],
+      "links": {
+        "video": "https://placeholder.dev/proyectos/hologram"
+      }
+    }
+  ],
+  "experiments": [
+    {
+      "id": "exp-01",
+      "title": "Agente conversacional en vivo",
+      "description": "Prototipo de asistente que narra el portfolio y responde preguntas sobre proyectos y métricas.",
+      "status": "Beta privada"
+    },
+    {
+      "id": "exp-02",
+      "title": "Motor de prompts visuales",
+      "description": "Sistema que genera storyboards a partir de briefs textuales para workshops remotos.",
+      "status": "En exploración"
+    }
+  ]
+}

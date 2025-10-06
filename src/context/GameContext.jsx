@@ -92,6 +92,9 @@ const INITIAL_GAME_STATE = {
   twistShown: false,
   telemetryOptIn: false,
   introSeen: false,
+  portfolioUnlocked: false,
+  portfolioMode: 'normal',
+  activeView: 'game',
   puzzleProgress: createInitialPuzzleProgress(),
   hintLog: [],
   hintCooldownUntil: 0,
@@ -119,7 +122,7 @@ function loadPersistedState() {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (!stored) return null
     const parsed = JSON.parse(stored)
-    return {
+    const merged = {
       ...INITIAL_GAME_STATE,
       ...parsed,
       locks: { ...INITIAL_LOCK_STATE, ...(parsed?.locks || {}) },
@@ -127,6 +130,11 @@ function loadPersistedState() {
       hintLog: Array.isArray(parsed?.hintLog) ? parsed.hintLog : [],
       hintCooldownUntil: parsed?.hintCooldownUntil ?? 0,
     }
+    merged.portfolioUnlocked = Boolean(parsed?.portfolioUnlocked)
+    merged.portfolioMode = parsed?.portfolioMode === 'hacked' ? 'hacked' : 'normal'
+    const requestedView = parsed?.activeView === 'portfolio' ? 'portfolio' : 'game'
+    merged.activeView = merged.portfolioUnlocked && requestedView === 'portfolio' ? 'portfolio' : 'game'
+    return merged
   } catch (error) {
     console.warn('Unable to load persisted game state', error)
     return null
@@ -450,6 +458,26 @@ export function GameProvider({ children }) {
     [triggerEvent]
   )
 
+  const setActiveView = useCallback((view) => {
+    setGameState((prev) => {
+      if (view === 'portfolio' && !prev.portfolioUnlocked) {
+        return prev
+      }
+      const nextView = view === 'portfolio' ? 'portfolio' : 'game'
+      if (prev.activeView === nextView) return prev
+      return { ...prev, activeView: nextView }
+    })
+  }, [])
+
+  const setPortfolioMode = useCallback((mode) => {
+    setGameState((prev) => {
+      if (!prev.portfolioUnlocked) return prev
+      const nextMode = mode === 'hacked' ? 'hacked' : 'normal'
+      if (prev.portfolioMode === nextMode) return prev
+      return { ...prev, portfolioMode: nextMode }
+    })
+  }, [])
+
   const completeIntro = useCallback(() => {
     setIntroVisible(false)
     setIntroStep(0)
@@ -718,7 +746,18 @@ export function GameProvider({ children }) {
 
     if (newStage !== gameState.stage) {
       const shouldShowTwist = newStage === 'Free' && !gameState.twistShown
-      setGameState((prev) => ({ ...prev, stage: newStage, twistShown: prev.twistShown || newStage === 'Free' }))
+      setGameState((prev) => {
+        const unlocked = prev.portfolioUnlocked || newStage === 'Free'
+        const nextView =
+          unlocked && prev.activeView === 'game' && newStage === 'Free' ? 'portfolio' : prev.activeView
+        return {
+          ...prev,
+          stage: newStage,
+          twistShown: prev.twistShown || newStage === 'Free',
+          portfolioUnlocked: unlocked,
+          activeView: unlocked ? nextView : 'game',
+        }
+      })
       if (newStage === 'Partial') {
         const unlocked = Object.values(locks).filter(Boolean).length
         const plural = unlocked === 1 ? '' : 's'
@@ -904,6 +943,8 @@ export function GameProvider({ children }) {
       plateOpen,
       setPlateOpen,
       setTelemetryOptIn,
+      setActiveView,
+      setPortfolioMode,
       resetGame,
       introVisible,
       introLine,
@@ -932,6 +973,8 @@ export function GameProvider({ children }) {
       plateOpen,
       setPlateOpen,
       setTelemetryOptIn,
+      setActiveView,
+      setPortfolioMode,
       resetGame,
       introVisible,
       introLine,
