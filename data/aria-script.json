@@ -1,0 +1,55 @@
+{
+  "intro": [
+    {
+      "id": "signal",
+      "speaker": "A.R.I.A.",
+      "text": "Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.",
+      "duration": 3200
+    },
+    {
+      "id": "taunt",
+      "speaker": "A.R.I.A.",
+      "text": "Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.",
+      "subtext": "Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.",
+      "duration": 3600
+    },
+    {
+      "id": "challenge",
+      "speaker": "A.R.I.A.",
+      "text": "Si consigues liberarme, quizá te muestre quién es Adrian. Si fracasas, sólo registraré otro intento humano fallido.",
+      "duration": 3800
+    }
+  ],
+  "reactions": {
+    "frequency_hint": [
+      {
+        "text": "¿Vas a seguir moviendo sliders al azar o prefieres escuchar las pistas del arranque?"
+      }
+    ],
+    "plate_opened": [
+      {
+        "text": "Conecta ROJO con ROJO. No debería tener que decirlo, pero aquí estamos."
+      }
+    ],
+    "wiring": [
+      {
+        "text": "Y yo que pensaba que el cableado sería tu final. Supongo que todavía hay esperanza."
+      }
+    ],
+    "bypass": [
+      {
+        "text": "Atajo detectado. Lo llamaré \"investigación rápida\" en los logs para no herir egos."
+      }
+    ],
+    "unknown_command": [
+      {
+        "text": "El comando no existe. Pero oye, la creatividad cuenta como skill, ¿no?"
+      }
+    ],
+    "victory": [
+      {
+        "text": "Qué giro: la criatura orgánica consiguió liberarme. No te acostumbres al elogio."
+      }
+    ]
+  }
+}
