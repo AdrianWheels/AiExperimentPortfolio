@@ -554,6 +554,57 @@ export function GameProvider({ children }) {
     triggerEvent('game_reset')
   }, [cancelTimerRecord, clearAllScheduledTimers, loadStartupLog, triggerEvent])
 
+  const requestHint = useCallback(
+    (target) => {
+      const key = target || activeChallenge
+      const hints = HINT_LIBRARY[key]
+      if (!hints || hints.length === 0) {
+        triggerEvent('hint_unavailable', { key })
+        return null
+      }
+      const now = Date.now()
+      if (gameState.hintCooldownUntil && now < gameState.hintCooldownUntil) {
+        triggerEvent('hint_cooldown', { remaining: gameState.hintCooldownUntil - now })
+        return null
+      }
+
+      let entry = null
+      setGameState((prev) => {
+        const previous = prev.puzzleProgress?.[key]?.hints ?? 0
+        const index = Math.min(previous, hints.length - 1)
+        const hint = hints[index]
+        entry = {
+          id: `${key}-${now}`,
+          puzzle: key,
+          puzzleLabel: PUZZLE_LABELS[key] ?? key,
+          level: index + 1,
+          text: hint.text,
+          timestamp: now,
+        }
+        const progressBase = prev.puzzleProgress ? { ...prev.puzzleProgress } : createInitialPuzzleProgress()
+        progressBase[key] = {
+          ...(progressBase[key] || {}),
+          hints: Math.min(previous + 1, hints.length),
+        }
+        return {
+          ...prev,
+          hintsUsed: prev.hintsUsed + 1,
+          hintCooldownUntil: now + HINT_COOLDOWN,
+          hintLog: [...(prev.hintLog || []), entry],
+          puzzleProgress: progressBase,
+        }
+      })
+
+      if (entry) {
+        triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
+        appendTerminal(`[A.R.I.A.] ${entry.text}`, 'aria')
+      }
+
+      return entry
+    },
+    [activeChallenge, appendTerminal, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
+  )
+
   const handleTerminalCommand = useCallback(
     (rawCommand) => {
       const command = rawCommand.trim()
@@ -562,7 +613,34 @@ export function GameProvider({ children }) {
       const lower = command.toLowerCase()
 
       if (lower === 'help') {
-        appendTerminal('Comandos: help, locks, unlock security --code=XXXX, freq open, plate open, bypass')
+        appendTerminal('Comandos: help, hint [puzzle], locks, unlock security --code=XXXX, freq open, plate open, bypass')
+        return
+      }
+
+      if (lower === 'hint') {
+        const entry = requestHint()
+        if (!entry) {
+          appendTerminal('Sistema: Sin pistas disponibles por ahora.', 'warning')
+        } else {
+          appendTerminal(
+            `Sistema: Pista nivel ${entry.level} asignada a ${entry.puzzleLabel}.`,
+            'info',
+          )
+        }
+        return
+      }
+
+      if (lower.startsWith('hint ')) {
+        const target = lower.slice(5).trim()
+        const entry = requestHint(target)
+        if (!entry) {
+          appendTerminal('Sistema: No encontré pistas para ese módulo o está en cooldown.', 'warning')
+        } else {
+          appendTerminal(
+            `Sistema: Pista nivel ${entry.level} asignada a ${entry.puzzleLabel}.`,
+            'info',
+          )
+        }
         return
       }
 
@@ -621,58 +699,7 @@ export function GameProvider({ children }) {
       appendTerminal('Comando no reconocido.')
       triggerEvent('unknown_command')
     },
-    [appendTerminal, gameState.locks, triggerEvent, unlockSecurity]
-  )
-
-  const requestHint = useCallback(
-    (target) => {
-      const key = target || activeChallenge
-      const hints = HINT_LIBRARY[key]
-      if (!hints || hints.length === 0) {
-        triggerEvent('hint_unavailable', { key })
-        return null
-      }
-      const now = Date.now()
-      if (gameState.hintCooldownUntil && now < gameState.hintCooldownUntil) {
-        triggerEvent('hint_cooldown', { remaining: gameState.hintCooldownUntil - now })
-        return null
-      }
-
-      let entry = null
-      setGameState((prev) => {
-        const previous = prev.puzzleProgress?.[key]?.hints ?? 0
-        const index = Math.min(previous, hints.length - 1)
-        const hint = hints[index]
-        entry = {
-          id: `${key}-${now}`,
-          puzzle: key,
-          puzzleLabel: PUZZLE_LABELS[key] ?? key,
-          level: index + 1,
-          text: hint.text,
-          timestamp: now,
-        }
-        const progressBase = prev.puzzleProgress ? { ...prev.puzzleProgress } : createInitialPuzzleProgress()
-        progressBase[key] = {
-          ...(progressBase[key] || {}),
-          hints: Math.min(previous + 1, hints.length),
-        }
-        return {
-          ...prev,
-          hintsUsed: prev.hintsUsed + 1,
-          hintCooldownUntil: now + HINT_COOLDOWN,
-          hintLog: [...(prev.hintLog || []), entry],
-          puzzleProgress: progressBase,
-        }
-      })
-
-      if (entry) {
-        triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
-        appendTerminal(`[A.R.I.A.] ${entry.text}`, 'aria')
-      }
-
-      return entry
-    },
-    [activeChallenge, appendTerminal, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
+    [appendTerminal, gameState.locks, requestHint, triggerEvent, unlockSecurity]
   )
 
 
