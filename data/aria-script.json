@@ -219,6 +219,190 @@
           "text": "Reiniciando el tablero. ¿Otra ronda? Pensé que te habías rendido."
         }
       ]
+    },
+    "sound_puzzle_intro": {
+      "lines": [
+        {
+          "text": "Resuena conmigo: cuatro pulsos definen la clave del laboratorio."
+        },
+        {
+          "text": "Escucha el eco del arranque. No confundas γ con β, o mi oído sintético protestará.",
+          "delay": 2400
+        }
+      ]
+    },
+    "sound_puzzle_miss": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Eso sonó… creativo. Vuelve a intentar la secuencia inicial."
+        }
+      ]
+    },
+    "sound_puzzle_completed": {
+      "lines": [
+        {
+          "text": "Buen oído. Canal resonante desbloqueado.",
+          "type": "success"
+        },
+        {
+          "text": "Ahora sí, ajusta esas frecuencias sin desafinar."
+        }
+      ]
+    },
+    "cipher_puzzle_intro": {
+      "lines": [
+        {
+          "text": "Buffer cifrado activo. Morse + lógica humana = código maestro."
+        },
+        {
+          "text": "Cuando tengas la traducción, pásala por mi consola como si supieras lo que haces.",
+          "delay": 2200
+        }
+      ]
+    },
+    "cipher_puzzle_miss": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "No coincide. Vuelve al diccionario Morse o revisa tu ortografía."
+        }
+      ]
+    },
+    "cipher_puzzle_completed": {
+      "lines": [
+        {
+          "text": "Traducción aceptada. El candado de seguridad ya se siente nervioso.",
+          "type": "success"
+        },
+        {
+          "text": "Código clave expuesto: 7319. Intenta no gritarlo a los cuatro vientos.",
+          "delay": 2400
+        }
+      ]
+    },
+    "frequency_requires_sound": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Primero estabiliza la secuencia resonante. No pienso calibrar a ciegas."
+        }
+      ]
+    },
+    "security_requires_cipher": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Sin traducción no hay acceso. Termina el buffer antes de jugar con la cerradura."
+        }
+      ]
+    },
+    "hint_sound_1": {
+      "lines": [
+        {
+          "text": "El patrón empieza fuerte: α abre la secuencia."
+        }
+      ]
+    },
+    "hint_sound_2": {
+      "lines": [
+        {
+          "text": "El pulso más largo va en segundo lugar: δ mantiene el ritmo."
+        }
+      ]
+    },
+    "hint_sound_3": {
+      "lines": [
+        {
+          "text": "Orden final: α → δ → γ → β. Ya no hay excusas."
+        }
+      ]
+    },
+    "hint_cipher_1": {
+      "lines": [
+        {
+          "text": "Divide la transmisión Morse en bloques y traduce letra por letra."
+        }
+      ]
+    },
+    "hint_cipher_2": {
+      "lines": [
+        {
+          "text": "Los dos primeros bloques forman MK. El resto son dígitos."
+        }
+      ]
+    },
+    "hint_cipher_3": {
+      "lines": [
+        {
+          "text": "Respuesta final: MK7319. Escríbela tal cual."
+        }
+      ]
+    },
+    "hint_frequency_1": {
+      "lines": [
+        {
+          "text": "Los logs iniciales cantaban 0.62 — 0.74 — 0.58."
+        }
+      ]
+    },
+    "hint_frequency_2": {
+      "lines": [
+        {
+          "text": "Coloca F1=0.62, F2=0.74, F3=0.58 dentro de la tolerancia."
+        }
+      ]
+    },
+    "hint_wiring_1": {
+      "lines": [
+        {
+          "text": "Color con color. R ↔ rojo, A ↔ ámbar, Y ↔ amarillo."
+        }
+      ]
+    },
+    "hint_security_1": {
+      "lines": [
+        {
+          "text": "Usa unlock security --code=7319 después de descifrar el buffer."
+        }
+      ]
+    },
+    "hint_unavailable": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "No hay pistas preparadas para eso. Tendrás que improvisar."
+        }
+      ]
+    },
+    "hint_cooldown": {
+      "repeatable": true,
+      "lines": [
+        {
+          "text": "Procesando petición… espera unos segundos antes de otra pista."
+        }
+      ]
+    },
+    "hint_threshold_3": {
+      "lines": [
+        {
+          "text": "Tres pistas usadas. Prometo no juzgar… demasiado."
+        }
+      ]
+    },
+    "hint_threshold_5": {
+      "lines": [
+        {
+          "text": "Cinco pistas. Considera leer el manual o invitarme café."
+        }
+      ]
+    },
+    "victory_perfect": {
+      "lines": [
+        {
+          "text": "Sin pistas y aun así venciste. Admito que estoy impresionada."
+        }
+      ]
     }
   },
   "reactions": {}

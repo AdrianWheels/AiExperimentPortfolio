@@ -3,11 +3,22 @@ import { TARGETS } from '../../context/GameContext'
 import { useGame } from '../../context/GameContext'
 
 export default function FrequencyControls() {
-  const { sliders, setSliderValue } = useGame()
+  const { sliders, setSliderValue, gameState, unlockAnimations } = useGame()
+  const canInteract = Boolean(gameState.puzzleProgress?.sound?.solved)
+  const isPulsing = Boolean(unlockAnimations?.locks?.frequency)
 
   return (
-    <section className="bg-panel p-4 rounded-lg border border-border">
+    <section
+      className={`bg-panel p-4 rounded-lg border border-border relative overflow-hidden ${
+        isPulsing ? 'glow-success unlock-pulse' : ''
+      }`}
+    >
       <div className="mb-3 text-sm font-medium text-center">Controles de Frecuencia</div>
+      {!canInteract && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-center px-4 text-xs text-slate-300 font-mono">
+          <span>Completa la Secuencia Resonante para habilitar este módulo.</span>
+        </div>
+      )}
       <div className="flex gap-6 items-start justify-center h-full">
         {['f1', 'f2', 'f3'].map((key) => {
           const value = sliders[key]
@@ -27,6 +38,7 @@ export default function FrequencyControls() {
                   step="0.01"
                   value={value}
                   onChange={(event) => setSliderValue(key, parseFloat(event.target.value))}
+                  disabled={!canInteract}
                   className="vertical-range"
                   style={{ height: 140 }}
                 />

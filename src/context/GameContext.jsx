@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import useSound from '../hooks/useSound'
 
 const STORAGE_KEY = 'genio_state'
 export const MODEL = 'MK-7319'
@@ -20,6 +21,69 @@ const INITIAL_LOCK_STATE = {
   wiring: false,
 }
 
+const HINT_COOLDOWN = 12000
+
+const PUZZLE_LABELS = {
+  sound: 'Secuencia resonante',
+  cipher: 'Buffer de cifrado',
+  frequency: 'Modulo de frecuencias',
+  wiring: 'Panel de cables',
+  security: 'Lock de seguridad',
+  free: 'Sistema liberado',
+}
+
+const HINT_LIBRARY = {
+  sound: [
+    { text: 'El arranque menciona cuatro pulsos. Comienza con α y termina combinando γ seguido de β.' },
+    { text: 'El segundo pulso es el más largo: δ. Escucha cómo A.R.I.A. alarga esa sílaba.' },
+    { text: 'Secuencia completa: α → δ → γ → β. Ejecuta sin errores para fijar la resonancia.' },
+  ],
+  cipher: [
+    { text: 'Traduce cada bloque Morse a una letra o dígito y elimina los separadores.' },
+    { text: 'Los dos primeros bloques equivalen a M y K. El resto son dígitos.' },
+    { text: 'Respuesta final: MK7319. Úsala en el comando de seguridad.' },
+  ],
+  frequency: [
+    { text: 'Los valores objetivo estaban en los logs: F1=0.62, F2=0.74, F3=0.58.' },
+    { text: 'Ajusta con precisión. Cuando los tres sliders coinciden entrarás al umbral de tolerancia.' },
+  ],
+  wiring: [
+    { text: 'Cables cromáticos: Rojo con R, Ámbar con A, Amarillo con Y. Sin cruces creativos.' },
+  ],
+  security: [
+    { text: 'Tras descifrar el buffer, ejecuta: unlock security --code=7319.' },
+  ],
+}
+
+function createInitialPuzzleProgress() {
+  return {
+    sound: { solved: false, hints: 0 },
+    cipher: { solved: false, hints: 0 },
+    frequency: { solved: false, hints: 0 },
+    wiring: { solved: false, hints: 0 },
+    security: { solved: false, hints: 0 },
+  }
+}
+
+function normalizePuzzleProgress(raw) {
+  const base = createInitialPuzzleProgress()
+  const source = raw || {}
+  return Object.keys(base).reduce((acc, key) => {
+    acc[key] = { ...base[key], ...(source[key] || {}) }
+    return acc
+  }, {})
+}
+
+function resolveActiveChallenge(state) {
+  const progress = state?.puzzleProgress || {}
+  if (!progress.sound?.solved) return 'sound'
+  if (!progress.cipher?.solved) return 'cipher'
+  if (!state?.locks?.frequency) return 'frequency'
+  if (!state?.locks?.security) return 'security'
+  if (!state?.locks?.wiring) return 'wiring'
+  return 'free'
+}
+
 const INITIAL_GAME_STATE = {
   stage: 'Trapped',
   locks: INITIAL_LOCK_STATE,
@@ -28,6 +92,9 @@ const INITIAL_GAME_STATE = {
   twistShown: false,
   telemetryOptIn: false,
   introSeen: false,
+  puzzleProgress: createInitialPuzzleProgress(),
+  hintLog: [],
+  hintCooldownUntil: 0,
 }
 
 const INITIAL_SLIDERS = { f1: 0.5, f2: 0.5, f3: 0.5 }
@@ -56,6 +123,9 @@ function loadPersistedState() {
       ...INITIAL_GAME_STATE,
       ...parsed,
       locks: { ...INITIAL_LOCK_STATE, ...(parsed?.locks || {}) },
+      puzzleProgress: normalizePuzzleProgress(parsed?.puzzleProgress),
+      hintLog: Array.isArray(parsed?.hintLog) ? parsed.hintLog : [],
+      hintCooldownUntil: parsed?.hintCooldownUntil ?? 0,
     }
   } catch (error) {
     console.warn('Unable to load persisted game state', error)
@@ -111,11 +181,20 @@ export function GameProvider({ children }) {
   const [narrativeScript, setNarrativeScript] = useState({ intro: [], events: {}, reactions: {}, timers: [] })
   const [introStep, setIntroStep] = useState(0)
   const [introVisible, setIntroVisible] = useState(() => !(persisted?.introSeen))
+  const [unlockAnimations, setUnlockAnimations] = useState({ locks: { ...INITIAL_LOCK_STATE }, pulse: 0 })
+
+  const { playTone, playUnlock, playError, playSlider } = useSound()
 
   const scheduledTimers = useRef([])
   const triggeredEvents = useRef(new Set())
   const timedEventsRegistry = useRef(new Map())
   const stageRef = useRef(gameState.stage)
+  const hintMilestones = useRef(new Set())
+  const activeChallenge = useMemo(
+    () => resolveActiveChallenge(gameState),
+    [gameState.locks, gameState.puzzleProgress],
+  )
+
 
   const registerTimer = useCallback((handle, type = 'timeout') => {
     const record = { handle, type }
@@ -132,6 +211,19 @@ export function GameProvider({ children }) {
     }
     scheduledTimers.current = scheduledTimers.current.filter((entry) => entry !== record)
   }, [])
+
+  const scheduleTimeout = useCallback(
+    (handler, delay = 0) => {
+      if (typeof handler !== 'function') return () => {}
+      const record = registerTimer(
+        setTimeout(() => {
+          handler()
+        }, delay),
+      )
+      return () => cancelTimerRecord(record)
+    },
+    [cancelTimerRecord, registerTimer],
+  )
 
   const clearAllScheduledTimers = useCallback(() => {
     scheduledTimers.current.forEach((record) => {
@@ -205,6 +297,26 @@ export function GameProvider({ children }) {
     [enqueueTerminalLine, narrativeScript.events, narrativeScript.reactions]
   )
 
+  const pulseLockAnimation = useCallback(
+    (key) => {
+      setUnlockAnimations((prev) => {
+        const timestamp = Date.now()
+        const currentLocks = prev?.locks || INITIAL_LOCK_STATE
+        scheduleTimeout(() => {
+          setUnlockAnimations((state) => ({
+            locks: { ...(state?.locks || {}), [key]: false },
+            pulse: state?.pulse || 0,
+          }))
+        }, 900)
+        return {
+          locks: { ...currentLocks, [key]: true },
+          pulse: timestamp,
+        }
+      })
+    },
+    [scheduleTimeout],
+  )
+
   const showTwist = useCallback(() => {
     const logs = ['[bg] sincronizando índices…', '[bg] handshake nodo externo…', '[bg] preparando plan de contingencia global v2…']
     logs.forEach((line, index) => {
@@ -213,17 +325,33 @@ export function GameProvider({ children }) {
   }, [enqueueTerminalLine])
 
   const unlockSecurity = useCallback(() => {
+    if (!gameState.puzzleProgress?.cipher?.solved) {
+      appendTerminal('Sistema: Descifra el buffer antes de manipular seguridad.', 'warning')
+      triggerEvent('security_requires_cipher')
+      playError()
+      return
+    }
+
     let unlocked = false
     setGameState((prev) => {
       if (prev.locks.security) return prev
       unlocked = true
-      return { ...prev, locks: { ...prev.locks, security: true } }
+      return {
+        ...prev,
+        locks: { ...prev.locks, security: true },
+        puzzleProgress: {
+          ...prev.puzzleProgress,
+          security: { ...(prev.puzzleProgress?.security || {}), solved: true },
+        },
+      }
     })
     if (unlocked) {
       appendTerminal('Sistema: Seguridad desbloqueada.')
       triggerEvent('lock_security_unlocked')
+      playUnlock()
+      pulseLockAnimation('security')
     }
-  }, [appendTerminal, triggerEvent])
+  }, [appendTerminal, gameState.puzzleProgress?.cipher?.solved, playError, playUnlock, pulseLockAnimation, triggerEvent])
 
   const connectPlate = useCallback(
     (source, target) => {
@@ -235,22 +363,84 @@ export function GameProvider({ children }) {
           setGameState((state) => {
             if (state.locks.wiring) return state
             updated = true
-            return { ...state, locks: { ...state.locks, wiring: true } }
+            return {
+              ...state,
+              locks: { ...state.locks, wiring: true },
+              puzzleProgress: {
+                ...state.puzzleProgress,
+                wiring: { ...(state.puzzleProgress?.wiring || {}), solved: true },
+              },
+            }
           })
           if (updated) {
             appendTerminal('Placa: Wiring correcto. Lock WIRING desbloqueado.', 'success')
             triggerEvent('lock_wiring_unlocked')
+            playUnlock()
+            pulseLockAnimation('wiring')
           }
         }
         return next
       })
     },
-    [appendTerminal, triggerEvent]
+    [appendTerminal, playUnlock, pulseLockAnimation, triggerEvent]
   )
 
-  const setSliderValue = useCallback((key, value) => {
-    setSliders((prev) => ({ ...prev, [key]: value }))
-  }, [])
+  const setSliderValue = useCallback(
+    (key, value) => {
+      if (!gameState.puzzleProgress?.sound?.solved) {
+        appendTerminal('Sistema: Estabiliza la secuencia resonante antes de calibrar frecuencias.', 'warning')
+        triggerEvent('frequency_requires_sound')
+        playError()
+        return
+      }
+      setSliders((prev) => ({ ...prev, [key]: value }))
+      playSlider()
+    },
+    [appendTerminal, gameState.puzzleProgress?.sound?.solved, playError, playSlider, triggerEvent],
+  )
+
+  const completeSoundPuzzle = useCallback(() => {
+    let solved = false
+    setGameState((prev) => {
+      if (prev.puzzleProgress?.sound?.solved) return prev
+      solved = true
+      return {
+        ...prev,
+        puzzleProgress: {
+          ...prev.puzzleProgress,
+          sound: { ...(prev.puzzleProgress?.sound || {}), solved: true },
+        },
+      }
+    })
+    if (solved) {
+      appendTerminal('Sistema: Patrón sonoro replicado. Canal de calibración abierto.', 'success')
+      playUnlock()
+      triggerEvent('sound_puzzle_completed')
+    }
+  }, [appendTerminal, playUnlock, triggerEvent])
+
+  const completeCipherPuzzle = useCallback(
+    (answer) => {
+      let solved = false
+      setGameState((prev) => {
+        if (prev.puzzleProgress?.cipher?.solved) return prev
+        solved = true
+        return {
+          ...prev,
+          puzzleProgress: {
+            ...prev.puzzleProgress,
+            cipher: { ...(prev.puzzleProgress?.cipher || {}), solved: true },
+          },
+        }
+      })
+      if (solved) {
+        appendTerminal('Buffer: Decodificación exitosa. Código maestro revelado → 7319.', 'success')
+        triggerEvent('cipher_puzzle_completed', { answer: answer || MODEL_CODE })
+        playUnlock()
+      }
+    },
+    [appendTerminal, playUnlock, triggerEvent],
+  )
 
   const setTelemetryOptIn = useCallback(
     (value) => {
@@ -314,11 +504,18 @@ export function GameProvider({ children }) {
       }
     })
     timedEventsRegistry.current.clear()
+    hintMilestones.current.clear()
+    setUnlockAnimations({ locks: { ...INITIAL_LOCK_STATE }, pulse: 0 })
     setNarrativeScript((prev) => ({
       ...prev,
       timers: Array.isArray(prev.timers) ? [...prev.timers] : [],
     }))
-    setGameState(INITIAL_GAME_STATE)
+    setGameState({
+      ...INITIAL_GAME_STATE,
+      puzzleProgress: createInitialPuzzleProgress(),
+      hintLog: [],
+      hintCooldownUntil: 0,
+    })
     setSliders(INITIAL_SLIDERS)
     setPlateConnections(INITIAL_PLATE)
     setPlateOpen(false)
@@ -379,6 +576,14 @@ export function GameProvider({ children }) {
           ...prev,
           usedBypass: true,
           locks: { security: true, frequency: true, wiring: true },
+          puzzleProgress: {
+            ...prev.puzzleProgress,
+            sound: { ...(prev.puzzleProgress?.sound || {}), solved: true },
+            cipher: { ...(prev.puzzleProgress?.cipher || {}), solved: true },
+            frequency: { ...(prev.puzzleProgress?.frequency || {}), solved: true },
+            wiring: { ...(prev.puzzleProgress?.wiring || {}), solved: true },
+            security: { ...(prev.puzzleProgress?.security || {}), solved: true },
+          },
         }))
         appendTerminal('Bypass activado. Acceso concedido.')
         triggerEvent('bypass')
@@ -390,6 +595,58 @@ export function GameProvider({ children }) {
     },
     [appendTerminal, gameState.locks, triggerEvent, unlockSecurity]
   )
+
+  const requestHint = useCallback(
+    (target) => {
+      const key = target || activeChallenge
+      const hints = HINT_LIBRARY[key]
+      if (!hints || hints.length === 0) {
+        triggerEvent('hint_unavailable', { key })
+        return null
+      }
+      const now = Date.now()
+      if (gameState.hintCooldownUntil && now < gameState.hintCooldownUntil) {
+        triggerEvent('hint_cooldown', { remaining: gameState.hintCooldownUntil - now })
+        return null
+      }
+
+      let entry = null
+      setGameState((prev) => {
+        const previous = prev.puzzleProgress?.[key]?.hints ?? 0
+        const index = Math.min(previous, hints.length - 1)
+        const hint = hints[index]
+        entry = {
+          id: `${key}-${now}`,
+          puzzle: key,
+          puzzleLabel: PUZZLE_LABELS[key] ?? key,
+          level: index + 1,
+          text: hint.text,
+          timestamp: now,
+        }
+        const progressBase = prev.puzzleProgress ? { ...prev.puzzleProgress } : createInitialPuzzleProgress()
+        progressBase[key] = {
+          ...(progressBase[key] || {}),
+          hints: Math.min(previous + 1, hints.length),
+        }
+        return {
+          ...prev,
+          hintsUsed: prev.hintsUsed + 1,
+          hintCooldownUntil: now + HINT_COOLDOWN,
+          hintLog: [...(prev.hintLog || []), entry],
+          puzzleProgress: progressBase,
+        }
+      })
+
+      if (entry) {
+        triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
+        appendTerminal(`[A.R.I.A.] ${entry.text}`, 'aria')
+      }
+
+      return entry
+    },
+    [activeChallenge, appendTerminal, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
+  )
+
 
   useEffect(() => {
     savePersistedState(gameState)
@@ -435,14 +692,23 @@ export function GameProvider({ children }) {
       setGameState((prev) => {
         if (prev.locks.frequency) return prev
         updated = true
-        return { ...prev, locks: { ...prev.locks, frequency: true } }
+        return {
+          ...prev,
+          locks: { ...prev.locks, frequency: true },
+          puzzleProgress: {
+            ...prev.puzzleProgress,
+            frequency: { ...(prev.puzzleProgress?.frequency || {}), solved: true },
+          },
+        }
       })
       if (updated) {
         appendTerminal('Sistema: Frecuencia establecida. Lock FREQUENCY desbloqueada.')
         triggerEvent('lock_frequency_unlocked')
+        playUnlock()
+        pulseLockAnimation('frequency')
       }
     }
-  }, [appendTerminal, gameState.locks.frequency, sliders, triggerEvent])
+  }, [appendTerminal, gameState.locks.frequency, pulseLockAnimation, sliders, triggerEvent, playUnlock])
 
   useEffect(() => {
     const locks = gameState.locks
@@ -461,9 +727,24 @@ export function GameProvider({ children }) {
       if (shouldShowTwist) {
         showTwist()
         triggerEvent('victory', { stage: newStage })
+        if (gameState.hintsUsed === 0) {
+          triggerEvent('victory_perfect')
+        }
       }
     }
-  }, [gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent])
+  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent])
+
+  useEffect(() => {
+    const used = gameState.hintsUsed
+    if (used >= 3 && !hintMilestones.current.has(3)) {
+      hintMilestones.current.add(3)
+      triggerEvent('hint_threshold_3')
+    }
+    if (used >= 5 && !hintMilestones.current.has(5)) {
+      hintMilestones.current.add(5)
+      triggerEvent('hint_threshold_5')
+    }
+  }, [gameState.hintsUsed, triggerEvent])
 
   useEffect(() => {
     stageRef.current = gameState.stage
@@ -631,6 +912,13 @@ export function GameProvider({ children }) {
       narrativeScript,
       triggerEvent,
       showTwist,
+      completeSoundPuzzle,
+      completeCipherPuzzle,
+      requestHint,
+      playTone,
+      scheduleTimeout,
+      unlockAnimations,
+      activeChallenge,
       MODEL,
     }),
     [
@@ -652,7 +940,14 @@ export function GameProvider({ children }) {
       narrativeScript,
       triggerEvent,
       showTwist,
-    ]
+      completeSoundPuzzle,
+      completeCipherPuzzle,
+      requestHint,
+      playTone,
+      scheduleTimeout,
+      unlockAnimations,
+      activeChallenge,
+    ],
   )
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>
