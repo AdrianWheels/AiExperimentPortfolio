@@ -48,7 +48,9 @@ const HINT_LIBRARY = {
     { text: 'Ajusta con precisión. Cuando los tres sliders coinciden entrarás al umbral de tolerancia.' },
   ],
   wiring: [
-    { text: 'Cables cromáticos: Rojo con R, Ámbar con A, Amarillo con Y. Sin cruces creativos.' },
+    { text: 'Las emociones deben conectarse de forma cruzada: Furia→Miedo, Alegría→Calma, etc.' },
+    { text: 'Busca el equilibrio emocional conectando opuestos: cada emoción con su contraparte.' },
+    { text: 'El patrón es: Furia→Miedo, Alegría→Calma, Tristeza→Envidia, Miedo→Amor, Amor→Tristeza, Calma→Alegría, Envidia→Furia.' },
   ],
   security: [
     { text: 'Tras descifrar el buffer, ejecuta: unlock security --code=7319.' },
@@ -101,7 +103,15 @@ const INITIAL_GAME_STATE = {
 }
 
 const INITIAL_SLIDERS = { f1: 0.5, f2: 0.5, f3: 0.5 }
-const INITIAL_PLATE = { R: null, A: null, Y: null }
+const INITIAL_PLATE = { 
+  FURY: null, 
+  JOY: null, 
+  SADNESS: null, 
+  FEAR: null, 
+  LOVE: null, 
+  CALM: null, 
+  ENVY: null 
+}
 
 const GameContext = createContext(null)
 
@@ -380,8 +390,16 @@ export function GameProvider({ children }) {
     (source, target) => {
       setPlateConnections((prev) => {
         const next = { ...prev, [source]: target }
-        const ok = next.R === 'R' && next.A === 'A' && next.Y === 'Y'
-        if (ok) {
+        // Verificar que todas las emociones estén conectadas de forma cruzada
+        const emotionsCorrect = next.FURY === 'FEAR' && 
+                               next.JOY === 'CALM' && 
+                               next.SADNESS === 'ENVY' && 
+                               next.FEAR === 'LOVE' && 
+                               next.LOVE === 'SADNESS' && 
+                               next.CALM === 'JOY' && 
+                               next.ENVY === 'FURY'
+        
+        if (emotionsCorrect) {
           let updated = false
           setGameState((state) => {
             if (state.locks.wiring) return state
@@ -396,7 +414,7 @@ export function GameProvider({ children }) {
             }
           })
           if (updated) {
-            appendTerminal('Placa: Wiring correcto. Lock WIRING desbloqueado.', 'success')
+            appendTerminal('Sistema Emocional: Conexiones cruzadas estabilizadas. Equilibrio neural conseguido. Lock WIRING desbloqueado.', 'success')
             triggerEvent('lock_wiring_unlocked')
             playUnlock()
             pulseLockAnimation('wiring')
