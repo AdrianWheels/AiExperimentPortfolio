@@ -1,4 +1,5 @@
 import React from 'react'
+import VandalizeCanvas from './VandalizeCanvas'
 
 function ContactItem({ label, value, url }) {
   if (!value) return null
@@ -38,7 +39,13 @@ export default function PortfolioHero({
     <section className="grid gap-8 lg:grid-cols-[2fr_1fr]">
       <div>
         <div className="flex flex-wrap items-baseline gap-3">
-          <h2 className="text-3xl font-semibold tracking-tight text-white">{name}</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-white">
+            {mode === 'hacked' ? (
+              <VandalizeCanvas name={name} replacement={alias || 'A.R.I.A'} />
+            ) : (
+              name
+            )}
+          </h2>
           {alias && mode === 'hacked' && (
             <span className="rounded-full border border-purple-400/40 bg-purple-900/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-purple-200">
               {alias}
