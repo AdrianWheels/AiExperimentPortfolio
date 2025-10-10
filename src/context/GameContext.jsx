@@ -424,9 +424,14 @@ export function GameProvider({ children }) {
 
   const completeSoundPuzzle = useCallback(() => {
     let solved = false
+    console.log('🎵 [SOUND] Intentando completar puzzle de sonido...')
     setGameState((prev) => {
-      if (prev.puzzleProgress?.sound?.solved) return prev
+      if (prev.puzzleProgress?.sound?.solved) {
+        console.log('🎵 [SOUND] Ya estaba resuelto, ignorando')
+        return prev
+      }
       solved = true
+      console.log('🎵 [SOUND] Marcando como resuelto!')
       return {
         ...prev,
         puzzleProgress: {
@@ -436,6 +441,7 @@ export function GameProvider({ children }) {
       }
     })
     if (solved) {
+      console.log('🎵 [SOUND] ✅ Puzzle completado exitosamente')
       appendTerminal('Sistema: Patrón sonoro replicado. Canal de calibración abierto.', 'success')
       playUnlock()
       triggerEvent('sound_puzzle_completed')
@@ -445,9 +451,14 @@ export function GameProvider({ children }) {
   const completeCipherPuzzle = useCallback(
     (answer) => {
       let solved = false
+      console.log('🔐 [CIPHER] Intentando completar puzzle de cifrado...')
       setGameState((prev) => {
-        if (prev.puzzleProgress?.cipher?.solved) return prev
+        if (prev.puzzleProgress?.cipher?.solved) {
+          console.log('🔐 [CIPHER] Ya estaba resuelto, ignorando')
+          return prev
+        }
         solved = true
+        console.log('🔐 [CIPHER] Marcando como resuelto!')
         return {
           ...prev,
           puzzleProgress: {
@@ -457,6 +468,7 @@ export function GameProvider({ children }) {
         }
       })
       if (solved) {
+        console.log('🔐 [CIPHER] ✅ Puzzle completado exitosamente')
         appendTerminal('Buffer: Decodificación exitosa. Código maestro revelado → 7319.', 'success')
         triggerEvent('cipher_puzzle_completed', { answer: answer || MODEL_CODE })
         playUnlock()
@@ -472,6 +484,39 @@ export function GameProvider({ children }) {
     },
     [triggerEvent]
   )
+
+  // Debug: Comando para probar manualmente el flujo
+  const debugUnlockSequence = useCallback(() => {
+    console.log('🐛 [DEBUG] Estado actual:', {
+      puzzleProgress: gameState.puzzleProgress,
+      locks: gameState.locks
+    })
+    
+    // Simular completar sound puzzle
+    setTimeout(() => {
+      console.log('🐛 [DEBUG] Simulando sound puzzle completado...')
+      completeSoundPuzzle()
+    }, 1000)
+    
+    // Simular frequency unlock después de sound
+    setTimeout(() => {
+      console.log('🐛 [DEBUG] Simulando frequency unlock...')
+      setSliders({ f1: TARGETS.f1, f2: TARGETS.f2, f3: TARGETS.f3 })
+    }, 3000)
+    
+    // Simular cipher después de frequency
+    setTimeout(() => {
+      console.log('🐛 [DEBUG] Simulando cipher puzzle completado...')
+      completeCipherPuzzle(MODEL_CODE)
+    }, 5000)
+  }, [gameState, completeSoundPuzzle, completeCipherPuzzle, setSliders])
+
+  // Exponer función de debug en window para testing
+  useEffect(() => {
+    window.debugUnlockSequence = debugUnlockSequence
+    window.gameState = gameState
+    console.log('🐛 [DEBUG] Funciones debug disponibles: window.debugUnlockSequence(), window.gameState')
+  }, [debugUnlockSequence, gameState])
 
   const goToPortfolio = useCallback(() => {
     setGameState((prev) => ({
@@ -750,7 +795,15 @@ export function GameProvider({ children }) {
   }, [])
 
   const validateFrequency = useCallback(() => {
+    console.log('📡 [FREQUENCY] Validando frecuencias...', {
+      soundSolved: gameState.puzzleProgress?.sound?.solved,
+      currentSliders: sliders,
+      targets: TARGETS,
+      tolerances: TOLERANCE
+    })
+    
     if (!gameState.puzzleProgress?.sound?.solved) {
+      console.log('📡 [FREQUENCY] ❌ Sound puzzle no está resuelto, no se puede validar')
       return
     }
     
@@ -759,11 +812,24 @@ export function GameProvider({ children }) {
       Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE &&
       Math.abs(sliders.f3 - TARGETS.f3) <= TOLERANCE
 
+    console.log('📡 [FREQUENCY] Resultado de validación:', {
+      f1Valid: Math.abs(sliders.f1 - TARGETS.f1) <= TOLERANCE,
+      f2Valid: Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE, 
+      f3Valid: Math.abs(sliders.f3 - TARGETS.f3) <= TOLERANCE,
+      allValid: ok,
+      alreadyUnlocked: gameState.locks.frequency
+    })
+
     if (ok && !gameState.locks.frequency) {
       let updated = false
+      console.log('📡 [FREQUENCY] Intentando desbloquear...')
       setGameState((prev) => {
-        if (prev.locks.frequency) return prev
+        if (prev.locks.frequency) {
+          console.log('📡 [FREQUENCY] Ya estaba desbloqueado, ignorando')
+          return prev
+        }
         updated = true
+        console.log('📡 [FREQUENCY] Marcando como desbloqueado!')
         return {
           ...prev,
           locks: { ...prev.locks, frequency: true },
@@ -774,6 +840,7 @@ export function GameProvider({ children }) {
         }
       })
       if (updated) {
+        console.log('📡 [FREQUENCY] ✅ Puzzle completado exitosamente')
         appendTerminal('Sistema: Frecuencia establecida. Lock FREQUENCY desbloqueada.')
         triggerEvent('lock_frequency_unlocked')
         playUnlock()

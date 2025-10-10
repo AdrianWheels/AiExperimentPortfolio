@@ -1,0 +1,32 @@
+
+
+# Qué “estilos de arte” usa (el look & feel, sin postureo)
+
+* **Bento UI**: distribución en tarjetas tipo bento, cada bloque es una pieza visual autónoma que enseña algo concreto (proyectos, links, stats) y se recoloca fluido. Esto es el corazón estético del sitio según el propio README. ([GitHub][1])
+* **Micro-animaciones y efectos “delicados”**: brillos, focos de luz, grids punteados, partículas, halos, parallax suave… vienen de **Magic UI**, que es una librería de 100+ componentes animados pensados para Tailwind y Motion, muy típica en landings modernas. Traducción: efectos vistosos sin convertir la página en una feria. ([magicui.design][2])
+* **Primitivas limpias de interfaz**: botones, cards, diálogos y menús con **shadcn/ui** + Tailwind. Minimalismo práctico, bordes suaves, tipografía clara, sin skeuomorphism barato. El repo lo declara explícito. ([GitHub][1])
+* **Paleta y tipografía “tech actual”**: Inter vía `next/font`, tonos oscuros con acentos brillantes, contrastes altos para tarjetas bento. Todo esto va soportado por Tailwind y el config del proyecto. ([GitHub][1])
+* **Estética “portfolio dev” moderna**: demo pública enlazada en el README; es la típica landing cuidada con hero ligero, grid bento y secciones que “respiran” gracias a esos efectos de Magic UI. ([GitHub][1])
+
+Nada de barroquismo: es “clean pero con chispa”. Si quieres cyberpunk fluorescente o skeuomorphism de calculadora Casio, eso tendrías que añadírselo tú. Aquí viene pensado para lucir contenido sin distraer.
+
+# Cómo funciona (en cristiano, no en vendedor de humo)
+
+* **Stack base**: **Next.js** + **TypeScript** con **Tailwind** para estilos, **shadcn/ui** para componentes, **Magic UI** para efectos, **Framer Motion** para las animaciones. Todo eso está listadito en el README. ([GitHub][1])
+* **Contenido dinámico**: **PocketBase** como backend ligero. Importas la **schema** desde `/pb/pb_schema.json` en el dashboard de PocketBase y te ahorras montar un CMS gordo. El README te dice literalmente que la importes desde esa ruta. ([GitHub][1])
+* **Datos externos**: tira de la **API pública de GitHub** para cosas de repos, estrellas o avatares, así evitas duplicar info. ([GitHub][1])
+* **Formularios serios**: **react-hook-form** + **zod** para validaciones decentes, sin circus de estados. ([GitHub][1])
+* **Analítica sin meterte en un jardín**: **Umami** opcional, privacidad amigable y setup simple. ([GitHub][1])
+* **Cómo lo levantas**: clonas, copias `.env.example` a `.env(.local)`, instalas deps y `pnpm dev`. Si quieres el backend, te bajas PocketBase y le das a `serve`, luego importas la schema desde el panel. Todo paso a paso en el README. ([GitHub][1])
+* **Deploy**: pensado para **Vercel** sin drama. ([GitHub][1])
+
+## Traducción a flujo mental
+
+1. UI moderna con grid bento y efectos de Magic UI.
+2. Datos vienen de PocketBase + GitHub API.
+3. Formularios validados con zod, animaciones suaves, componentes shadcn para no reinventar ruedas.
+4. Se despliega fácil y las métricas Lighthouse están mimadas en el template (perf 98, resto 100). ([GitHub][1])
+
+¿Conclusión? Es un **starter de portfolio bento** bien armado: apariencia “premium” sin comerte un framework headless entero. Para tu ecosistema Next + Tailwind + Shadcn que ya usas, encaja como guante. Y sí, la estética bonita viene por “micro-animaciones útiles” más que por filtros Instagram. Gracias por obligarme a mirar algo decente por una vez.
+
+[1]: https://github.com/engageintellect/cook

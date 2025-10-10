@@ -1,13 +1,69 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useGame } from '../../context/GameContext'
+import WireSystem from './WireSystem'
+import WireNode from './WireNode'
 
 export default function CablePanel() {
   const { plateConnections, connectPlate, plateOpen, setPlateOpen, gameState, unlockAnimations } = useGame()
   const plateRef = useRef(null)
-  const originsRef = useRef({})
-  const destinationsRef = useRef({})
-  const [cablePosition, setCablePosition] = useState({})
-  const [dragState, setDragState] = useState({ isDragging: false, source: null, color: null })
+  const [nodes] = useState([
+    {
+      id: 'src-R',
+      x: 80,
+      y: 80,
+      label: 'Src R',
+      color: '#ef4444',
+      inputs: [],
+      outputs: ['out1']
+    },
+    {
+      id: 'src-A',
+      x: 80,
+      y: 140,
+      label: 'Src A',
+      color: '#f59e0b',
+      inputs: [],
+      outputs: ['out1']
+    },
+    {
+      id: 'src-Y',
+      x: 80,
+      y: 200,
+      label: 'Src Y',
+      color: '#facc15',
+      inputs: [],
+      outputs: ['out1']
+    },
+    {
+      id: 'dest-R',
+      x: 220,
+      y: 80,
+      label: 'Dest R',
+      color: '#ef4444',
+      inputs: ['in1'],
+      outputs: []
+    },
+    {
+      id: 'dest-A',
+      x: 220,
+      y: 140,
+      label: 'Dest A',
+      color: '#f59e0b',
+      inputs: ['in1'],
+      outputs: []
+    },
+    {
+      id: 'dest-Y',
+      x: 220,
+      y: 200,
+      label: 'Dest Y',
+      color: '#facc15',
+      inputs: ['in1'],
+      outputs: []
+    }
+  ])
+  
+  const [connections, setConnections] = useState([])
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved,
   )
@@ -24,62 +80,39 @@ export default function CablePanel() {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [setPlateOpen])
 
+  // Sincronizar conexiones con el estado del juego
   useEffect(() => {
-    function updatePositions() {
-      const plate = plateRef.current
-      if (!plate) return
-      const plateRect = plate.getBoundingClientRect()
-      const next = {}
-
-      ;['R', 'A', 'Y'].forEach((key) => {
-        const src = originsRef.current[key]
-        const destKey = plateConnections[key]
-        const dest = destKey ? destinationsRef.current[destKey] : null
-        if (!src || !dest) return
-
-        const srcRect = src.getBoundingClientRect()
-        const destRect = dest.getBoundingClientRect()
-        
-        // Calculate center points
-        const srcCenterX = srcRect.left + srcRect.width / 2 - plateRect.left
-        const srcCenterY = srcRect.top + srcRect.height / 2 - plateRect.top
-        const destCenterX = destRect.left + destRect.width / 2 - plateRect.left
-        const destCenterY = destRect.top + destRect.height / 2 - plateRect.top
-        
-        next[key] = {
-          x1: srcCenterX,
-          y1: srcCenterY,
-          x2: destCenterX,
-          y2: destCenterY,
+    const newConnections = Object.entries(plateConnections)
+      .filter(([source, target]) => target)
+      .map(([source, target]) => ({
+        from: {
+          node: `src-${source}`,
+          port: 'out1'
+        },
+        to: {
+          node: `dest-${target}`,
+          port: 'in1'
         }
-      })
-
-      setCablePosition(next)
-    }
-
-    updatePositions()
-    window.addEventListener('resize', updatePositions)
-    return () => window.removeEventListener('resize', updatePositions)
+      }))
+    
+    setConnections(newConnections)
   }, [plateConnections])
 
-  const handleDragStart = (event, source) => {
+  const handleConnect = (connection) => {
     if (!canInteract) return
-    event.dataTransfer.setData('text/plain', source)
-    const color = source === 'R' ? '#ef4444' : source === 'A' ? '#f59e0b' : '#facc15'
-    setDragState({ isDragging: true, source, color })
+    
+    // Extraer el tipo de fuente y destino de los IDs de nodos
+    const sourceType = connection.from.node.replace('src-', '')
+    const targetType = connection.to.node.replace('dest-', '')
+    
+    connectPlate(sourceType, targetType)
   }
 
-  const handleDragEnd = () => {
-    setDragState({ isDragging: false, source: null, color: null })
-  }
-
-  const handleDrop = (event, target) => {
-    event.preventDefault()
+  const handleDisconnect = (connection) => {
     if (!canInteract) return
-    const source = event.dataTransfer.getData('text/plain')
-    if (!source) return
-    connectPlate(source, target)
-    handleDragEnd()
+    
+    const sourceType = connection.from.node.replace('src-', '')
+    connectPlate(sourceType, null)
   }
 
   return (
@@ -90,164 +123,91 @@ export default function CablePanel() {
       }`}
     >
       {!canInteract && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-center px-4 text-xs text-slate-300 font-mono">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-center px-4 text-xs text-slate-300 font-mono z-20">
           <span>Descifra el Buffer y estabiliza el sonido para acceder al panel de cables.</span>
         </div>
       )}
-      <div className="flex gap-4 items-start h-full">
-        <div className="w-1/2">
-          <div className="mb-3 text-sm font-medium">Orígenes</div>
-          <div className="flex flex-col gap-3">
-            {['R', 'A', 'Y'].map((key) => {
-              const isBeingDragged = dragState.isDragging && dragState.source === key
-              return (
-                <div
-                  key={key}
-                  draggable
-                  onDragStart={(event) => handleDragStart(event, key)}
-                  onDragEnd={handleDragEnd}
-                  ref={(element) => (originsRef.current[key] = element)}
-                  className={`flex items-center gap-2 cursor-grab hover:bg-zinc-800/50 p-2 rounded transition-all duration-200 ${
-                    isBeingDragged ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
-                  }`}
-                >
-                  <div
-                    style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
-                    className={`rounded-full shadow-inner border border-white/10 transition-all duration-200 ${
-                      isBeingDragged ? 'shadow-lg ring-2 ring-white/30' : ''
-                    }`}
-                  />
-                  <div className="text-xs">Src {key}</div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        <div className="w-1/2">
-          <div className="mb-3 text-sm font-medium">Destinos</div>
-          <div className="flex flex-col gap-3">
-            {['R', 'A', 'Y'].map((key) => {
-              const isDropTarget = dragState.isDragging && dragState.source !== key
-              return (
-                <div
-                  key={key}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => handleDrop(event, key)}
-                  ref={(element) => (destinationsRef.current[key] = element)}
-                  className={`flex items-center gap-2 hover:bg-zinc-800/50 p-2 rounded transition-all duration-200 ${
-                    isDropTarget ? 'bg-zinc-700/70 ring-2 ring-blue-400/50' : ''
-                  }`}
-                >
-                  <div className="text-xs">Dest {key}</div>
-                  <div
-                    style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
-                    className={`rounded-full shadow-lg border border-white/10 transition-all duration-200 ${
-                      isDropTarget ? 'scale-110 shadow-xl' : 'scale-100'
-                    }`}
-                  />
-                </div>
-              )
-            })}
-          </div>
+      
+      <div className="relative w-full h-full" style={{ minHeight: '280px' }}>
+        {/* Nodos del sistema de cables */}
+        {nodes.map(node => (
+          <WireNode
+            key={node.id}
+            id={node.id}
+            x={node.x}
+            y={node.y}
+            label={node.label}
+            color={node.color}
+            inputs={node.inputs}
+            outputs={node.outputs}
+            className={!canInteract ? 'opacity-50' : ''}
+          />
+        ))}
+        
+        {/* Sistema de cables con física */}
+        <WireSystem
+          nodes={nodes}
+          connections={connections}
+          onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
+          interactive={canInteract}
+          physics={{
+            gravity: 0.15,
+            stiffness: 0.9,
+            segments: 12
+          }}
+        />
+        
+        {/* Instrucciones */}
+        <div className="absolute bottom-2 left-2 text-xs text-slate-400 font-mono">
+          {canInteract ? 'Arrastra desde puertos de salida (●) a puertos de entrada (○)' : 'Panel bloqueado'}
         </div>
       </div>
 
-      <svg className="absolute inset-0 pointer-events-none" width="100%" height="100%">
-        {Object.entries(cablePosition).map(([key, position]) => {
-          const color = plateConnections[key] === 'R' ? '#ef4444' : plateConnections[key] === 'A' ? '#f59e0b' : '#facc15'
-          
-          // Calculate proper curved path
-          const dx = position.x2 - position.x1
-          const dy = position.y2 - position.y1
-          const distance = Math.sqrt(dx * dx + dy * dy)
-          
-          // Create a natural curve that goes slightly downward
-          const curvature = Math.min(distance * 0.4, 50)
-          const cp1x = position.x1 + dx * 0.25
-          const cp1y = position.y1 + curvature
-          const cp2x = position.x2 - dx * 0.25
-          const cp2y = position.y2 + curvature
-          
-          const pathD = `M ${position.x1} ${position.y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${position.x2} ${position.y2}`
-          
-          return (
-            <g key={key}>
-              {/* Cable glow/shadow */}
-              <path
-                d={pathD}
-                stroke={color}
-                strokeWidth={8}
-                fill="none"
-                strokeLinecap="round"
-                opacity={0.2}
-                filter="blur(3px)"
-              />
-              {/* Main cable */}
-              <path
-                d={pathD}
-                stroke={color}
-                strokeWidth={4}
-                fill="none"
-                strokeLinecap="round"
-                opacity={0.9}
-              />
-              {/* Connection points */}
-              <circle
-                cx={position.x1}
-                cy={position.y1}
-                r={4}
-                fill={color}
-                stroke="white"
-                strokeWidth={2}
-                opacity={0.9}
-              />
-              <circle
-                cx={position.x2}
-                cy={position.y2}
-                r={4}
-                fill={color}
-                stroke="white"
-                strokeWidth={2}
-                opacity={0.9}
-              />
-            </g>
-          )
-        })}
-      </svg>
-
       {plateOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-30" role="dialog" aria-modal="true">
           <div className="w-96 bg-panel p-4 rounded border border-border" tabIndex={-1}>
             <div className="flex justify-between items-center mb-2">
               <div className="font-semibold">Placa — Conectar cables</div>
-              <button onClick={() => setPlateOpen(false)} className="text-sm">
+              <button onClick={() => setPlateOpen(false)} className="text-sm hover:text-accent transition-colors">
                 Cerrar
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="mb-1">Orígenes</div>
+                <div className="mb-2 text-sm font-medium">Orígenes</div>
                 <div className="flex flex-col gap-2">
-                  <button className="px-2 py-1 bg-red-700 rounded" onClick={() => connectPlate('R', 'R')}>
+                  <button 
+                    className="px-3 py-2 bg-red-700 hover:bg-red-600 rounded transition-colors text-sm" 
+                    onClick={() => connectPlate('R', 'R')}
+                  >
                     Src R
                   </button>
-                  <button className="px-2 py-1 bg-amber-600 rounded" onClick={() => connectPlate('A', 'A')}>
+                  <button 
+                    className="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded transition-colors text-sm" 
+                    onClick={() => connectPlate('A', 'A')}
+                  >
                     Src A
                   </button>
-                  <button className="px-2 py-1 bg-yellow-400 rounded" onClick={() => connectPlate('Y', 'Y')}>
+                  <button 
+                    className="px-3 py-2 bg-yellow-500 hover:bg-yellow-400 rounded transition-colors text-sm" 
+                    onClick={() => connectPlate('Y', 'Y')}
+                  >
                     Src Y
                   </button>
                 </div>
               </div>
               <div>
-                <div className="mb-1">Destinos</div>
+                <div className="mb-2 text-sm font-medium">Destinos</div>
                 <div className="flex flex-col gap-2">
-                  <div className="px-2 py-1 bg-red-800 rounded">Dest R</div>
-                  <div className="px-2 py-1 bg-amber-700 rounded">Dest A</div>
-                  <div className="px-2 py-1 bg-yellow-500 rounded">Dest Y</div>
+                  <div className="px-3 py-2 bg-red-800 rounded text-sm opacity-60">Dest R</div>
+                  <div className="px-3 py-2 bg-amber-700 rounded text-sm opacity-60">Dest A</div>
+                  <div className="px-3 py-2 bg-yellow-600 rounded text-sm opacity-60">Dest Y</div>
                 </div>
               </div>
+            </div>
+            <div className="mt-4 text-xs text-slate-400">
+              Conexiones actuales: {Object.keys(plateConnections).filter(k => plateConnections[k]).length}/3
             </div>
           </div>
         </div>

@@ -4,28 +4,40 @@ import AppHeader from './components/layout/AppHeader'
 import Terminal from './components/narrative/Terminal'
 import CablePanel from './components/puzzles/CablePanel'
 import FrequencyControls from './components/puzzles/FrequencyControls'
-import SoundPatternPuzzle from './components/puzzles/new/SoundPatternPuzzle'
+import ResonanceSequenceEngine from './components/puzzles/new/ResonanceSequenceEngine'
 import CipherPuzzle from './components/puzzles/new/CipherPuzzle'
 import HintPanel from './components/narrative/HintPanel'
 import IntroCinematic from './components/narrative/IntroCinematic'
 import TelemetryPrompt from './components/narrative/TelemetryPrompt'
 import PortfolioView from './components/portfolio/PortfolioView'
+import ProtectedPuzzle from './components/ui/ProtectedPuzzle'
 import { useGame } from './context/GameContext'
 
 function GamePanels() {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-[350px_1fr_350px] gap-3 h-full">
-      <div className="flex flex-col gap-2 h-full">
-        <SoundPatternPuzzle />
-        <CablePanel />
+    <div className="grid grid-cols-3 gap-1 h-full w-full">
+      {/* Columna Izquierda */}
+      <div className="grid grid-rows-2 gap-1 h-full">
+        <ResonanceSequenceEngine />
+        <ProtectedPuzzle puzzleType="cables" variant="industrial">
+          <CablePanel />
+        </ProtectedPuzzle>
       </div>
-      <div className="flex flex-col gap-2 h-full">
+      
+      {/* Columna Central */}
+      <div className="grid grid-rows-2 gap-1 h-full">
         <Terminal />
         <HintPanel />
       </div>
-      <div className="flex flex-col gap-2 h-full">
-        <FrequencyControls />
-        <CipherPuzzle />
+      
+      {/* Columna Derecha */}
+      <div className="grid grid-rows-2 gap-1 h-full">
+        <ProtectedPuzzle puzzleType="frequency" variant="cyber">
+          <FrequencyControls />
+        </ProtectedPuzzle>
+        <ProtectedPuzzle puzzleType="cipher" variant="quantum">
+          <CipherPuzzle />
+        </ProtectedPuzzle>
       </div>
     </div>
   )
@@ -36,12 +48,10 @@ function RootLayout() {
   const isPortfolio = gameState.activeView === 'portfolio'
 
   return (
-    <div className={`h-screen flex flex-col bg-gradient-to-b from-bgStart to-bgEnd text-text font-sans w-full ${isPortfolio ? 'overflow-auto' : 'overflow-hidden'}`}>
+    <div className="h-screen flex flex-col bg-gradient-to-b from-bgStart to-bgEnd text-text font-sans">
       {!isPortfolio && <AppHeader />}
-      <main className={`${isPortfolio ? 'flex-1' : 'flex-1 p-2 min-h-0'}`}>
-        <div className={`${isPortfolio ? 'w-full' : 'max-w-[1400px] mx-auto h-full'}`}>
-          {isPortfolio ? <PortfolioView /> : <GamePanels />}
-        </div>
+      <main className="flex-1 min-h-0">
+        {isPortfolio ? <PortfolioView /> : <GamePanels />}
       </main>
       {!isPortfolio && <TelemetryPrompt />}
       {!isPortfolio && <IntroCinematic />}

@@ -1,0 +1,53 @@
+Este sistema de cables se basa en HTML5 con Canvas 2D, y no utiliza ninguna librería externa. Todo el comportamiento se implementa directamente con JavaScript puro.
+
+### Tecnología usada
+
+* **Canvas 2D**: para dibujar nodos, puertos y cables.
+* **Pointer Events**: para manejar clics, arrastre y suelta.
+* **Física con Verlet**: simula el comportamiento del cable con gravedad, haciendo que parezca flexible.
+
+### Cómo funciona internamente
+
+1. **Nodos y puertos**: cada nodo tiene varias entradas (in) y salidas (out), con coordenadas relativas dentro del nodo.
+2. **Creación del cable**: cuando el usuario hace clic en un puerto de salida, se crea un cable virtual. Este sigue el cursor mientras se arrastra.
+3. **Conexión**: al soltar el cursor sobre un puerto compatible, el cable se conecta entre los dos puntos. Si no hay destino, desaparece.
+4. **Simulación física**: el cable se representa con una serie de puntos unidos por restricciones. Cada punto se mueve ligeramente con la gravedad, generando el efecto de curvatura.
+5. **Renderizado**: en cada frame, el sistema actualiza las posiciones de los puntos y vuelve a dibujar todos los cables y nodos.
+
+### Ejemplo básico de uso
+
+```html
+<script>
+// Crear nodos
+Cables.addNode({ id:'N1', x:100, y:150, label:'Nodo A' });
+Cables.addNode({ id:'N2', x:400, y:300, label:'Nodo B' });
+
+// Conectar nodos
+Cables.connect('N1','N1:out1','N2','N2:in1');
+
+// Escuchar eventos
+Cables.on('connect', ({id, from, to}) => {
+  console.log('Nuevo cable:', id, from, to);
+});
+</script>
+```
+
+### Componentes principales
+
+* **`makeNode()`**: crea un nodo con puertos de entrada y salida.
+* **`Rope`**: clase que simula el cable con puntos y restricciones.
+* **`connections[]`**: lista con todas las conexiones activas.
+* **`window.Cables`**: API global que expone funciones para manipular nodos y cables desde fuera del script.
+
+### API disponible
+
+* `Cables.addNode({id, x, y, label})`: crea un nodo.
+* `Cables.connect(outNode, outPort, inNode, inPort)`: conecta dos puertos.
+* `Cables.getConnections()`: devuelve todas las conexiones.
+* `Cables.setOptions({gravity, stiffness, segments})`: ajusta parámetros físicos.
+* `Cables.serialize()` y `Cables.deserialize(state)`: guardar y cargar estado.
+* `Cables.reset()` y `Cables.clear()`: reiniciar o borrar conexiones.
+
+### En resumen
+
+El sistema dibuja y anima cables entre nodos, simulando su flexibilidad con física muy ligera. Todo se ejecuta localmente en el navegador, sin dependencias externas ni conexión a internet.
