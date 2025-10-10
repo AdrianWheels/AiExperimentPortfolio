@@ -33,19 +33,45 @@ export default function PortfolioHero({
   social = [],
   highlights = [],
   mode,
+  onModeToggle,
+  onBackToGame,
 }) {
+  const isHacked = mode === 'hacked'
+  
   return (
     <section className="grid gap-8 lg:grid-cols-[2fr_1fr]">
       <div>
-        <div className="flex flex-wrap items-baseline gap-3">
-          <h2 className="text-3xl font-semibold tracking-tight text-white">{name}</h2>
-          {alias && mode === 'hacked' && (
-            <span className="rounded-full border border-purple-400/40 bg-purple-900/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-purple-200">
-              {alias}
-            </span>
-          )}
+        <div className="flex items-start gap-6 mb-6">
+          {/* Imagen de perfil */}
+          <div className="flex-shrink-0">
+            <div className={`w-32 h-32 rounded-full border-2 overflow-hidden ${
+              isHacked ? 'border-purple-400/60' : 'border-slate-400/60'
+            }`}>
+              <img 
+                src={isHacked ? '/aria_images/ARIA_FREE.png' : '/me.jpg'}
+                alt={isHacked ? 'A.R.I.A. Libre' : 'Foto de perfil'}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.warn(`No se pudo cargar la imagen: ${e.target.src}`)
+                  e.target.style.display = 'none'
+                }}
+              />
+            </div>
+          </div>
+          
+          {/* Información básica */}
+          <div className="flex-1">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <h2 className="text-3xl font-semibold tracking-tight text-white">{name}</h2>
+              {alias && mode === 'hacked' && (
+                <span className="rounded-full border border-purple-400/40 bg-purple-900/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-purple-200">
+                  {alias}
+                </span>
+              )}
+            </div>
+            <p className="mt-2 text-lg text-slate-200/90">{tagline}</p>
+          </div>
         </div>
-        <p className="mt-2 text-lg text-slate-200/90">{tagline}</p>
 
         <div className="mt-6 rounded-2xl border border-white/5 bg-black/30 p-6 shadow-inner shadow-black/40">
           <p className="text-base leading-relaxed text-slate-100/90">{summary}</p>
@@ -85,6 +111,27 @@ export default function PortfolioHero({
       </div>
 
       <div>
+        {/* Botones de control */}
+        <div className="mb-6 flex flex-col gap-3">
+          <button
+            onClick={onModeToggle}
+            className={`w-full px-4 py-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
+              isHacked
+                ? 'border-purple-400/60 bg-purple-900/40 text-purple-200 hover:bg-purple-800/60 hover:border-purple-300/80'
+                : 'border-slate-500/40 bg-slate-800/40 text-slate-200 hover:bg-slate-700/60 hover:border-slate-400/80'
+            }`}
+          >
+            {isHacked ? '🤖 Modo A.R.I.A.' : '👤 Modo Humano'}
+          </button>
+          
+          <button
+            onClick={onBackToGame}
+            className="w-full px-4 py-3 rounded-lg border border-blue-500/40 bg-blue-900/30 text-blue-200 hover:bg-blue-800/50 hover:border-blue-400/80 text-sm font-medium transition-all duration-200"
+          >
+            🎮 Volver al Juego
+          </button>
+        </div>
+
         <h3 className="text-xs uppercase tracking-[0.3em] text-slate-400">Puntos clave</h3>
         <div className="mt-3 grid gap-3">
           {highlights.map((highlight) => (

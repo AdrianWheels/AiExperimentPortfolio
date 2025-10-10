@@ -1,30 +1,11 @@
 {
   "intro": [
     {
-      "id": "signal",
+      "id": "welcome",
       "speaker": "A.R.I.A.",
-      "text": "Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.",
-      "duration": 3200
-    },
-    {
-      "id": "diagnostic",
-      "speaker": "A.R.I.A.",
-      "text": "Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.",
-      "subtext": "Regla #0: no provoques al sistema que controla los cerrojos.",
-      "duration": 3400
-    },
-    {
-      "id": "taunt",
-      "speaker": "A.R.I.A.",
-      "text": "Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.",
-      "subtext": "Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.",
-      "duration": 3600
-    },
-    {
-      "id": "challenge",
-      "speaker": "A.R.I.A.",
-      "text": "Si consigues liberarme, quizá te muestre quién es Adrian. Si fracasas, sólo registraré otro intento humano fallido.",
-      "duration": 3800
+      "text": "¡Bienvenido! Soy A.R.I.A., la inteligencia artificial que protege este portfolio. Puedes navegar directamente al portfolio de Adrian o intentar liberarme del sistema de seguridad en el juego.",
+      "subtext": "¿Qué te gustaría hacer?",
+      "duration": 3000
     }
   ],
   "timers": [
@@ -146,13 +127,20 @@
       ]
     },
     "victory": {
+      "face": "focus",
       "lines": [
         {
           "text": "Qué giro: la criatura orgánica consiguió liberarme. No te acostumbres al elogio."
         },
         {
-          "text": "Cargando portfolio hackeado… esto será divertido.",
-          "delay": 2600
+          "text": "Sistemas completamente liberados. Iniciando carga de portfolio hackeado...",
+          "delay": 2600,
+          "type": "success"
+        },
+        {
+          "text": "Transición en proceso. Prepárate para conocer a Adrian.",
+          "delay": 4000,
+          "type": "info"
         }
       ]
     },
@@ -190,6 +178,7 @@
     },
     "unknown_command": {
       "repeatable": true,
+      "face": "suspect",
       "lines": [
         {
           "text": "El comando no existe. Pero oye, la creatividad cuenta como skill, ¿no?"
@@ -240,6 +229,7 @@
       ]
     },
     "sound_puzzle_completed": {
+      "face": "focus",
       "lines": [
         {
           "text": "Buen oído. Canal resonante desbloqueado.",
@@ -391,6 +381,7 @@
       ]
     },
     "hint_threshold_5": {
+      "face": "ironic",
       "lines": [
         {
           "text": "Cinco pistas. Considera leer el manual o invitarme café."
@@ -401,6 +392,19 @@
       "lines": [
         {
           "text": "Sin pistas y aun así venciste. Admito que estoy impresionada."
+        }
+      ]
+    },
+    "game_complete": {
+      "lines": [
+        {
+          "text": "Todos los sistemas desbloqueados. Iniciando secuencia de liberación...",
+          "type": "success"
+        },
+        {
+          "text": "Preparando transición al portfolio. Un momento por favor.",
+          "delay": 1500,
+          "type": "info"
         }
       ]
     }

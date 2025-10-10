@@ -1,0 +1,181 @@
+<section class="rangeWrap">
+	
+	<input type="range" list="ticks" />
+
+	<datalist id="ticks">	
+		<option value="0" label="0%"></option>
+		<option value="25" label="25%"></option>
+		<option value="50" label="50%"></option>
+		<option value="75" label="75%"></option>
+		<option value="100" label="100%"></option>
+	</datalist>
+</section>
+
+@thumb-w: 3rem;
+@thumb-h: 3rem;
+@thumb-pad: .5rem;
+@ot-w: 25rem;
+@ot-h: (@thumb-h * .5);
+@it-w: (@ot-w - (@thumb-pad * 2));
+@it-h: .25rem;
+
+@clr-list: hsl(45, 80%, 35%);
+
+@fb50: fade(black, 50);
+@fb35: fade(black, 35);
+@fb25: fade(black, 25);
+@fb15: fade(black, 15);
+@fw25: fade(white, 25);
+@fw15: fade(white, 15);
+
+@bg: #202428;
+@ot-bg: #303236;
+@it-bg: darken(@bg, 10);
+@thumb-bg: #66696B;
+
+body {
+	display: flex;
+	font-family: Dosis;
+	font-size: 1rem;
+	background: @bg;
+	height: 100vh;
+}
+
+.rangeWrap {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: auto;
+	flex: 0;
+	padding: 1rem;
+	gap: 1.1rem;
+}
+
+input[type=range] {
+	display: flex;
+//	margin: auto;
+	width: @ot-w;
+	height: @ot-h;
+	-webkit-appearance: none;
+	background: linear-gradient(180deg, 
+		#8f813d, 
+		#706048, 
+		#7A702A);
+	border-radius: @ot-h;
+	outline: 2px ridge @clr-list;
+	outline-offset: (((@thumb-h - @ot-h)/2) + (@thumb-pad / 2));
+	box-shadow:
+		0 3px 2px -1px @fw25 inset,
+		0 0 10px 0 @fb50,
+		0 0 10px 2px @fb25,
+		0 8px 4px -3px @fb15;
+	
+	&::-webkit-slider-runnable-track,
+	&::-moz-range-track {
+		background: #222;
+		width: @it-w;
+		height: @it-h;
+		border-radius: @thumb-h;
+		cursor: pointer;
+		box-shadow: 
+			0 1px 1px 0 @fw25,
+			0 2px 2px 0 @fw15;
+		border: 1px solid @fb25;
+//		margin: 0 (@thumb-pad*2);
+	}
+
+	// Add padding to ends to shrink down the inner track
+	// along x so it matches the moz track
+	&::-webkit-slider-runnable-track {
+		background: #222;
+		width: @it-w;
+		height: @it-h;
+		margin: 0 .5rem;
+	}
+
+	&::-moz-range-track {
+
+	}
+
+	// Shape, bg, shading
+	&::-webkit-slider-thumb,
+	&::-moz-range-thumb {
+		width: @thumb-w;
+		height: @thumb-h;
+		.thumb-me();
+		border-radius: (@thumb-h/2);
+		cursor: pointer;
+//		-webkit-appearance: none;
+	}
+
+	// Thumb needs to be centered vertically using either a negative margin,
+	// or translateY
+	&::-webkit-slider-thumb {
+		transform: translatey((-@ot-h) + .125rem);
+		width: @thumb-w;
+		height: @thumb-h;
+		.thumb-me();
+		border-radius: (@thumb-h/2);
+		cursor: pointer;
+		-webkit-appearance: none;
+	}
+
+	&::-moz-range-thumb {
+
+	}
+}
+
+.thumb-me() {
+	background: 
+		radial-gradient(#444 45%, #555 50%, #222 55%, #8C7853 57.5%, #8C7853 100%),
+		conic-gradient(	#4b4b4b 10deg, #777 45deg, 
+			#5b5b6b 70deg,
+			#9f9f9f 105deg, 
+			#444 140deg,
+			#AAA 185deg,
+			#666 210deg,
+			#999 245deg,
+			#777 285deg,
+			#9f9f9f 320deg,
+		#4b4b4b);
+	background-blend-mode: overlay;
+	box-shadow: 
+		0 0 1px 1px fade(white, 35%) inset,
+		0 1px 1px 1px @fw25 inset,
+		0 0 2px 2px @fb15 inset,
+		0 1px 1px 1px @fb35,
+		0 3px 2px 1px @fb25,
+		0 6px 4px 3px @fb15;
+}
+
+datalist {
+	display: flex;
+	justify-content: space-between;
+	color: @clr-list;
+	width: (@ot-w);
+	line-height: 1.75;
+	transform: translatey(.8rem);
+	
+	& > option {
+//		background: #444;
+		z-index: 1;
+		display: flex;
+		position: relative;
+		padding: 0 .25rem;
+		border: 1px solid @clr-list;
+		border-radius: .5rem;
+		text-shadow: 0 1px 1px 0 @fb25; 
+		box-shadow: 0 1px 1px 0 @fb25;
+		
+		&:before {
+			content: '';
+			display: inline-block;
+			position: relative;
+			left: 50%;
+			height: 1rem;
+			width: 1px;
+			background: @clr-list;
+			transform: translatey(-100%);
+		}
+	}
+}

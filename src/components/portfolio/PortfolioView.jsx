@@ -22,13 +22,21 @@ function resolveModeCopy(value, mode) {
 }
 
 export default function PortfolioView() {
-  const { gameState } = useGame()
+  const { gameState, setPortfolioMode, setActiveView } = useGame()
   const mode = gameState.portfolioMode || 'normal'
   const isHacked = mode === 'hacked'
 
+  const handleModeToggle = () => {
+    setPortfolioMode(isHacked ? 'normal' : 'hacked')
+  }
+
+  const handleBackToGame = () => {
+    setActiveView('game')
+  }
+
   const shellClass = isHacked
-    ? 'relative rounded-[28px] border border-purple-700/60 bg-gradient-to-br from-purple-950/80 via-slate-950 to-black shadow-[0_0_32px_rgba(168,85,247,0.25)] overflow-hidden'
-    : 'relative rounded-[28px] border border-slate-700/50 bg-slate-900/70 backdrop-blur-md shadow-[0_0_28px_rgba(59,130,246,0.18)] overflow-hidden'
+    ? 'relative rounded-[28px] border border-purple-700/60 bg-gradient-to-br from-purple-950/80 via-slate-950 to-black shadow-[0_0_32px_rgba(168,85,247,0.25)]'
+    : 'relative rounded-[28px] border border-slate-700/50 bg-slate-900/70 backdrop-blur-md shadow-[0_0_28px_rgba(59,130,246,0.18)]'
 
   const description = useMemo(
     () => resolveModeCopy(profileData.summary, mode),
@@ -41,18 +49,7 @@ export default function PortfolioView() {
   )
 
   return (
-    <div className="w-full">
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-100">Portfolio desbloqueado</h1>
-          <p className="text-sm text-slate-400">
-            {isHacked
-              ? 'Modo A.R.I.A. activo: la IA reescribe el relato con tono irónico.'
-              : 'Modo humano activo: resumen profesional listo para compartir.'}
-          </p>
-        </div>
-      </div>
-
+    <div className="w-full px-4 py-8">
       <div className={shellClass}>
         <div
           className={`absolute inset-0 pointer-events-none ${
@@ -73,6 +70,8 @@ export default function PortfolioView() {
             social={profileData.social}
             highlights={isHacked ? profileData.hackedHighlights ?? [] : profileData.highlights ?? []}
             mode={mode}
+            onModeToggle={handleModeToggle}
+            onBackToGame={handleBackToGame}
           />
 
           <div className="mt-10 grid gap-8 xl:grid-cols-[2fr_1fr]">

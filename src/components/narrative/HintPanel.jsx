@@ -41,7 +41,7 @@ export default function HintPanel() {
   const hintLog = Array.isArray(gameState.hintLog) ? gameState.hintLog : []
 
   return (
-    <section className="bg-panel border border-border rounded-lg p-4 flex flex-col gap-3 min-h-[220px]">
+    <section className="bg-panel border border-border rounded-lg p-4 flex flex-col gap-3 flex-1 min-h-0">
       <header className="flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold">Canal de Pistas</div>

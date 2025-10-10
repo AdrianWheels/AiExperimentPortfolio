@@ -95,12 +95,12 @@
 .groovy-name {
   position: absolute;
   right: 16px;
-  top: 12px;
+  top: 8px;
   text-align: right;
   color: #e6eef9;
   line-height: 0.95;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   letter-spacing: 0.6px;
   text-shadow: 
     0 2px 6px rgba(0,0,0,0.6), 
@@ -226,6 +226,197 @@
 
 .unlock-pulse {
   animation: unlockPulse 1.1s ease-out;
+}
+
+/* ===== EFECTOS DE HINT Y PROXIMIDAD ===== */
+
+/* Efecto de brillo para elementos con hint */
+@keyframes hintGlow {
+  0%, 100% { 
+    box-shadow: 0 0 5px rgba(52, 211, 153, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+  }
+}
+
+.hint-glow {
+  animation: hintGlow 2s ease-in-out infinite;
+}
+
+/* ===== SLIDERS DE FRECUENCIA METÁLICOS ===== */
+/* Inspirado en el diseño del slider.css pero adaptado a nuestros colores */
+
+.frequency-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.frequency-slider {
+  display: flex;
+  width: 100%;
+  height: 1.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(180deg, 
+    var(--gunmetal-1), 
+    #475569, 
+    var(--gunmetal-2));
+  border-radius: 0.75rem;
+  outline: 2px ridge #64748b;
+  outline-offset: 0.375rem;
+  box-shadow:
+    0 3px 2px -1px rgba(255,255,255,0.25) inset,
+    0 0 10px 0 rgba(0,0,0,0.5),
+    0 0 10px 2px rgba(0,0,0,0.25),
+    0 8px 4px -3px rgba(0,0,0,0.15);
+  position: relative;
+  cursor: pointer;
+}
+
+.frequency-slider::-webkit-slider-runnable-track {
+  background: #1e293b;
+  width: calc(100% - 1rem);
+  height: 0.25rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  box-shadow: 
+    0 1px 1px 0 rgba(255,255,255,0.25),
+    0 2px 2px 0 rgba(255,255,255,0.15);
+  border: 1px solid rgba(0,0,0,0.25);
+  margin: 0 0.5rem;
+}
+
+.frequency-slider::-moz-range-track {
+  background: #1e293b;
+  width: 100%;
+  height: 0.25rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  box-shadow: 
+    0 1px 1px 0 rgba(255,255,255,0.25),
+    0 2px 2px 0 rgba(255,255,255,0.15);
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.frequency-slider::-webkit-slider-thumb {
+  width: 3rem;
+  height: 3rem;
+  background: 
+    radial-gradient(#475569 45%, #64748b 50%, #1e293b 55%, var(--gunmetal-1) 57.5%, var(--gunmetal-1) 100%),
+    conic-gradient(
+      #475569 10deg, #64748b 45deg, 
+      #5b6478 70deg,
+      #94a3b8 105deg, 
+      #374151 140deg,
+      #9ca3af 185deg,
+      #4b5563 210deg,
+      #6b7280 245deg,
+      #64748b 285deg,
+      #94a3b8 320deg,
+      #475569);
+  background-blend-mode: overlay;
+  box-shadow: 
+    0 0 1px 1px rgba(255,255,255,0.35) inset,
+    0 1px 1px 1px rgba(255,255,255,0.25) inset,
+    0 0 2px 2px rgba(0,0,0,0.15) inset,
+    0 1px 1px 1px rgba(0,0,0,0.35),
+    0 3px 2px 1px rgba(0,0,0,0.25),
+    0 6px 4px 3px rgba(0,0,0,0.15);
+  border-radius: 50%;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transform: translateY(-0.625rem);
+}
+
+.frequency-slider::-moz-range-thumb {
+  width: 3rem;
+  height: 3rem;
+  background: 
+    radial-gradient(#475569 45%, #64748b 50%, #1e293b 55%, var(--gunmetal-1) 57.5%, var(--gunmetal-1) 100%),
+    conic-gradient(
+      #475569 10deg, #64748b 45deg, 
+      #5b6478 70deg,
+      #94a3b8 105deg, 
+      #374151 140deg,
+      #9ca3af 185deg,
+      #4b5563 210deg,
+      #6b7280 245deg,
+      #64748b 285deg,
+      #94a3b8 320deg,
+      #475569);
+  background-blend-mode: overlay;
+  box-shadow: 
+    0 0 1px 1px rgba(255,255,255,0.35) inset,
+    0 1px 1px 1px rgba(255,255,255,0.25) inset,
+    0 0 2px 2px rgba(0,0,0,0.15) inset,
+    0 1px 1px 1px rgba(0,0,0,0.35),
+    0 3px 2px 1px rgba(0,0,0,0.25),
+    0 6px 4px 3px rgba(0,0,0,0.15);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Estados de proximidad mejorados */
+.frequency-slider.near {
+  outline-color: #22c55e;
+  box-shadow:
+    0 3px 2px -1px rgba(255,255,255,0.25) inset,
+    0 0 10px 0 rgba(34,197,94,0.4),
+    0 0 10px 2px rgba(34,197,94,0.25),
+    0 8px 4px -3px rgba(0,0,0,0.15);
+}
+
+.frequency-slider.close {
+  outline-color: #3b82f6;
+  box-shadow:
+    0 3px 2px -1px rgba(255,255,255,0.25) inset,
+    0 0 10px 0 rgba(59,130,246,0.3),
+    0 0 10px 2px rgba(59,130,246,0.15),
+    0 8px 4px -3px rgba(0,0,0,0.15);
+}
+
+.frequency-slider.far {
+  outline-color: #64748b;
+  filter: brightness(0.8) saturate(0.8);
+}
+
+/* Marcadores de valores (datalist style) */
+.frequency-marks {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+  width: 100%;
+  line-height: 1.75;
+  transform: translateY(0.5rem);
+  font-size: 0.75rem;
+}
+
+.frequency-mark {
+  display: flex;
+  position: relative;
+  padding: 0 0.25rem;
+  border: 1px solid #64748b;
+  border-radius: 0.375rem;
+  text-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
+  background: rgba(30,41,59,0.8);
+}
+
+.frequency-mark::before {
+  content: '';
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  height: 0.75rem;
+  width: 1px;
+  background: #64748b;
+  transform: translateY(-100%) translateX(-50%);
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

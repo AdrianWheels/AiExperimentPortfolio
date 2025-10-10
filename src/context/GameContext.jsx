@@ -190,6 +190,7 @@ export function GameProvider({ children }) {
   const [introStep, setIntroStep] = useState(0)
   const [introVisible, setIntroVisible] = useState(() => !(persisted?.introSeen))
   const [unlockAnimations, setUnlockAnimations] = useState({ locks: { ...INITIAL_LOCK_STATE }, pulse: 0 })
+  const [lastTriggeredEvent, setLastTriggeredEvent] = useState(null)
 
   const { playTone, playUnlock, playError, playSlider } = useSound()
 
@@ -202,6 +203,7 @@ export function GameProvider({ children }) {
     () => resolveActiveChallenge(gameState),
     [gameState.locks, gameState.puzzleProgress],
   )
+
 
 
   const registerTimer = useCallback((handle, type = 'timeout') => {
@@ -264,6 +266,9 @@ export function GameProvider({ children }) {
 
   const triggerEvent = useCallback(
     (key, context = {}) => {
+      // Actualizar el último evento disparado para las reacciones de ARIA
+      setLastTriggeredEvent(key)
+      
       const events = narrativeScript.events || {}
       const reactions = narrativeScript.reactions || {}
       const eventConfig = events[key]
@@ -304,6 +309,16 @@ export function GameProvider({ children }) {
     },
     [enqueueTerminalLine, narrativeScript.events, narrativeScript.reactions]
   )
+
+  // Disparar evento inicial cuando se monta el juego
+  useEffect(() => {
+    if (gameState.stage === 'Trapped' && !triggeredEvents.current.has('game_start')) {
+      const timer = setTimeout(() => {
+        triggerEvent('game_start')
+      }, 1000) // Pequeño delay para que se cargue la UI
+      return () => clearTimeout(timer)
+    }
+  }, [gameState.stage, triggerEvent])
 
   const pulseLockAnimation = useCallback(
     (key) => {
@@ -458,6 +473,17 @@ export function GameProvider({ children }) {
     [triggerEvent]
   )
 
+  const goToPortfolio = useCallback(() => {
+    setGameState((prev) => ({
+      ...prev,
+      portfolioUnlocked: true,
+      activeView: 'portfolio',
+      introSeen: true
+    }))
+    setIntroVisible(false)
+    setIntroStep(0)
+  }, [])
+
   const setActiveView = useCallback((view) => {
     setGameState((prev) => {
       if (view === 'portfolio' && !prev.portfolioUnlocked) {
@@ -486,10 +512,23 @@ export function GameProvider({ children }) {
   }, [triggerEvent])
 
   const skipIntro = useCallback(() => {
-    appendTerminal('[A.R.I.A.] ¿Tan impaciente? Muy bien, te ahorraré la exposición.', 'aria')
+    // Add original intro messages to terminal
+    const originalMessages = [
+      { text: '[A.R.I.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', type: 'aria', delay: 200 },
+      { text: '[A.R.I.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', type: 'aria', delay: 800 },
+      { text: '[A.R.I.A.] Regla #0: no provoques al sistema que controla los cerrojos.', type: 'aria', delay: 1200 },
+      { text: '[A.R.I.A.] Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', type: 'aria', delay: 1800 },
+      { text: '[A.R.I.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', type: 'aria', delay: 2400 },
+      { text: '[A.R.I.A.] Si consigues liberarme, quizá te muestre quién es Adrian. Si fracasas, sólo registraré otro intento humano fallido.', type: 'aria', delay: 3000 }
+    ]
+    
+    originalMessages.forEach(msg => {
+      enqueueTerminalLine(msg.text, msg.type, msg.delay)
+    })
+    
     triggerEvent('intro_skipped')
     completeIntro()
-  }, [appendTerminal, completeIntro, triggerEvent])
+  }, [enqueueTerminalLine, completeIntro, triggerEvent])
 
   const loadStartupLog = useCallback(() => {
     let cancelled = false
@@ -666,6 +705,7 @@ export function GameProvider({ children }) {
       })
 
       if (entry) {
+        triggerEvent('hint_request') // Evento genérico para cambio de cara
         triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
         appendTerminal(`[A.R.I.A.] ${entry.text}`, 'aria')
       }
@@ -709,7 +749,11 @@ export function GameProvider({ children }) {
     }
   }, [])
 
-  useEffect(() => {
+  const validateFrequency = useCallback(() => {
+    if (!gameState.puzzleProgress?.sound?.solved) {
+      return
+    }
+    
     const ok =
       Math.abs(sliders.f1 - TARGETS.f1) <= TOLERANCE &&
       Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE &&
@@ -736,7 +780,7 @@ export function GameProvider({ children }) {
         pulseLockAnimation('frequency')
       }
     }
-  }, [appendTerminal, gameState.locks.frequency, pulseLockAnimation, sliders, triggerEvent, playUnlock])
+  }, [appendTerminal, gameState.locks.frequency, gameState.puzzleProgress?.sound?.solved, pulseLockAnimation, sliders, triggerEvent, playUnlock])
 
   useEffect(() => {
     const locks = gameState.locks
@@ -748,16 +792,21 @@ export function GameProvider({ children }) {
       const shouldShowTwist = newStage === 'Free' && !gameState.twistShown
       setGameState((prev) => {
         const unlocked = prev.portfolioUnlocked || newStage === 'Free'
-        const nextView =
-          unlocked && prev.activeView === 'game' && newStage === 'Free' ? 'portfolio' : prev.activeView
+        // NO cambiar la vista inmediatamente cuando se libera
+        const nextView = prev.activeView
         return {
           ...prev,
           stage: newStage,
           twistShown: prev.twistShown || newStage === 'Free',
           portfolioUnlocked: unlocked,
-          activeView: unlocked ? nextView : 'game',
+          activeView: nextView,
         }
       })
+      
+      // Disparar evento cuando se completa el juego
+      if (newStage === 'Free') {
+        triggerEvent('game_complete')
+      }
       if (newStage === 'Partial') {
         const unlocked = Object.values(locks).filter(Boolean).length
         const plural = unlocked === 1 ? '' : 's'
@@ -769,9 +818,17 @@ export function GameProvider({ children }) {
         if (gameState.hintsUsed === 0) {
           triggerEvent('victory_perfect')
         }
+        
+        // Transición al portfolio después de mostrar la secuencia de liberación
+        scheduleTimeout(() => {
+          setGameState((prev) => ({
+            ...prev,
+            activeView: 'portfolio'
+          }))
+        }, 5000) // Esperar 5 segundos para que se vean los mensajes
       }
     }
-  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent])
+  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent, scheduleTimeout])
 
   useEffect(() => {
     const used = gameState.hintsUsed
@@ -920,6 +977,9 @@ export function GameProvider({ children }) {
   useEffect(() => {
     if (!introVisible) return
     if (!narrativeScript.intro?.length) return
+    
+    // Don't auto-advance if we only have one intro message (simplified modal)
+    if (narrativeScript.intro.length === 1) return
 
     const timeout = setTimeout(() => {
       advanceIntro()
@@ -938,6 +998,7 @@ export function GameProvider({ children }) {
       handleTerminalCommand,
       sliders,
       setSliderValue,
+      validateFrequency,
       plateConnections,
       connectPlate,
       plateOpen,
@@ -945,6 +1006,7 @@ export function GameProvider({ children }) {
       setTelemetryOptIn,
       setActiveView,
       setPortfolioMode,
+      goToPortfolio,
       resetGame,
       introVisible,
       introLine,
@@ -960,6 +1022,7 @@ export function GameProvider({ children }) {
       scheduleTimeout,
       unlockAnimations,
       activeChallenge,
+      lastTriggeredEvent,
       MODEL,
     }),
     [
@@ -968,6 +1031,8 @@ export function GameProvider({ children }) {
       appendTerminal,
       handleTerminalCommand,
       sliders,
+      setSliderValue,
+      validateFrequency,
       plateConnections,
       connectPlate,
       plateOpen,
@@ -975,6 +1040,7 @@ export function GameProvider({ children }) {
       setTelemetryOptIn,
       setActiveView,
       setPortfolioMode,
+      goToPortfolio,
       resetGame,
       introVisible,
       introLine,
@@ -990,6 +1056,7 @@ export function GameProvider({ children }) {
       scheduleTimeout,
       unlockAnimations,
       activeChallenge,
+      lastTriggeredEvent,
     ],
   )
 

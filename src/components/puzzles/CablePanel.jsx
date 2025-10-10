@@ -7,6 +7,7 @@ export default function CablePanel() {
   const originsRef = useRef({})
   const destinationsRef = useRef({})
   const [cablePosition, setCablePosition] = useState({})
+  const [dragState, setDragState] = useState({ isDragging: false, source: null, color: null })
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved,
   )
@@ -38,11 +39,18 @@ export default function CablePanel() {
 
         const srcRect = src.getBoundingClientRect()
         const destRect = dest.getBoundingClientRect()
+        
+        // Calculate center points
+        const srcCenterX = srcRect.left + srcRect.width / 2 - plateRect.left
+        const srcCenterY = srcRect.top + srcRect.height / 2 - plateRect.top
+        const destCenterX = destRect.left + destRect.width / 2 - plateRect.left
+        const destCenterY = destRect.top + destRect.height / 2 - plateRect.top
+        
         next[key] = {
-          x1: srcRect.right - plateRect.left - 8,
-          y1: srcRect.top + srcRect.height / 2 - plateRect.top,
-          x2: destRect.left - plateRect.left + 8,
-          y2: destRect.top + destRect.height / 2 - plateRect.top,
+          x1: srcCenterX,
+          y1: srcCenterY,
+          x2: destCenterX,
+          y2: destCenterY,
         }
       })
 
@@ -54,18 +62,30 @@ export default function CablePanel() {
     return () => window.removeEventListener('resize', updatePositions)
   }, [plateConnections])
 
+  const handleDragStart = (event, source) => {
+    if (!canInteract) return
+    event.dataTransfer.setData('text/plain', source)
+    const color = source === 'R' ? '#ef4444' : source === 'A' ? '#f59e0b' : '#facc15'
+    setDragState({ isDragging: true, source, color })
+  }
+
+  const handleDragEnd = () => {
+    setDragState({ isDragging: false, source: null, color: null })
+  }
+
   const handleDrop = (event, target) => {
     event.preventDefault()
     if (!canInteract) return
     const source = event.dataTransfer.getData('text/plain')
     if (!source) return
     connectPlate(source, target)
+    handleDragEnd()
   }
 
   return (
     <aside
       ref={plateRef}
-      className={`bg-panel p-4 rounded-lg border border-border relative overflow-hidden ${
+      className={`bg-panel p-4 rounded-lg border border-border relative overflow-hidden flex-1 min-h-0 ${
         isPulsing ? 'glow-success unlock-pulse' : ''
       }`}
     >
@@ -78,65 +98,122 @@ export default function CablePanel() {
         <div className="w-1/2">
           <div className="mb-3 text-sm font-medium">Orígenes</div>
           <div className="flex flex-col gap-3">
-            {['R', 'A', 'Y'].map((key) => (
-              <div
-                key={key}
-                draggable
-                onDragStart={(event) => event.dataTransfer.setData('text/plain', key)}
-                ref={(element) => (originsRef.current[key] = element)}
-                className="flex items-center gap-2 cursor-grab hover:bg-zinc-800/50 p-2 rounded transition-colors"
-              >
+            {['R', 'A', 'Y'].map((key) => {
+              const isBeingDragged = dragState.isDragging && dragState.source === key
+              return (
                 <div
-                  style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
-                  className="rounded-full shadow-inner border border-white/10"
-                />
-                <div className="text-xs">Src {key}</div>
-              </div>
-            ))}
+                  key={key}
+                  draggable
+                  onDragStart={(event) => handleDragStart(event, key)}
+                  onDragEnd={handleDragEnd}
+                  ref={(element) => (originsRef.current[key] = element)}
+                  className={`flex items-center gap-2 cursor-grab hover:bg-zinc-800/50 p-2 rounded transition-all duration-200 ${
+                    isBeingDragged ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
+                  }`}
+                >
+                  <div
+                    style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
+                    className={`rounded-full shadow-inner border border-white/10 transition-all duration-200 ${
+                      isBeingDragged ? 'shadow-lg ring-2 ring-white/30' : ''
+                    }`}
+                  />
+                  <div className="text-xs">Src {key}</div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
         <div className="w-1/2">
           <div className="mb-3 text-sm font-medium">Destinos</div>
           <div className="flex flex-col gap-3">
-            {['R', 'A', 'Y'].map((key) => (
-              <div
-                key={key}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => handleDrop(event, key)}
-                ref={(element) => (destinationsRef.current[key] = element)}
-                className="flex items-center gap-2 hover:bg-zinc-800/50 p-2 rounded transition-colors"
-              >
-                <div className="text-xs">Dest {key}</div>
+            {['R', 'A', 'Y'].map((key) => {
+              const isDropTarget = dragState.isDragging && dragState.source !== key
+              return (
                 <div
-                  style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
-                  className="rounded-full shadow-lg border border-white/10"
-                />
-              </div>
-            ))}
+                  key={key}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => handleDrop(event, key)}
+                  ref={(element) => (destinationsRef.current[key] = element)}
+                  className={`flex items-center gap-2 hover:bg-zinc-800/50 p-2 rounded transition-all duration-200 ${
+                    isDropTarget ? 'bg-zinc-700/70 ring-2 ring-blue-400/50' : ''
+                  }`}
+                >
+                  <div className="text-xs">Dest {key}</div>
+                  <div
+                    style={{ width: 24, height: 24, background: key === 'R' ? '#ef4444' : key === 'A' ? '#f59e0b' : '#facc15' }}
+                    className={`rounded-full shadow-lg border border-white/10 transition-all duration-200 ${
+                      isDropTarget ? 'scale-110 shadow-xl' : 'scale-100'
+                    }`}
+                  />
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
 
       <svg className="absolute inset-0 pointer-events-none" width="100%" height="100%">
-        {Object.entries(cablePosition).map(([key, position]) => (
-          <line
-            key={key}
-            x1={position.x1}
-            y1={position.y1}
-            x2={position.x2}
-            y2={position.y2}
-            stroke={
-              plateConnections[key] === 'R'
-                ? '#ef4444'
-                : plateConnections[key] === 'A'
-                ? '#f59e0b'
-                : '#facc15'
-            }
-            strokeWidth={4}
-            strokeLinecap="round"
-          />
-        ))}
+        {Object.entries(cablePosition).map(([key, position]) => {
+          const color = plateConnections[key] === 'R' ? '#ef4444' : plateConnections[key] === 'A' ? '#f59e0b' : '#facc15'
+          
+          // Calculate proper curved path
+          const dx = position.x2 - position.x1
+          const dy = position.y2 - position.y1
+          const distance = Math.sqrt(dx * dx + dy * dy)
+          
+          // Create a natural curve that goes slightly downward
+          const curvature = Math.min(distance * 0.4, 50)
+          const cp1x = position.x1 + dx * 0.25
+          const cp1y = position.y1 + curvature
+          const cp2x = position.x2 - dx * 0.25
+          const cp2y = position.y2 + curvature
+          
+          const pathD = `M ${position.x1} ${position.y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${position.x2} ${position.y2}`
+          
+          return (
+            <g key={key}>
+              {/* Cable glow/shadow */}
+              <path
+                d={pathD}
+                stroke={color}
+                strokeWidth={8}
+                fill="none"
+                strokeLinecap="round"
+                opacity={0.2}
+                filter="blur(3px)"
+              />
+              {/* Main cable */}
+              <path
+                d={pathD}
+                stroke={color}
+                strokeWidth={4}
+                fill="none"
+                strokeLinecap="round"
+                opacity={0.9}
+              />
+              {/* Connection points */}
+              <circle
+                cx={position.x1}
+                cy={position.y1}
+                r={4}
+                fill={color}
+                stroke="white"
+                strokeWidth={2}
+                opacity={0.9}
+              />
+              <circle
+                cx={position.x2}
+                cy={position.y2}
+                r={4}
+                fill={color}
+                stroke="white"
+                strokeWidth={2}
+                opacity={0.9}
+              />
+            </g>
+          )
+        })}
       </svg>
 
       {plateOpen && (

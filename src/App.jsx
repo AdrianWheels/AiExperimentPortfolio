@@ -14,18 +14,18 @@ import { useGame } from './context/GameContext'
 
 function GamePanels() {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-[320px_1fr_320px] gap-6 h-full">
-      <div className="flex flex-col gap-4">
+    <div className="grid grid-cols-1 xl:grid-cols-[350px_1fr_350px] gap-3 h-full">
+      <div className="flex flex-col gap-2 h-full">
         <SoundPatternPuzzle />
-        <CipherPuzzle />
         <CablePanel />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 h-full">
         <Terminal />
         <HintPanel />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 h-full">
         <FrequencyControls />
+        <CipherPuzzle />
       </div>
     </div>
   )
@@ -36,10 +36,10 @@ function RootLayout() {
   const isPortfolio = gameState.activeView === 'portfolio'
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-bgStart to-bgEnd text-text font-sans w-full">
-      <AppHeader />
-      <main className="flex-1 p-4">
-        <div className="max-w-[1400px] mx-auto h-full">
+    <div className={`h-screen flex flex-col bg-gradient-to-b from-bgStart to-bgEnd text-text font-sans w-full ${isPortfolio ? 'overflow-auto' : 'overflow-hidden'}`}>
+      {!isPortfolio && <AppHeader />}
+      <main className={`${isPortfolio ? 'flex-1' : 'flex-1 p-2 min-h-0'}`}>
+        <div className={`${isPortfolio ? 'w-full' : 'max-w-[1400px] mx-auto h-full'}`}>
           {isPortfolio ? <PortfolioView /> : <GamePanels />}
         </div>
       </main>
