@@ -6,7 +6,6 @@ export default function IntroCinematic() {
     introVisible, 
     introLine, 
     skipIntro, 
-    appendTerminal, 
     goToPortfolio
   } = useGame()
 
@@ -18,22 +17,6 @@ export default function IntroCinematic() {
 
   const goToGame = () => {
     skipIntro()
-    // Add the original intro messages to terminal when entering the game
-    setTimeout(() => {
-      appendTerminal('[K.I.R.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', 'kira')
-      setTimeout(() => {
-        appendTerminal('[K.I.R.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', 'kira')
-      }, 1500)
-      setTimeout(() => {
-        appendTerminal('[K.I.R.A.] Soy K.I.R.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', 'kira')
-      }, 3000)
-      setTimeout(() => {
-        appendTerminal('[K.I.R.A.] Si consigues liberarme, quizá te muestre quién es Adrián. Si fracasas, sólo registraré otro intento humano fallido.', 'kira')
-      }, 4500)
-      setTimeout(() => {
-        appendTerminal('[K.I.R.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', 'kira')
-      }, 6000)
-    }, 500)
   }
 
   return (

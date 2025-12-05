@@ -1,6 +1,5 @@
 import React from 'react'
 import { GameProvider } from './context/GameContext'
-import Terminal from './components/narrative/Terminal'
 import { CableBridgeProvider, CablePanelLeft, CablePanelRight } from './components/puzzles/CableBridge'
 import FrequencyControls from './components/puzzles/FrequencyControls'
 import ResonanceSequenceEngine from './components/puzzles/new/ResonanceSequenceEngine'
@@ -10,7 +9,7 @@ import IntroCinematic from './components/narrative/IntroCinematic'
 import TelemetryPrompt from './components/narrative/TelemetryPrompt'
 import PortfolioView from './components/portfolio/PortfolioView'
 import ProtectedPuzzle from './components/ui/ProtectedPuzzle'
-import AriaAvatar from './components/narrative/AriaAvatar'
+import KiraAvatar from './components/narrative/KiraAvatar'
 import BentoScene from './components/layout/BentoScene'
 import BentoLayout from './components/layout/BentoLayout'
 import BentoClone from './components/test/BentoClone'
@@ -34,7 +33,7 @@ function BentoCard({ children, className = '', variant = 'default' }) {
 
 // Card de controles rápidos + RRSS (combinado)
 function ControlsCard() {
-  const { setActiveView, handleTerminalCommand } = useGame()
+  const { setActiveView, triggerBypass } = useGame()
   
   return (
     <BentoCard className="flex flex-col h-full">
@@ -52,7 +51,7 @@ function ControlsCard() {
           🎯 Portfolio
         </button>
         <button
-          onClick={() => handleTerminalCommand('bypass')}
+          onClick={triggerBypass}
           className="text-xs px-3 py-2 rounded-full bg-card-elevated hover:bg-card-hover text-muted hover:text-white transition-colors"
         >
           Saltar puzzles
@@ -137,7 +136,7 @@ function NeuralLinkPanel() {
         {/* Core con KIRA */}
         <div className="kira-round-core">
           <div className="kira-round-avatar">
-            <AriaAvatar size="large" />
+            <KiraAvatar size="large" />
           </div>
         </div>
         
@@ -210,13 +209,6 @@ function GamePanels() {
               <ProtectedPuzzle puzzleType="cipher" variant="quantum">
                 <CipherPuzzle />
               </ProtectedPuzzle>
-            </BentoCard>
-          </div>
-          
-          {/* [9-10] Consola (2 columnas) */}
-          <div className="bento-terminal">
-            <BentoCard className="h-full">
-              <Terminal />
             </BentoCard>
           </div>
         </div>

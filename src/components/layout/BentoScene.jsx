@@ -1,5 +1,5 @@
 import React from 'react'
-import AriaAvatar from '../narrative/AriaAvatar'
+import KiraAvatar from '../narrative/KiraAvatar'
 
 /**
  * BentoScene - Layout simple:
@@ -79,7 +79,7 @@ export default function BentoScene() {
           
           {/* Avatar de KIRA */}
           <div className="kira-center-avatar">
-            <AriaAvatar size="medium" />
+            <KiraAvatar size="medium" />
           </div>
         </div>
       </div>

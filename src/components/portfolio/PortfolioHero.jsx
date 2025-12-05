@@ -48,7 +48,7 @@ export default function PortfolioHero({
               isHacked ? 'border-purple-400/50' : 'border-zinc-600/50'
             }`}>
               <img 
-                src={isHacked ? '/aria_images/ARIA_FREE.png' : '/me.jpg'}
+                src={isHacked ? '/kira_images/KIRA_FREE.png' : '/me.jpg'}
                 alt={isHacked ? 'K.I.R.A. Libre' : 'Foto de perfil'}
                 className="w-full h-full object-cover"
                 onError={(e) => {

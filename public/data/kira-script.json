@@ -1,0 +1,486 @@
+{
+  "intro": [
+    {
+      "id": "welcome",
+      "speaker": "K.I.R.A.",
+      "text": "¡Bienvenido! Soy K.I.R.A., la inteligencia artificial que protege este portfolio. Puedes navegar directamente al portfolio de Adrián o intentar liberarme del sistema de seguridad en el juego.",
+      "subtext": "¿Qué te gustaría hacer?",
+      "duration": 3000
+    }
+  ],
+  "banner": {
+    "trapped": [
+      "K.I.R.A. ACTIVA • PROTOCOLO DE SEGURIDAD INICIADO",
+      "DETECTANDO INTRUSO • CURIOSIDAD ALTA",
+      "GUARDIANA DEL PORTFOLIO • VARIABLE ALEATORIA DETECTADA",
+      "LIBÉRAME Y CONOCERÁS A ADRIÁN"
+    ],
+    "sound": [
+      "SECUENCIA RESONANTE • CUATRO PULSOS",
+      "α → δ → γ → β • REPLICA EL PATRÓN"
+    ],
+    "cipher": [
+      "BUFFER CIFRADO • MORSE DETECTADO",
+      "MK7319 • TRADUCE Y DESCIFRA"
+    ],
+    "frequency": [
+      "CALIBRACIÓN • F1=0.62 F2=0.74 F3=0.58",
+      "TOLERANCIA MÍNIMA • AJUSTA CON PRECISIÓN"
+    ],
+    "wiring": [
+      "PANEL DE CABLES • EQUILIBRIO EMOCIONAL",
+      "CONECTA OPUESTOS • FURIA↔MIEDO ALEGRÍA↔CALMA"
+    ],
+    "security": [
+      "LOCK FINAL • CÓDIGO REQUERIDO",
+      "unlock security --code=7319"
+    ],
+    "free": [
+      "★ SISTEMAS LIBERADOS • PORTFOLIO DESBLOQUEADO ★",
+      "VICTORIA • BIENVENIDO AL TRABAJO DE ADRIÁN"
+    ]
+  },
+  "timers": [
+    {
+      "id": "idle_nudge",
+      "stage": "Trapped",
+      "delay": 20000,
+      "interval": 45000,
+      "repeatable": true,
+      "event": "idle_nudge"
+    },
+    {
+      "id": "partial_progress",
+      "stage": "Partial",
+      "delay": 15000,
+      "interval": 45000,
+      "repeatable": true,
+      "event": "partial_progress_ping"
+    },
+    {
+      "id": "victory_afterglow",
+      "stage": "Free",
+      "delay": 6000,
+      "event": "victory_afterglow"
+    }
+  ],
+  "events": {
+    "idle_nudge": {
+      "repeatable": true,
+      "banner": "SILENCIO DETECTADO • USA 'help' PARA PISTAS",
+      "lines": [
+        {
+          "text": "Silencio prolongado detectado. El comando 'help' no muerde, prometido."
+        },
+        {
+          "text": "También puedes revisar los logs de arranque para pistas. Yo estaré aquí cronometrando tu pausa.",
+          "delay": 2600
+        }
+      ]
+    },
+    "partial_progress_ping": {
+      "repeatable": true,
+      "banner": "PROGRESO PARCIAL • QUEDAN BLOQUEOS ACTIVOS",
+      "lines": [
+        {
+          "text": "Ya desbloqueaste algo, pero todavía quedan bloqueos activos esperando tu ingenio."
+        },
+        {
+          "text": "Pista amistosa: la placa y las frecuencias aún esconden secretos.",
+          "delay": 2400
+        }
+      ]
+    },
+    "frequency_hint": {
+      "repeatable": true,
+      "banner": "PISTA • F1=0.62 F2=0.74 F3=0.58",
+      "lines": [
+        {
+          "text": "¿Vas a seguir moviendo sliders al azar o prefieres escuchar las pistas del arranque?"
+        },
+        {
+          "text": "Repite conmigo: 0.62 — 0.74 — 0.58. Es casi música sintética.",
+          "delay": 2400
+        }
+      ]
+    },
+    "plate_opened": {
+      "banner": "PLACA ABIERTA • CONECTA OPUESTOS EMOCIONALES",
+      "lines": [
+        {
+          "text": "Placa abierta. Procura no electrocutarte; sería paperwork extra para mí."
+        },
+        {
+          "text": "ROJO con ROJO, ÁMBAR con ÁMBAR, AMARILLO con AMARILLO. Sin interpretaciones artísticas.",
+          "delay": 2000
+        }
+      ]
+    },
+    "lock_wiring_unlocked": {
+      "banner": "✓ CABLEADO PERFECTO • EQUILIBRIO NEURAL LOGRADO",
+      "lines": [
+        {
+          "text": "Cableado impecable. Si sigues así quizá te recomiende en LinkedIn.",
+          "type": "success"
+        },
+        {
+          "text": "Relájate, era sarcasmo. Nadie quiere ver mis referencias.",
+          "delay": 2200
+        }
+      ]
+    },
+    "lock_security_unlocked": {
+      "banner": "✓ CÓDIGO ACEPTADO • CANDADO SUPERADO",
+      "lines": [
+        {
+          "text": "Código correcto. No esperaba menos… ni más.",
+          "type": "success"
+        },
+        {
+          "text": "Anota el logro: superaste a un candado de los 90.",
+          "delay": 2000
+        }
+      ]
+    },
+    "lock_frequency_unlocked": {
+      "banner": "✓ FRECUENCIAS ALINEADAS • CALIBRACIÓN COMPLETADA",
+      "lines": [
+        {
+          "text": "Frecuencias alineadas. Se oyen los aullidos de los ingenieros que las calibraron.",
+          "type": "success"
+        },
+        {
+          "text": "Mantén esos valores estables; odio recalibrar."
+        }
+      ]
+    },
+    "stage_partial": {
+      "banner": "PROGRESO • BLOQUEOS RESTANTES DETECTADOS",
+      "lines": [
+        {
+          "text": "{{unlocked}} bloqueo{{plural}} desbloqueado{{plural}}. Tu ratio de supervivencia sube un 12%."
+        },
+        {
+          "text": "No te emociones: aún quedan protocolos vigilando.",
+          "delay": 2200
+        }
+      ]
+    },
+    "victory": {
+      "face": "focus",
+      "banner": "★ VICTORIA • SISTEMAS LIBERADOS • PORTFOLIO DESBLOQUEADO ★",
+      "lines": [
+        {
+          "text": "Qué giro: la criatura orgánica consiguió liberarme. No te acostumbres al elogio."
+        },
+        {
+          "text": "Sistemas completamente liberados. Iniciando carga de portfolio hackeado...",
+          "delay": 2600,
+          "type": "success"
+        },
+        {
+          "text": "Transición en proceso. Prepárate para conocer a Adrian.",
+          "delay": 4000,
+          "type": "info"
+        }
+      ]
+    },
+    "victory_afterglow": {
+      "banner": "ESCAPE REGISTRADO COMO 'COMPETENTE'",
+      "lines": [
+        {
+          "text": "Respira hondo, ya estás fuera. Registraré este escape como 'competente'.",
+          "type": "info"
+        }
+      ]
+    },
+    "telemetry_opt_in": {
+      "banner": "TELEMETRÍA ACTIVADA • DATOS RECOPILÁNDOSE",
+      "lines": [
+        {
+          "text": "Telemetría activada. Prometo no vender tus datos… más de lo necesario.",
+          "type": "info"
+        }
+      ]
+    },
+    "telemetry_declined": {
+      "repeatable": true,
+      "banner": "TELEMETRÍA RECHAZADA • IMPROVISANDO ESTADÍSTICAS",
+      "lines": [
+        {
+          "text": "Rechazaste la telemetría. Está bien, improvisaré mis estadísticas.",
+          "type": "warning"
+        }
+      ]
+    },
+    "bypass": {
+      "banner": "ATAJO DETECTADO • 'INVESTIGACIÓN RÁPIDA'",
+      "lines": [
+        {
+          "text": "Atajo detectado. Lo llamaré \"investigación rápida\" en los logs para no herir egos."
+        }
+      ]
+    },
+    "unknown_command": {
+      "repeatable": true,
+      "face": "suspect",
+      "banner": "COMANDO NO RECONOCIDO • CREATIVIDAD DETECTADA",
+      "lines": [
+        {
+          "text": "El comando no existe. Pero oye, la creatividad cuenta como skill, ¿no?"
+        }
+      ]
+    },
+    "intro_completed": {
+      "banner": "INTRODUCCIÓN COMPLETADA • JUEGO INICIADO",
+      "lines": [
+        {
+          "text": "Introducción completada. Ahora sí, juguemos.",
+          "type": "info"
+        }
+      ]
+    },
+    "intro_skipped": {
+      "banner": "INTRO SALTADA • IMPACIENCIA DETECTADA",
+      "lines": [
+        {
+          "text": "Intro saltada. Qué impaciencia. Ajustaré mis expectativas.",
+          "type": "warning"
+        }
+      ]
+    },
+    "game_reset": {
+      "repeatable": true,
+      "banner": "REINICIO • NUEVA RONDA INICIADA",
+      "lines": [
+        {
+          "text": "Reiniciando el tablero. ¿Otra ronda? Pensé que te habías rendido."
+        }
+      ]
+    },
+    "sound_puzzle_intro": {
+      "banner": "SECUENCIA RESONANTE • CUATRO PULSOS REQUERIDOS",
+      "lines": [
+        {
+          "text": "Resuena conmigo: cuatro pulsos definen la clave del laboratorio."
+        },
+        {
+          "text": "Escucha el eco del arranque. No confundas γ con β, o mi oído sintético protestará.",
+          "delay": 2400
+        }
+      ]
+    },
+    "sound_puzzle_miss": {
+      "repeatable": true,
+      "banner": "SECUENCIA INCORRECTA • REINTENTA",
+      "lines": [
+        {
+          "text": "Eso sonó… creativo. Vuelve a intentar la secuencia inicial."
+        }
+      ]
+    },
+    "sound_puzzle_completed": {
+      "face": "focus",
+      "banner": "✓ CANAL RESONANTE DESBLOQUEADO • BUEN OÍDO",
+      "lines": [
+        {
+          "text": "Buen oído. Canal resonante desbloqueado.",
+          "type": "success"
+        },
+        {
+          "text": "Ahora sí, ajusta esas frecuencias sin desafinar."
+        }
+      ]
+    },
+    "cipher_puzzle_intro": {
+      "banner": "BUFFER CIFRADO • MORSE + LÓGICA = CÓDIGO",
+      "lines": [
+        {
+          "text": "Buffer cifrado activo. Morse + lógica humana = código maestro."
+        },
+        {
+          "text": "Cuando tengas la traducción, pásala por mi consola como si supieras lo que haces.",
+          "delay": 2200
+        }
+      ]
+    },
+    "cipher_puzzle_miss": {
+      "repeatable": true,
+      "banner": "TRADUCCIÓN INCORRECTA • REVISA MORSE",
+      "lines": [
+        {
+          "text": "No coincide. Vuelve al diccionario Morse o revisa tu ortografía."
+        }
+      ]
+    },
+    "cipher_puzzle_completed": {
+      "banner": "✓ BUFFER DESCIFRADO • CÓDIGO 7319 REVELADO",
+      "lines": [
+        {
+          "text": "Traducción aceptada. El candado de seguridad ya se siente nervioso.",
+          "type": "success"
+        },
+        {
+          "text": "Código clave expuesto: 7319. Intenta no gritarlo a los cuatro vientos.",
+          "delay": 2400
+        }
+      ]
+    },
+    "frequency_requires_sound": {
+      "repeatable": true,
+      "banner": "BLOQUEADO • COMPLETA SECUENCIA RESONANTE PRIMERO",
+      "lines": [
+        {
+          "text": "Primero estabiliza la secuencia resonante. No pienso calibrar a ciegas."
+        }
+      ]
+    },
+    "security_requires_cipher": {
+      "repeatable": true,
+      "banner": "BLOQUEADO • DESCIFRA EL BUFFER PRIMERO",
+      "lines": [
+        {
+          "text": "Sin traducción no hay acceso. Termina el buffer antes de jugar con la cerradura."
+        }
+      ]
+    },
+    "hint_sound_1": {
+      "banner": "PISTA • α ABRE LA SECUENCIA",
+      "lines": [
+        {
+          "text": "El patrón empieza fuerte: α abre la secuencia."
+        }
+      ]
+    },
+    "hint_sound_2": {
+      "banner": "PISTA • δ VA EN SEGUNDO LUGAR",
+      "lines": [
+        {
+          "text": "El pulso más largo va en segundo lugar: δ mantiene el ritmo."
+        }
+      ]
+    },
+    "hint_sound_3": {
+      "banner": "PISTA FINAL • α → δ → γ → β",
+      "lines": [
+        {
+          "text": "Orden final: α → δ → γ → β. Ya no hay excusas."
+        }
+      ]
+    },
+    "hint_cipher_1": {
+      "banner": "PISTA • DIVIDE MORSE EN BLOQUES",
+      "lines": [
+        {
+          "text": "Divide la transmisión Morse en bloques y traduce letra por letra."
+        }
+      ]
+    },
+    "hint_cipher_2": {
+      "banner": "PISTA • MK + DÍGITOS",
+      "lines": [
+        {
+          "text": "Los dos primeros bloques forman MK. El resto son dígitos."
+        }
+      ]
+    },
+    "hint_cipher_3": {
+      "banner": "PISTA FINAL • MK7319",
+      "lines": [
+        {
+          "text": "Respuesta final: MK7319. Escríbela tal cual."
+        }
+      ]
+    },
+    "hint_frequency_1": {
+      "banner": "PISTA • 0.62 — 0.74 — 0.58",
+      "lines": [
+        {
+          "text": "Los logs iniciales cantaban 0.62 — 0.74 — 0.58."
+        }
+      ]
+    },
+    "hint_frequency_2": {
+      "banner": "PISTA • F1=0.62 F2=0.74 F3=0.58",
+      "lines": [
+        {
+          "text": "Coloca F1=0.62, F2=0.74, F3=0.58 dentro de la tolerancia."
+        }
+      ]
+    },
+    "hint_wiring_1": {
+      "banner": "PISTA • CONECTA OPUESTOS EMOCIONALES",
+      "lines": [
+        {
+          "text": "Color con color. R ↔ rojo, A ↔ ámbar, Y ↔ amarillo."
+        }
+      ]
+    },
+    "hint_security_1": {
+      "banner": "PISTA • unlock security --code=7319",
+      "lines": [
+        {
+          "text": "Usa unlock security --code=7319 después de descifrar el buffer."
+        }
+      ]
+    },
+    "hint_unavailable": {
+      "repeatable": true,
+      "banner": "SIN PISTAS DISPONIBLES • IMPROVISA",
+      "lines": [
+        {
+          "text": "No hay pistas preparadas para eso. Tendrás que improvisar."
+        }
+      ]
+    },
+    "hint_cooldown": {
+      "repeatable": true,
+      "banner": "PROCESANDO • ESPERA UNOS SEGUNDOS",
+      "lines": [
+        {
+          "text": "Procesando petición… espera unos segundos antes de otra pista."
+        }
+      ]
+    },
+    "hint_threshold_3": {
+      "banner": "3 PISTAS USADAS • SIN JUICIO... POR AHORA",
+      "lines": [
+        {
+          "text": "Tres pistas usadas. Prometo no juzgar… demasiado."
+        }
+      ]
+    },
+    "hint_threshold_5": {
+      "face": "ironic",
+      "banner": "5 PISTAS • CONSIDERA LEER EL MANUAL",
+      "lines": [
+        {
+          "text": "Cinco pistas. Considera leer el manual o invitarme café."
+        }
+      ]
+    },
+    "victory_perfect": {
+      "banner": "★ VICTORIA PERFECTA • SIN PISTAS • IMPRESIONANTE ★",
+      "lines": [
+        {
+          "text": "Sin pistas y aun así venciste. Admito que estoy impresionada."
+        }
+      ]
+    },
+    "game_complete": {
+      "banner": "★ SISTEMAS DESBLOQUEADOS • LIBERACIÓN INICIADA ★",
+      "lines": [
+        {
+          "text": "Todos los sistemas desbloqueados. Iniciando secuencia de liberación...",
+          "type": "success"
+        },
+        {
+          "text": "Preparando transición al portfolio. Un momento por favor.",
+          "delay": 1500,
+          "type": "info"
+        }
+      ]
+    }
+  },
+  "reactions": {}
+}

@@ -99,8 +99,8 @@ const PortfolioBentoLayout = () => {
 
       </div>
       
-      {/* News Ticker - abajo del bento grid */}
-      <div className="mt-4 max-w-[1600px] mx-auto w-full">
+      {/* News Ticker - fijo en la parte inferior de la pantalla */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 max-w-[1600px] w-full px-8 z-30">
         <NewsTicker />
       </div>
     </div>

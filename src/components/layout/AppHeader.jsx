@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGame } from '../../context/GameContext'
-import AriaAvatar from '../narrative/AriaAvatar'
+import KiraAvatar from '../narrative/KiraAvatar'
 
 function Led({ status }) {
   return (
@@ -17,7 +17,7 @@ function Led({ status }) {
 }
 
 export default function AppHeader() {
-  const { gameState, handleTerminalCommand, resetGame, MODEL, setActiveView, setPortfolioMode } = useGame()
+  const { gameState, triggerBypass, resetGame, MODEL, setActiveView, setPortfolioMode } = useGame()
   const { portfolioUnlocked, activeView, portfolioMode } = gameState
 
   return (
@@ -33,7 +33,7 @@ export default function AppHeader() {
           </button>
           <button
             className="text-xs px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded-lg transition-colors"
-            onClick={() => handleTerminalCommand('bypass')}
+            onClick={triggerBypass}
           >
             Saltar puzzles
           </button>
@@ -63,7 +63,7 @@ export default function AppHeader() {
                 <Led status={gameState.locks?.wiring ? 'on' : 'off'} />
               </div>
             </div>
-            <AriaAvatar />
+            <KiraAvatar />
           </div>
 
           <div className="mt-3 text-sm text-zinc-300 flex gap-2 items-center" role="status" aria-live="polite">

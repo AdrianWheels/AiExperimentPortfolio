@@ -1,9 +1,8 @@
 import React from 'react'
 import { useGame } from '../../context/GameContext'
-import AriaAvatar from '../narrative/AriaAvatar'
+import KiraAvatar from '../narrative/KiraAvatar'
 import ResonanceSequenceEngine from '../puzzles/new/ResonanceSequenceEngine'
 import FrequencyControls from '../puzzles/FrequencyControls'
-import Terminal from '../narrative/Terminal'
 import { CableBridgeProvider, CablePanelLeft, CablePanelRight } from '../puzzles/CableBridge'
 
 /**
@@ -102,13 +101,13 @@ function StatsPanel() {
 
 // Panel 6: Saltar puzzles + RRSS
 function ControlsPanel() {
-  const { handleTerminalCommand } = useGame()
+  const { triggerBypass } = useGame()
   return (
     <BentoCard className="h-full flex flex-col">
       <h4 className="text-white font-semibold text-xs mb-0.5">saltar puzzles</h4>
       <p className="text-[10px] text-white/40 mb-2">rrss</p>
       <button
-        onClick={() => handleTerminalCommand('bypass')}
+        onClick={triggerBypass}
         className="text-[10px] px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors mb-auto"
       >
         Skip all
@@ -237,7 +236,7 @@ function CentralOrb() {
         
         {/* Core con avatar */}
         <div className="pp-orb-core">
-          <AriaAvatar size="large" />
+          <KiraAvatar size="large" />
         </div>
       </div>
     </div>

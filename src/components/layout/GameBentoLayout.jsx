@@ -3,16 +3,15 @@ import { useGame, MODEL } from '../../context/GameContext'
 import { CableBridgeProvider, CablePanelLeft, CablePanelRight } from '../puzzles/CableBridge'
 import ResonanceSequenceEngine from '../puzzles/new/ResonanceSequenceEngine'
 import FrequencyControls from '../puzzles/FrequencyControls'
-import Terminal from '../narrative/Terminal'
 import HintPanel from '../narrative/HintPanel'
-import AriaAvatar from '../narrative/AriaAvatar'
+import KiraAvatar from '../narrative/KiraAvatar'
 import ProtectedPuzzle from '../ui/ProtectedPuzzle'
 import CipherPuzzle from '../puzzles/new/CipherPuzzle'
 import StarryBackground from './StarryBackground'
 import NewsTicker from '../ui/NewsTicker'
 
 const GameBentoLayout = () => {
-  const { setActiveView, handleTerminalCommand, resetGame, activeChallenge } = useGame()
+  const { setActiveView, triggerBypass, resetGame, activeChallenge } = useGame()
   const biteRadius = '100px'
 
   const STATUS_THEMES = {
@@ -158,7 +157,7 @@ const GameBentoLayout = () => {
               <div className="flex flex-col gap-3 w-full">
                  <div className="flex gap-2">
                     <button
-                        onClick={() => handleTerminalCommand('bypass')}
+                        onClick={triggerBypass}
                         className="flex-1 py-3 px-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl text-[10px] font-bold tracking-wider transition-all border border-red-500/20 hover:border-red-500/40 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] flex items-center justify-center gap-2 group"
                         title="Saltar Puzles"
                     >
@@ -216,16 +215,16 @@ const GameBentoLayout = () => {
                 </svg>
              </div>
 
-             {/* Core Orb with AriaAvatar */}
+             {/* Core Orb with KiraAvatar */}
              <div className="w-32 h-32 rounded-full bg-black relative overflow-hidden shadow-[0_0_50px_rgba(139,92,246,0.6)] border border-white/20 pointer-events-auto">
                 <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 via-purple-600 to-blue-500 opacity-80 blur-md animate-pulse"></div>
                 <div className="absolute inset-2 bg-black rounded-full overflow-hidden flex items-center justify-center">
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30"></div>
                   <div className="absolute -inset-4 bg-gradient-to-r from-purple-500 to-pink-500 blur-xl opacity-50 animate-[spin_3s_linear_infinite]"></div>
                   
-                  {/* ARIA AVATAR */}
+                  {/* KIRA AVATAR */}
                   <div className="relative z-10 w-full h-full">
-                    <AriaAvatar />
+                    <KiraAvatar />
                   </div>
                 </div>
              </div>

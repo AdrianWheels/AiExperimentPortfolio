@@ -118,8 +118,8 @@
   z-index: 1;
 }
 
-/* Hacer que AriaAvatar ocupe todo el espacio */
-.kira-center-avatar .aria-avatar,
+/* Hacer que KiraAvatar ocupe todo el espacio */
+.kira-center-avatar .kira-avatar,
 .kira-center-avatar > div {
   width: 100% !important;
   height: 100% !important;
@@ -232,11 +232,6 @@
   grid-row: 3;
 }
 
-.bento-terminal {
-  grid-column: 3;
-  grid-row: 3;
-}
-
 /* Responsive - Tablet */
 @media (max-width: 1024px) {
   .bento-grid-square {
@@ -252,8 +247,7 @@
   .bento-hints,
   .bento-neural,
   .bento-frequency,
-  .bento-cipher,
-  .bento-terminal {
+  .bento-cipher {
     grid-column: auto;
     grid-row: auto;
   }
@@ -582,43 +576,7 @@
   box-shadow: 0 6px 28px rgba(124, 58, 237, 0.45);
 }
 
-/* ===== ESTILOS DE TERMINAL ACTUALIZADOS ===== */
-.term-line { 
-  padding: 3px 0; 
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
 
-.term-system { color: #60a5fa; font-weight: 600; }
-.term-boot { color: #34d399; }
-.term-info { color: #e2e8f0; }
-.term-kira { color: #c4b5fd; font-weight: 500; }
-.term-warning { color: #fbbf24; }
-.term-error { color: #f87171; font-weight: 600; }
-.term-success { color: #86efac; }
-.term-locked { color: #ef4444; }
-.term-border { color: #5a5a6e; }
-.term-help { color: #a78bfa; font-weight: 500; }
-.term-command { color: #fde047; }
-.term-default { color: #ffffff; }
-.term-bg { color: #8b8b9e; }
-
-.term-system::before { content: "► "; color: #3b82f6; }
-.term-boot::before { content: "⚡ "; }
-.term-kira::before { content: "🤖 "; }
-.term-warning::before { content: "⚠ "; }
-.term-error::before { content: "❌ "; }
-.term-success::before { content: "✅ "; }
-
-@keyframes typing {
-  from { opacity: 0; transform: translateX(-5px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.term-line {
-  animation: typing 0.2s ease-out;
-}
 @keyframes ledBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }

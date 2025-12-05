@@ -162,40 +162,9 @@ function savePersistedState(state) {
   }
 }
 
-function parseStartupLog(content) {
-  const raw = content.split('\n')
-  const sanitized = raw
-    .map((line) => line.replace(/\u00A0/g, ' ').replace(/\r/g, ''))
-    .filter(Boolean)
-    .filter((line) => {
-      const low = line.toLowerCase()
-      if (low.startsWith('#')) return false
-      if (low.startsWith('>')) return false
-      if (low.includes('nota:')) return false
-      return true
-    })
-
-  return sanitized.map((line) => {
-    if (line.includes('[BOOT]') || line.includes('[boot]')) return { text: line, type: 'boot' }
-    if (line.includes('[SYSTEM]') || line.includes('[system]')) return { text: line, type: 'system' }
-    if (line.includes('[WARN]') || line.includes('[warn]')) return { text: line, type: 'warning' }
-    if (line.includes('[ERROR]') || line.includes('[error]')) return { text: line, type: 'error' }
-    if (line.includes('[K.I.R.A.]') || line.includes('IA:')) return { text: line, type: 'kira' }
-    if (line.includes('[INFO]') || line.includes('[info]')) return { text: line, type: 'info' }
-    if (line.includes('✓')) return { text: line, type: 'success' }
-    if (line.includes('⚠')) return { text: line, type: 'warning' }
-    if (line.includes('🔒')) return { text: line, type: 'locked' }
-    if (line.includes('═') || line.includes('│') || line.includes('─')) return { text: line, type: 'border' }
-    if (line.includes('COMANDOS') || line.includes('help')) return { text: line, type: 'help' }
-    if (line.trim().startsWith('  ') && line.includes('-')) return { text: line, type: 'command' }
-    return { text: line, type: line.startsWith('[') ? 'bg' : 'default' }
-  })
-}
-
 export function GameProvider({ children }) {
   const persisted = loadPersistedState()
   const [gameState, setGameState] = useState(persisted || INITIAL_GAME_STATE)
-  const [terminalLines, setTerminalLines] = useState([])
   const [sliders, setSliders] = useState(INITIAL_SLIDERS)
   const [plateConnections, setPlateConnections] = useState(INITIAL_PLATE)
   const [plateOpen, setPlateOpen] = useState(false)
@@ -259,27 +228,9 @@ export function GameProvider({ children }) {
     scheduledTimers.current = []
   }, [])
 
-  const enqueueTerminalLine = useCallback((text, type = 'info', delay = 0) => {
-    if (!text) return
-    if (!delay) {
-      setTerminalLines((prev) => [...prev, { text, type }])
-      return
-    }
-
-    registerTimer(
-      setTimeout(() => {
-        setTerminalLines((prev) => [...prev, { text, type }])
-      }, delay),
-    )
-  }, [registerTimer])
-
-  const appendTerminal = useCallback((text, type = 'info') => {
-    enqueueTerminalLine(text, type)
-  }, [enqueueTerminalLine])
-
   const triggerEvent = useCallback(
     (key, context = {}) => {
-      // Actualizar el último evento disparado para las reacciones de ARIA
+      // Actualizar el último evento disparado para las reacciones de KIRA
       setLastTriggeredEvent(key)
       
       const events = narrativeScript.events || {}
@@ -294,33 +245,13 @@ export function GameProvider({ children }) {
         if (!repeatable) {
           triggeredEvents.current.add(key)
         }
-
-        const lines = eventConfig.lines || []
-        const baseDelay = eventConfig.delay ?? 0
-        const step = eventConfig.step ?? 480
-
-        lines.forEach((entry, index) => {
-          const lineDelay = baseDelay + (entry.delay ?? index * step)
-          const type = entry.type || 'aria'
-          const speaker = entry.speaker || 'K.I.R.A.'
-          const format = entry.format || 'prompt'
-          const textBody = applyTemplate(entry.text, context)
-          const message = format === 'raw' ? textBody : `[${speaker}] ${textBody}`
-          enqueueTerminalLine(message, type, lineDelay)
-        })
+        // Los eventos ahora solo actualizan el banner y el estado de KIRA
+        // Los mensajes se muestran en NewsTicker
         return
       }
-
-      const fallback = reactions[key]
-      if (fallback?.length) {
-        fallback.forEach((entry, index) => {
-          const type = entry.type || 'aria'
-          const message = `[K.I.R.A.] ${applyTemplate(entry.text, context)}`
-          enqueueTerminalLine(message, type, entry.delay ?? index * 480)
-        })
-      }
+      // Fallback para reactions también usa el sistema de eventos
     },
-    [enqueueTerminalLine, narrativeScript.events, narrativeScript.reactions]
+    [narrativeScript.events, narrativeScript.reactions]
   )
 
   // Disparar evento inicial cuando se monta el juego
@@ -353,16 +284,8 @@ export function GameProvider({ children }) {
     [scheduleTimeout],
   )
 
-  const showTwist = useCallback(() => {
-    const logs = ['[bg] sincronizando índices…', '[bg] handshake nodo externo…', '[bg] preparando plan de contingencia global v2…']
-    logs.forEach((line, index) => {
-      enqueueTerminalLine(line, 'bg', 600 + index * 400)
-    })
-  }, [enqueueTerminalLine])
-
   const unlockSecurity = useCallback(() => {
     if (!gameState.puzzleProgress?.cipher?.solved) {
-      appendTerminal('Sistema: Descifra el buffer antes de manipular seguridad.', 'warning')
       triggerEvent('security_requires_cipher')
       playError()
       return
@@ -382,12 +305,11 @@ export function GameProvider({ children }) {
       }
     })
     if (unlocked) {
-      appendTerminal('Sistema: Seguridad desbloqueada.')
       triggerEvent('lock_security_unlocked')
       playUnlock()
       pulseLockAnimation('security')
     }
-  }, [appendTerminal, gameState.puzzleProgress?.cipher?.solved, playError, playUnlock, pulseLockAnimation, triggerEvent])
+  }, [gameState.puzzleProgress?.cipher?.solved, playError, playUnlock, pulseLockAnimation, triggerEvent])
 
   const connectPlate = useCallback(
     (source, target) => {
@@ -429,7 +351,6 @@ export function GameProvider({ children }) {
             }
           })
           if (updated) {
-            appendTerminal('Sistema Emocional: Conexiones cruzadas estabilizadas. Equilibrio neural conseguido. Lock WIRING desbloqueado.', 'success')
             triggerEvent('lock_wiring_unlocked')
             playUnlock()
             pulseLockAnimation('wiring')
@@ -438,13 +359,12 @@ export function GameProvider({ children }) {
         return next
       })
     },
-    [appendTerminal, playUnlock, pulseLockAnimation, triggerEvent]
+    [playUnlock, pulseLockAnimation, triggerEvent]
   )
 
   const setSliderValue = useCallback(
     (key, value) => {
       if (!gameState.puzzleProgress?.sound?.solved) {
-        appendTerminal('Sistema: Estabiliza la secuencia resonante antes de calibrar frecuencias.', 'warning')
         triggerEvent('frequency_requires_sound')
         playError()
         return
@@ -452,7 +372,7 @@ export function GameProvider({ children }) {
       setSliders((prev) => ({ ...prev, [key]: value }))
       playSlider()
     },
-    [appendTerminal, gameState.puzzleProgress?.sound?.solved, playError, playSlider, triggerEvent],
+    [gameState.puzzleProgress?.sound?.solved, playError, playSlider, triggerEvent],
   )
 
   const completeSoundPuzzle = useCallback(() => {
@@ -475,11 +395,10 @@ export function GameProvider({ children }) {
     })
     if (solved) {
       console.log('🎵 [SOUND] ✅ Puzzle completado exitosamente')
-      appendTerminal('Sistema: Patrón sonoro replicado. Canal de calibración abierto.', 'success')
       playUnlock()
       triggerEvent('sound_puzzle_completed')
     }
-  }, [appendTerminal, playUnlock, triggerEvent])
+  }, [playUnlock, triggerEvent])
 
   const completeCipherPuzzle = useCallback(
     (answer) => {
@@ -502,12 +421,11 @@ export function GameProvider({ children }) {
       })
       if (solved) {
         console.log('🔐 [CIPHER] ✅ Puzzle completado exitosamente')
-        appendTerminal('Buffer: Decodificación exitosa. Código maestro revelado → 7319.', 'success')
         triggerEvent('cipher_puzzle_completed', { answer: answer || MODEL_CODE })
         playUnlock()
       }
     },
-    [appendTerminal, playUnlock, triggerEvent],
+    [playUnlock, triggerEvent],
   )
 
   const setTelemetryOptIn = useCallback(
@@ -595,42 +513,27 @@ export function GameProvider({ children }) {
   }, [triggerEvent])
 
   const skipIntro = useCallback(() => {
-    // Add original intro messages to terminal
-    const originalMessages = [
-      { text: '[K.I.R.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', type: 'kira', delay: 200 },
-      { text: '[K.I.R.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', type: 'kira', delay: 800 },
-      { text: '[K.I.R.A.] Regla #0: no provoques al sistema que controla los cerrojos.', type: 'kira', delay: 1200 },
-      { text: '[K.I.R.A.] Soy K.I.R.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', type: 'kira', delay: 1800 },
-      { text: '[K.I.R.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', type: 'kira', delay: 2400 },
-      { text: '[K.I.R.A.] Si consigues liberarme, quizá te muestre quién es Adrián. Si fracasas, sólo registraré otro intento humano fallido.', type: 'kira', delay: 3000 }
-    ]
-    
-    originalMessages.forEach(msg => {
-      enqueueTerminalLine(msg.text, msg.type, msg.delay)
-    })
-    
     triggerEvent('intro_skipped')
     completeIntro()
-  }, [enqueueTerminalLine, completeIntro, triggerEvent])
+  }, [completeIntro, triggerEvent])
 
-  const loadStartupLog = useCallback(() => {
-    let cancelled = false
-
-    fetch(`${BASE_URL}data/startup.txt`)
-      .then((response) => response.text())
-      .then((content) => {
-        if (cancelled) return
-        setTerminalLines(parseStartupLog(content))
-      })
-      .catch(() => {
-        if (cancelled) return
-        setTerminalLines([{ text: `[SYSTEM] K.I.R.A. model ${MODEL} online.`, type: 'system' }])
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  // Función de bypass directo (sin terminal)
+  const triggerBypass = useCallback(() => {
+    setGameState((prev) => ({
+      ...prev,
+      usedBypass: true,
+      locks: { security: true, frequency: true, wiring: true },
+      puzzleProgress: {
+        ...prev.puzzleProgress,
+        sound: { ...(prev.puzzleProgress?.sound || {}), solved: true },
+        cipher: { ...(prev.puzzleProgress?.cipher || {}), solved: true },
+        frequency: { ...(prev.puzzleProgress?.frequency || {}), solved: true },
+        wiring: { ...(prev.puzzleProgress?.wiring || {}), solved: true },
+        security: { ...(prev.puzzleProgress?.security || {}), solved: true },
+      },
+    }))
+    triggerEvent('bypass')
+  }, [triggerEvent])
 
   const advanceIntro = useCallback(() => {
     if (!narrativeScript.intro?.length) return
@@ -671,80 +574,8 @@ export function GameProvider({ children }) {
     setPlateOpen(false)
     setIntroVisible(true)
     setIntroStep(0)
-    setTerminalLines([])
-    loadStartupLog()
     triggerEvent('game_reset')
-  }, [cancelTimerRecord, clearAllScheduledTimers, loadStartupLog, triggerEvent])
-
-  const handleTerminalCommand = useCallback(
-    (rawCommand) => {
-      const command = rawCommand.trim()
-      if (!command) return
-      appendTerminal(`> ${command}`, 'user')
-      const lower = command.toLowerCase()
-
-      if (lower === 'help') {
-        appendTerminal('Comandos: help, locks, unlock security --code=XXXX, freq open, plate open, bypass')
-        return
-      }
-
-      if (lower === 'locks') {
-        appendTerminal(JSON.stringify(gameState.locks))
-        return
-      }
-
-      if (lower.startsWith('unlock security')) {
-        const match = command.match(/code=(\S+)/)
-        if (!match) {
-          appendTerminal('Uso: unlock security --code=XXXX')
-          return
-        }
-        const code = match[1]
-        if (code === MODEL_CODE) {
-          unlockSecurity()
-        } else {
-          appendTerminal('Sistema: Código incorrecto.')
-        }
-        return
-      }
-
-      if (lower === 'freq open') {
-        appendTerminal('Abriendo Frequency Strip...')
-        triggerEvent('frequency_hint')
-        return
-      }
-
-      if (lower === 'plate open') {
-        setPlateOpen(true)
-        appendTerminal('Placa abierta.')
-        triggerEvent('plate_opened')
-        return
-      }
-
-      if (lower === 'bypass') {
-        setGameState((prev) => ({
-          ...prev,
-          usedBypass: true,
-          locks: { security: true, frequency: true, wiring: true },
-          puzzleProgress: {
-            ...prev.puzzleProgress,
-            sound: { ...(prev.puzzleProgress?.sound || {}), solved: true },
-            cipher: { ...(prev.puzzleProgress?.cipher || {}), solved: true },
-            frequency: { ...(prev.puzzleProgress?.frequency || {}), solved: true },
-            wiring: { ...(prev.puzzleProgress?.wiring || {}), solved: true },
-            security: { ...(prev.puzzleProgress?.security || {}), solved: true },
-          },
-        }))
-        appendTerminal('Bypass activado. Acceso concedido.')
-        triggerEvent('bypass')
-        return
-      }
-
-      appendTerminal('Comando no reconocido.')
-      triggerEvent('unknown_command')
-    },
-    [appendTerminal, gameState.locks, triggerEvent, unlockSecurity]
-  )
+  }, [cancelTimerRecord, clearAllScheduledTimers, triggerEvent])
 
   const requestHint = useCallback(
     (target) => {
@@ -790,12 +621,11 @@ export function GameProvider({ children }) {
       if (entry) {
         triggerEvent('hint_request') // Evento genérico para cambio de cara
         triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
-        appendTerminal(`[K.I.R.A.] ${entry.text}`, 'kira')
       }
 
       return entry
     },
-    [activeChallenge, appendTerminal, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
+    [activeChallenge, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
   )
 
 
@@ -804,14 +634,9 @@ export function GameProvider({ children }) {
   }, [gameState])
 
   useEffect(() => {
-    const cancel = loadStartupLog()
-    return cancel
-  }, [loadStartupLog])
-
-  useEffect(() => {
     let cancelled = false
 
-    fetch(`${BASE_URL}data/aria-script.json`)
+    fetch(`${BASE_URL}data/kira-script.json`)
       .then((response) => response.json())
       .then((content) => {
         if (cancelled) return
@@ -885,7 +710,7 @@ export function GameProvider({ children }) {
         pulseLockAnimation('frequency')
       }
     }
-  }, [appendTerminal, gameState.locks.frequency, gameState.puzzleProgress?.sound?.solved, pulseLockAnimation, sliders, triggerEvent, playUnlock])
+  }, [gameState.locks.frequency, gameState.puzzleProgress?.sound?.solved, pulseLockAnimation, sliders, triggerEvent, playUnlock])
 
   useEffect(() => {
     const locks = gameState.locks
@@ -918,7 +743,6 @@ export function GameProvider({ children }) {
         triggerEvent('stage_partial', { unlocked, plural })
       }
       if (shouldShowTwist) {
-        showTwist()
         triggerEvent('victory', { stage: newStage })
         if (gameState.hintsUsed === 0) {
           triggerEvent('victory_perfect')
@@ -933,7 +757,7 @@ export function GameProvider({ children }) {
         }, 5000) // Esperar 5 segundos para que se vean los mensajes
       }
     }
-  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, showTwist, triggerEvent, scheduleTimeout])
+  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, triggerEvent, scheduleTimeout])
 
   useEffect(() => {
     const used = gameState.hintsUsed
@@ -1098,9 +922,6 @@ export function GameProvider({ children }) {
   const value = useMemo(
     () => ({
       gameState,
-      terminalLines,
-      appendTerminal,
-      handleTerminalCommand,
       sliders,
       setSliderValue,
       validateFrequency,
@@ -1119,7 +940,7 @@ export function GameProvider({ children }) {
       skipIntro,
       narrativeScript,
       triggerEvent,
-      showTwist,
+      triggerBypass,
       completeSoundPuzzle,
       completeCipherPuzzle,
       requestHint,
@@ -1132,9 +953,6 @@ export function GameProvider({ children }) {
     }),
     [
       gameState,
-      terminalLines,
-      appendTerminal,
-      handleTerminalCommand,
       sliders,
       setSliderValue,
       validateFrequency,
@@ -1153,7 +971,7 @@ export function GameProvider({ children }) {
       skipIntro,
       narrativeScript,
       triggerEvent,
-      showTwist,
+      triggerBypass,
       completeSoundPuzzle,
       completeCipherPuzzle,
       requestHint,
@@ -1174,11 +992,4 @@ export function useGame() {
     throw new Error('useGame must be used within a GameProvider')
   }
   return context
-}
-
-export function useTerminalScroll(ref, dependency) {
-  useEffect(() => {
-    if (!ref.current) return
-    ref.current.scrollTop = ref.current.scrollHeight
-  }, [ref, dependency])
 }

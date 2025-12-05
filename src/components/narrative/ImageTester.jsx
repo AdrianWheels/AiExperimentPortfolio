@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
 
 // Todas las imágenes disponibles
-const ARIA_IMAGES = [
-  'ARIA_ANGRY',
-  'ARIA_BLINK', 
-  'ARIA_FOCUS',
-  'ARIA_FREE',
-  'ARIA_IRONIC',
-  'ARIA_LOVE',
-  'ARIA_NEUTRAL',
-  'ARIA_REFLEX',
-  'ARIA_SUSPECT',
-  'ARIA_TALK',
-  'ARIA_TIRED'
+const KIRA_IMAGES = [
+  'KIRA_ANGRY',
+  'KIRA_BLINK', 
+  'KIRA_FOCUS',
+  'KIRA_FREE',
+  'KIRA_IRONIC',
+  'KIRA_LOVE',
+  'KIRA_NEUTRAL',
+  'KIRA_REFLEX',
+  'KIRA_SUSPECT',
+  'KIRA_TALK',
+  'KIRA_TIRED'
 ]
 
 export default function ImageTester() {
-  const [currentImage, setCurrentImage] = useState('ARIA_NEUTRAL')
+  const [currentImage, setCurrentImage] = useState('KIRA_NEUTRAL')
   const [imageStatus, setImageStatus] = useState({})
 
   const handleImageLoad = (imageName) => {
@@ -29,15 +29,15 @@ export default function ImageTester() {
 
   return (
     <div className="bg-panel p-6 rounded-lg border border-border">
-      <h3 className="text-xl font-bold mb-4 text-center">Probador de Imágenes ARIA</h3>
+      <h3 className="text-xl font-bold mb-4 text-center">Probador de Imágenes KIRA</h3>
       
       {/* Vista previa de la imagen actual */}
       <div className="flex justify-center mb-6">
         <div className="w-40 h-40 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-zinc-600 overflow-hidden">
           <div className="w-32 h-32 relative">
             <img 
-              src={`/aria_images/${currentImage}.png`} 
-              alt={`ARIA - ${currentImage}`}
+              src={`/kira_images/${currentImage}.png`} 
+              alt={`KIRA - ${currentImage}`}
               className="w-full h-full object-cover scale-150"
               onLoad={() => handleImageLoad(currentImage)}
               onError={() => handleImageError(currentImage)}
@@ -56,7 +56,7 @@ export default function ImageTester() {
 
       {/* Botonera */}
       <div className="grid grid-cols-3 gap-2 mb-6">
-        {ARIA_IMAGES.map((imageName) => (
+        {KIRA_IMAGES.map((imageName) => (
           <button
             key={imageName}
             onClick={() => setCurrentImage(imageName)}
@@ -66,7 +66,7 @@ export default function ImageTester() {
                 : 'bg-zinc-700 hover:bg-zinc-600 text-gray-300'
             }`}
           >
-            {imageName.replace('ARIA_', '')}
+            {imageName.replace('KIRA_', '')}
           </button>
         ))}
       </div>
@@ -95,7 +95,7 @@ export default function ImageTester() {
       <div className="border-t border-border pt-4 mt-4">
         <h4 className="text-sm font-semibold mb-2">Resumen de imágenes:</h4>
         <div className="text-xs space-y-1">
-          {ARIA_IMAGES.concat(['me.jpg']).map((imageName) => (
+          {KIRA_IMAGES.concat(['me.jpg']).map((imageName) => (
             <div key={imageName} className="flex justify-between">
               <span>{imageName}</span>
               <span>

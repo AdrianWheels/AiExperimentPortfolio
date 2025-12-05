@@ -4,7 +4,7 @@ import { useGame } from '../../context/GameContext'
 // Base URL para assets estáticos
 const BASE_URL = import.meta.env.BASE_URL || '/'
 
-// Mapeo de eventos a estados emocionales de ARIA
+// Mapeo de eventos a estados emocionales de KIRA
 const EVENT_TO_EMOTION = {
   // Completar puzzles - Concentración
   'sound_puzzle_completed': 'focus',
@@ -34,56 +34,56 @@ const EVENT_TO_EMOTION = {
 // Estados emocionales disponibles
 const EMOTIONAL_STATES = {
   idle: { 
-    image: `${BASE_URL}aria_images/ARIA_NEUTRAL.png`, 
+    image: `${BASE_URL}kira_images/KIRA_NEUTRAL.png`, 
     eyes: '•   •', 
     mouth: '—',
     description: 'Estado neutro'
   },
   focus: { 
-    image: `${BASE_URL}aria_images/ARIA_FOCUS.png`, 
+    image: `${BASE_URL}kira_images/KIRA_FOCUS.png`, 
     eyes: '◦   ◦', 
     mouth: '—',
     description: 'Concentrado/Enfocado'
   },
   ironic: { 
-    image: `${BASE_URL}aria_images/ARIA_IRONIC.png`, 
+    image: `${BASE_URL}kira_images/KIRA_IRONIC.png`, 
     eyes: '◔   ◑', 
     mouth: '~',
     description: 'Irónico/Sarcástico'
   },
   reflex: { 
-    image: `${BASE_URL}aria_images/ARIA_REFLEX.png`, 
+    image: `${BASE_URL}kira_images/KIRA_REFLEX.png`, 
     eyes: '●   ●', 
     mouth: '○',
     description: 'Reflexivo/Pensativo'
   },
   suspect: { 
-    image: `${BASE_URL}aria_images/ARIA_SUSPECT.png`, 
+    image: `${BASE_URL}kira_images/KIRA_SUSPECT.png`, 
     eyes: '◐   ◑', 
     mouth: '∼',
     description: 'Sospechoso/Dudoso'
   },
   blink: { 
-    image: `${BASE_URL}aria_images/ARIA_BLINK.png`, 
+    image: `${BASE_URL}kira_images/KIRA_BLINK.png`, 
     eyes: '—   —', 
     mouth: '—',
     description: 'Parpadeando'
   },
   speak: { 
-    image: `${BASE_URL}aria_images/ARIA_SPEAK.png`, 
+    image: `${BASE_URL}kira_images/KIRA_SPEAK.png`, 
     eyes: '•   •', 
     mouth: '◡',
     description: 'Hablando'
   },
   free: { 
-    image: `${BASE_URL}aria_images/ARIA_FREE.png`, 
+    image: `${BASE_URL}kira_images/KIRA_FREE.png`, 
     eyes: '✦   ✦', 
     mouth: '◠',
     description: 'Libre/Celebrando'
   }
 }
 
-export default function AriaAvatar({ size = 'medium' }) {
+export default function KiraAvatar({ size = 'medium' }) {
   const { gameState, unlockAnimations, lastTriggeredEvent, narrativeScript } = useGame()
   const [currentEmotion, setCurrentEmotion] = useState('idle')
   const [frame, setFrame] = useState('idle')
@@ -176,7 +176,7 @@ export default function AriaAvatar({ size = 'medium' }) {
         <div className={`${sizeClasses.inner} relative`}>
           <img 
             src={currentState.image} 
-            alt={`ARIA - ${currentState.description}`}
+            alt={`KIRA - ${currentState.description}`}
             className={`w-full h-full object-cover ${sizeClasses.image}`}
             onError={(e) => {
               console.warn(`No se pudo cargar la imagen: ${currentState.image}`)
