@@ -6,6 +6,7 @@ import BentoSkills from './BentoSkills'
 import BentoTimeline from './BentoTimeline'
 import BentoAbout from './BentoAbout'
 import BentoSocials from './BentoSocials'
+import NewsTicker from '../../ui/NewsTicker'
 
 const PortfolioBentoLayout = () => {
   const biteRadius = '100px'
@@ -96,6 +97,11 @@ const PortfolioBentoLayout = () => {
            </div>
         </div>
 
+      </div>
+      
+      {/* News Ticker - abajo del bento grid */}
+      <div className="mt-4 max-w-[1600px] mx-auto w-full">
+        <NewsTicker />
       </div>
     </div>
   )

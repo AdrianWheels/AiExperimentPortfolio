@@ -9,6 +9,9 @@ import React, {
 } from 'react'
 import useSound from '../hooks/useSound'
 
+// Base URL para assets estáticos
+const BASE_URL = import.meta.env.BASE_URL || '/'
+
 const STORAGE_KEY = 'genio_state'
 export const MODEL = 'MK-7319'
 export const MODEL_CODE = '7319'
@@ -388,16 +391,28 @@ export function GameProvider({ children }) {
 
   const connectPlate = useCallback(
     (source, target) => {
+      console.log(`🔌 [WIRING] Conectando: ${source} → ${target}`)
       setPlateConnections((prev) => {
         const next = { ...prev, [source]: target }
+        
+        console.log('🔌 [WIRING] Estado actual de conexiones:', next)
+        
         // Verificar que todas las emociones estén conectadas de forma cruzada
-        const emotionsCorrect = next.FURY === 'FEAR' && 
-                               next.JOY === 'CALM' && 
-                               next.SADNESS === 'ENVY' && 
-                               next.FEAR === 'LOVE' && 
-                               next.LOVE === 'SADNESS' && 
-                               next.CALM === 'JOY' && 
-                               next.ENVY === 'FURY'
+        const checks = {
+          'FURY→FEAR': next.FURY === 'FEAR',
+          'JOY→CALM': next.JOY === 'CALM',
+          'SADNESS→ENVY': next.SADNESS === 'ENVY',
+          'FEAR→LOVE': next.FEAR === 'LOVE',
+          'LOVE→SADNESS': next.LOVE === 'SADNESS',
+          'CALM→JOY': next.CALM === 'JOY',
+          'ENVY→FURY': next.ENVY === 'FURY'
+        }
+        
+        console.log('🔌 [WIRING] Verificación de conexiones:', checks)
+        
+        const emotionsCorrect = Object.values(checks).every(v => v === true)
+        
+        console.log(`🔌 [WIRING] ¿Todas correctas?: ${emotionsCorrect}`)
         
         if (emotionsCorrect) {
           let updated = false
@@ -601,7 +616,7 @@ export function GameProvider({ children }) {
   const loadStartupLog = useCallback(() => {
     let cancelled = false
 
-    fetch('/data/startup.txt')
+    fetch(`${BASE_URL}data/startup.txt`)
       .then((response) => response.text())
       .then((content) => {
         if (cancelled) return
@@ -796,7 +811,7 @@ export function GameProvider({ children }) {
   useEffect(() => {
     let cancelled = false
 
-    fetch('/data/aria-script.json')
+    fetch(`${BASE_URL}data/aria-script.json`)
       .then((response) => response.json())
       .then((content) => {
         if (cancelled) return

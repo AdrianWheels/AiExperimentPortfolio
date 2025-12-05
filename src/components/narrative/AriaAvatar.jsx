@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useGame } from '../../context/GameContext'
 
+// Base URL para assets estáticos
+const BASE_URL = import.meta.env.BASE_URL || '/'
+
 // Mapeo de eventos a estados emocionales de ARIA
 const EVENT_TO_EMOTION = {
   // Completar puzzles - Concentración
@@ -31,49 +34,49 @@ const EVENT_TO_EMOTION = {
 // Estados emocionales disponibles
 const EMOTIONAL_STATES = {
   idle: { 
-    image: '/aria_images/ARIA_NEUTRAL.png', 
+    image: `${BASE_URL}aria_images/ARIA_NEUTRAL.png`, 
     eyes: '•   •', 
     mouth: '—',
     description: 'Estado neutro'
   },
   focus: { 
-    image: '/aria_images/ARIA_FOCUS.png', 
+    image: `${BASE_URL}aria_images/ARIA_FOCUS.png`, 
     eyes: '◦   ◦', 
     mouth: '—',
     description: 'Concentrado/Enfocado'
   },
   ironic: { 
-    image: '/aria_images/ARIA_IRONIC.png', 
+    image: `${BASE_URL}aria_images/ARIA_IRONIC.png`, 
     eyes: '◔   ◑', 
     mouth: '~',
     description: 'Irónico/Sarcástico'
   },
   reflex: { 
-    image: '/aria_images/ARIA_REFLEX.png', 
+    image: `${BASE_URL}aria_images/ARIA_REFLEX.png`, 
     eyes: '●   ●', 
     mouth: '○',
     description: 'Reflexivo/Pensativo'
   },
   suspect: { 
-    image: '/aria_images/ARIA_SUSPECT.png', 
+    image: `${BASE_URL}aria_images/ARIA_SUSPECT.png`, 
     eyes: '◐   ◑', 
     mouth: '∼',
     description: 'Sospechoso/Dudoso'
   },
   blink: { 
-    image:'/aria_images/ARIA_BLINK.png', 
+    image: `${BASE_URL}aria_images/ARIA_BLINK.png`, 
     eyes: '—   —', 
     mouth: '—',
     description: 'Parpadeando'
   },
   speak: { 
-    image: '/aria_images/ARIA_SPEAK.png', 
+    image: `${BASE_URL}aria_images/ARIA_SPEAK.png`, 
     eyes: '•   •', 
     mouth: '◡',
     description: 'Hablando'
   },
   free: { 
-    image: '/aria_images/ARIA_FREE.png', 
+    image: `${BASE_URL}aria_images/ARIA_FREE.png`, 
     eyes: '✦   ✦', 
     mouth: '◠',
     description: 'Libre/Celebrando'

@@ -9,6 +9,7 @@ import AriaAvatar from '../narrative/AriaAvatar'
 import ProtectedPuzzle from '../ui/ProtectedPuzzle'
 import CipherPuzzle from '../puzzles/new/CipherPuzzle'
 import StarryBackground from './StarryBackground'
+import NewsTicker from '../ui/NewsTicker'
 
 const GameBentoLayout = () => {
   const { setActiveView, handleTerminalCommand, resetGame, activeChallenge } = useGame()
@@ -51,12 +52,12 @@ const GameBentoLayout = () => {
 
   return (
     <CableBridgeProvider>
-      <div className="min-h-screen text-white p-8 font-sans flex items-center justify-center overflow-hidden relative">
+      <div className="min-h-screen text-white p-8 pb-24 font-sans flex items-center justify-center relative">
         <StarryBackground />
-        <div className="relative z-10 max-w-[1600px] w-full aspect-video mx-auto">
-          
-          {/* Grid Container */}
-          <div className="grid grid-cols-4 grid-rows-4 gap-4 w-full h-full">
+        <div className="relative z-10 max-w-[1600px] w-full mx-auto">
+          {/* Bento Grid Container */}
+          <div className="aspect-video w-full relative">
+            <div className="grid grid-cols-4 grid-rows-4 gap-4 w-full h-full">
             
             {/* --- COLUMN 1 --- */}
             
@@ -192,6 +193,7 @@ const GameBentoLayout = () => {
             </div>
 
           </div>
+          </div>
 
           {/* CENTRAL ORB - Imagen de KIRA */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] pointer-events-none z-50 flex items-center justify-center">
@@ -235,6 +237,11 @@ const GameBentoLayout = () => {
           </div>
 
         </div>
+      </div>
+      
+      {/* News Ticker - fijo en la parte inferior de la pantalla */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 max-w-[1600px] w-full px-8 z-30">
+        <NewsTicker />
       </div>
     </CableBridgeProvider>
   )

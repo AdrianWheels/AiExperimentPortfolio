@@ -10,6 +10,13 @@
 /* ===== COMPONENTES PERSONALIZADOS ===== */
 @import './components.css';
 
+@font-face {
+  font-family: 'Glitch Slap';
+  src: url('/font/Glitch Slap.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* ===== TAILWIND CSS ===== */
 @tailwind base;
 @tailwind components;

@@ -17,7 +17,8 @@ export default function ProtectedPuzzle({
 }) {
   const { gameState, triggerEvent } = useGame()
   const [isUnlocking, setIsUnlocking] = useState(false)
-  const [wasLocked, setWasLocked] = useState(true)
+  // Usar useRef para trackear el estado anterior de isUnlocked
+  const prevUnlockedRef = React.useRef(null)
 
   // Check if puzzle is solved
   const isSolved = React.useMemo(() => {
@@ -70,7 +71,7 @@ export default function ProtectedPuzzle({
   useEffect(() => {
     console.log(`🎮 [${puzzleType}] Estado cambió:`, {
       isUnlocked,
-      wasLocked,
+      prevUnlocked: prevUnlockedRef.current,
       isUnlocking,
       gameState: {
         progress: gameState?.puzzleProgress,
@@ -78,22 +79,28 @@ export default function ProtectedPuzzle({
       }
     })
     
-    if (isUnlocked && wasLocked && !isUnlocking) {
+    // Solo animar si cambió de bloqueado a desbloqueado (no en el mount inicial)
+    const wasLockedBefore = prevUnlockedRef.current === false
+    const justUnlocked = isUnlocked && wasLockedBefore && !isUnlocking
+    
+    if (justUnlocked) {
       console.log(`🎮 [${puzzleType}] 🚀 Iniciando secuencia de desbloqueo automático...`)
       setIsUnlocking(true)
       // Delay para que se vea la animación de apertura
       setTimeout(() => {
         console.log(`🎮 [${puzzleType}] ✅ Desbloqueo completado!`)
         setIsUnlocking(false)
-        setWasLocked(false)
         triggerEvent('puzzle_auto_unlocked', { puzzleType, variant })
-        console.log(`� [${puzzleType}] Puzzle desbloqueado automáticamente!`)
+        console.log(`🔓 [${puzzleType}] Puzzle desbloqueado automáticamente!`)
       }, 1000) // Tiempo para que se vea la animación de apertura
     }
-  }, [isUnlocked, wasLocked, isUnlocking, puzzleType, variant, triggerEvent, gameState])
+    
+    // Actualizar ref después de procesar
+    prevUnlockedRef.current = isUnlocked
+  }, [isUnlocked, isUnlocking, puzzleType, variant, triggerEvent, gameState])
 
   // Si está desbloqueado y no está en proceso de desbloqueo, mostrar directamente
-  if (isUnlocked && !isUnlocking && !wasLocked) {
+  if (isUnlocked && !isUnlocking) {
     return (
       <div className={`relative w-full h-full ${className}`}>
         {isSolved && (
