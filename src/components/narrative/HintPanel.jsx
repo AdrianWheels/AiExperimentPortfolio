@@ -41,55 +41,47 @@ export default function HintPanel() {
   const hintLog = Array.isArray(gameState.hintLog) ? gameState.hintLog : []
 
   return (
-    <section className="bg-panel border border-border rounded-lg p-4 flex flex-col gap-3 flex-1 min-h-0">
-      <header className="flex items-center justify-between">
-        <div>
-          <div className="text-sm font-semibold">Canal de Pistas</div>
-          <p className="text-xs text-slate-400 mt-1">
-            Solicita ayuda contextual. A.R.I.A. ajusta su actitud según el número de pistas usadas.
-          </p>
+    <section className="flex flex-col h-full min-h-0">
+      <header className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-accent/20 flex items-center justify-center">
+            <span className="text-xs">💡</span>
+          </div>
+          <h2 className="text-sm font-semibold text-white">Pistas</h2>
         </div>
-        <div className="text-[11px] uppercase tracking-wide text-slate-500 text-right leading-tight">
-          {activeLabel}
-        </div>
+        <span className="text-xs text-muted">{activeLabel}</span>
       </header>
 
       <button
         type="button"
         onClick={handleRequest}
         disabled={!canRequest}
-        className="self-start px-3 py-2 bg-violet-600 hover:bg-violet-500 rounded text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-3 py-2 bg-accent/80 hover:bg-accent rounded-lg text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-colors mb-3"
       >
         {cooldown > 0
-          ? `En cooldown (${formatTime(cooldown)})`
+          ? `Cooldown (${formatTime(cooldown)})`
           : activeChallenge === 'free'
-          ? 'Sin retos activos'
-          : 'Solicitar pista'}
+          ? 'Sin retos'
+          : 'Solicitar'}
       </button>
 
-      <div className="flex-1 overflow-y-auto bg-black/30 border border-zinc-800 rounded p-3 text-xs text-slate-200 space-y-2">
+      <div className="flex-1 overflow-y-auto bg-black/30 rounded-lg p-2 text-xs space-y-2 min-h-[60px] max-h-[100px]">
         {hintLog.length === 0 ? (
-          <p className="text-slate-500 text-xs">
-            Aún no has pedido pistas. Mantén la racha para impresionar a A.R.I.A.
-          </p>
+          <p className="text-subtle text-center py-2">Sin pistas aún</p>
         ) : (
           hintLog
             .slice()
             .reverse()
             .map((entry) => (
-              <article key={entry.id} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between text-[11px] text-slate-400 uppercase">
-                  <span>{entry.puzzleLabel}</span>
-                  <span>Nivel {entry.level}</span>
-                </div>
-                <p>{entry.text}</p>
+              <article key={entry.id} className="pb-2 border-b border-white/5 last:border-0 last:pb-0">
+                <p className="text-muted leading-relaxed">{entry.text}</p>
               </article>
             ))
         )}
       </div>
 
-      <footer className="text-[11px] text-slate-500 uppercase tracking-wide">
-        Pistas usadas: {gameState.hintsUsed}
+      <footer className="text-xs text-subtle mt-2">
+        Usadas: {gameState.hintsUsed}
       </footer>
     </section>
   )

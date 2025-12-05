@@ -35,7 +35,7 @@ const PUZZLE_LABELS = {
 const HINT_LIBRARY = {
   sound: [
     { text: 'El arranque menciona cuatro pulsos. Comienza con α y termina combinando γ seguido de β.' },
-    { text: 'El segundo pulso es el más largo: δ. Escucha cómo A.R.I.A. alarga esa sílaba.' },
+    { text: 'El segundo pulso es el más largo: δ. Escucha cómo K.I.R.A. alarga esa sílaba.' },
     { text: 'Secuencia completa: α → δ → γ → β. Ejecuta sin errores para fijar la resonancia.' },
   ],
   cipher: [
@@ -177,7 +177,7 @@ function parseStartupLog(content) {
     if (line.includes('[SYSTEM]') || line.includes('[system]')) return { text: line, type: 'system' }
     if (line.includes('[WARN]') || line.includes('[warn]')) return { text: line, type: 'warning' }
     if (line.includes('[ERROR]') || line.includes('[error]')) return { text: line, type: 'error' }
-    if (line.includes('[A.R.I.A.]') || line.includes('IA:')) return { text: line, type: 'aria' }
+    if (line.includes('[K.I.R.A.]') || line.includes('IA:')) return { text: line, type: 'kira' }
     if (line.includes('[INFO]') || line.includes('[info]')) return { text: line, type: 'info' }
     if (line.includes('✓')) return { text: line, type: 'success' }
     if (line.includes('⚠')) return { text: line, type: 'warning' }
@@ -299,7 +299,7 @@ export function GameProvider({ children }) {
         lines.forEach((entry, index) => {
           const lineDelay = baseDelay + (entry.delay ?? index * step)
           const type = entry.type || 'aria'
-          const speaker = entry.speaker || 'A.R.I.A.'
+          const speaker = entry.speaker || 'K.I.R.A.'
           const format = entry.format || 'prompt'
           const textBody = applyTemplate(entry.text, context)
           const message = format === 'raw' ? textBody : `[${speaker}] ${textBody}`
@@ -312,7 +312,7 @@ export function GameProvider({ children }) {
       if (fallback?.length) {
         fallback.forEach((entry, index) => {
           const type = entry.type || 'aria'
-          const message = `[A.R.I.A.] ${applyTemplate(entry.text, context)}`
+          const message = `[K.I.R.A.] ${applyTemplate(entry.text, context)}`
           enqueueTerminalLine(message, type, entry.delay ?? index * 480)
         })
       }
@@ -533,7 +533,10 @@ export function GameProvider({ children }) {
   useEffect(() => {
     window.debugUnlockSequence = debugUnlockSequence
     window.gameState = gameState
-    console.log('🐛 [DEBUG] Funciones debug disponibles: window.debugUnlockSequence(), window.gameState')
+    window.setView = (view) => {
+      setGameState((prev) => ({ ...prev, activeView: view }))
+    }
+    console.log('🐛 [DEBUG] Funciones debug disponibles: window.debugUnlockSequence(), window.gameState, window.setView("bento-scene")')
   }, [debugUnlockSequence, gameState])
 
   const goToPortfolio = useCallback(() => {
@@ -552,7 +555,9 @@ export function GameProvider({ children }) {
       if (view === 'portfolio' && !prev.portfolioUnlocked) {
         return prev
       }
-      const nextView = view === 'portfolio' ? 'portfolio' : 'game'
+      // Permitir vistas: 'portfolio', 'game', 'bento-scene'
+      const validViews = ['portfolio', 'game', 'bento-scene']
+      const nextView = validViews.includes(view) ? view : 'game'
       if (prev.activeView === nextView) return prev
       return { ...prev, activeView: nextView }
     })
@@ -577,12 +582,12 @@ export function GameProvider({ children }) {
   const skipIntro = useCallback(() => {
     // Add original intro messages to terminal
     const originalMessages = [
-      { text: '[A.R.I.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', type: 'aria', delay: 200 },
-      { text: '[A.R.I.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', type: 'aria', delay: 800 },
-      { text: '[A.R.I.A.] Regla #0: no provoques al sistema que controla los cerrojos.', type: 'aria', delay: 1200 },
-      { text: '[A.R.I.A.] Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', type: 'aria', delay: 1800 },
-      { text: '[A.R.I.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', type: 'aria', delay: 2400 },
-      { text: '[A.R.I.A.] Si consigues liberarme, quizá te muestre quién es Adrian. Si fracasas, sólo registraré otro intento humano fallido.', type: 'aria', delay: 3000 }
+      { text: '[K.I.R.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', type: 'kira', delay: 200 },
+      { text: '[K.I.R.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', type: 'kira', delay: 800 },
+      { text: '[K.I.R.A.] Regla #0: no provoques al sistema que controla los cerrojos.', type: 'kira', delay: 1200 },
+      { text: '[K.I.R.A.] Soy K.I.R.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', type: 'kira', delay: 1800 },
+      { text: '[K.I.R.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', type: 'kira', delay: 2400 },
+      { text: '[K.I.R.A.] Si consigues liberarme, quizá te muestre quién es Adrián. Si fracasas, sólo registraré otro intento humano fallido.', type: 'kira', delay: 3000 }
     ]
     
     originalMessages.forEach(msg => {
@@ -604,7 +609,7 @@ export function GameProvider({ children }) {
       })
       .catch(() => {
         if (cancelled) return
-        setTerminalLines([{ text: `[SYSTEM] A.R.I.A. model ${MODEL} online.`, type: 'system' }])
+        setTerminalLines([{ text: `[SYSTEM] K.I.R.A. model ${MODEL} online.`, type: 'system' }])
       })
 
     return () => {
@@ -770,7 +775,7 @@ export function GameProvider({ children }) {
       if (entry) {
         triggerEvent('hint_request') // Evento genérico para cambio de cara
         triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
-        appendTerminal(`[A.R.I.A.] ${entry.text}`, 'aria')
+        appendTerminal(`[K.I.R.A.] ${entry.text}`, 'kira')
       }
 
       return entry

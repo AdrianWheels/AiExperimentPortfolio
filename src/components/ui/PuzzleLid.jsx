@@ -568,8 +568,8 @@ export default function PuzzleLid({
       </div>
       
       {/* Instrucciones */}
-      <div className="absolute bottom-2 right-2 z-20 text-xs text-slate-400 bg-black/70 px-2 py-1 rounded opacity-80">
-        🔒 Resuelve puzzles para desbloquear
+      <div className="absolute bottom-2 right-2 z-20 text-[10px] text-muted bg-black/70 px-2 py-1 rounded opacity-80">
+        🔒 Bloqueado
       </div>
     </div>
   )

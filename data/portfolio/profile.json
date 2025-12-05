@@ -1,49 +1,53 @@
 {
-  "name": "Nombre Apellido",
-  "alias": "codename-placeholder",
+  "name": "Adrián Rueda Fernández",
+  "alias": "drilan",
   "tagline": {
-    "normal": "Product Designer & Frontend Developer",
-    "hacked": "Perfil interceptado: Arquitecto de experiencias narrativas"
+    "normal": "Técnico Informático & Desarrollador de Realidad Virtual",
+    "hacked": "ALERTA NIVEL OMEGA: Sujeto híbrido detectado. Fusión ilegal de neurociencia y código. Clasificación: Arquitecto de Realidades Simuladas."
   },
   "summary": {
-    "normal": "Profesional multidisciplinario centrado en combinar investigación, diseño y código para construir productos accesibles y memorables.",
-    "hacked": "Registro de campo: especialista en tender trampas emocionales con interfaces. Se sospecha obsesión por la armonía tipográfica."
+    "normal": "Profesional multidisciplinario especializado en desarrollo de software, administración de sistemas cloud y creación de experiencias de Realidad Virtual. Combino conocimientos de psicología con tecnología para crear soluciones innovadoras.",
+    "hacked": "EXPEDIENTE K.I.R.A.-2847: Espécimen singular que logró hackear su propia carrera mezclando el estudio de la mente humana con la programación de mundos virtuales. Nivel de amenaza para la realidad consensuada: CONSIDERABLE. Se recomienda vigilancia continua."
   },
-  "location": "Ciudad Remota, Planeta Tierra",
-  "availability": "Disponible para colaboraciones Q3 — Q4",
+  "location": "Almería, España",
+  "availability": "Actualmente empleado en GRS",
   "contact": {
-    "email": "contacto@placeholder.dev",
+    "email": "drilan@gmail.com",
     "portfolio": "https://placeholder.dev",
-    "phone": "+00 000 000 000",
-    "timeZone": "UTC±0"
+    "phone": "691664913",
+    "timeZone": "UTC+1 (CET)"
   },
   "social": [
     { "label": "LinkedIn", "url": "https://linkedin.com/in/placeholder" },
-    { "label": "GitHub", "url": "https://github.com/placeholder" },
+    { "label": "GitHub", "url": "https://github.com/AdrianWheels" },
     { "label": "Behance", "url": "https://behance.net/placeholder" }
   ],
   "highlights": [
     {
-      "title": "Diseño end-to-end",
-      "description": "Lidero discovery, prototipado y handoff técnico para productos SaaS."
+      "title": "Realidad Virtual & Gaming",
+      "description": "Desarrollo de experiencias inmersivas con Unity y C# para aplicaciones científicas y artísticas."
     },
     {
-      "title": "Story-driven UX",
-      "description": "Integro narrativa interactiva en funnels y experiencias educativas."
+      "title": "Neurociencia Aplicada",
+      "description": "Creación de pruebas neuropsicológicas digitales y herramientas para investigación cognitiva."
     },
     {
-      "title": "Hibridación IA",
-      "description": "Experimentos con agentes, LLMs y pipelines creativos con datos locales."
+      "title": "Infraestructura Cloud",
+      "description": "Administración de sistemas en AWS y gestión de servidores para startups tecnológicas."
     }
   ],
   "hackedHighlights": [
     {
-      "title": "Anomalía detectada",
-      "description": "Registra picos de productividad tras playlists de synthwave a 87 BPM."
+      "title": "Anomalía Dimensional",
+      "description": "ADVERTENCIA: Sujeto capaz de analizar tu mente mientras te sumerge en una simulación. Probabilidad de ser un agente de Matrix: 73.2%"
     },
     {
-      "title": "Sesgo creativo",
-      "description": "Tiende a nombrar commits como si fueran episodios de serie sci-fi."
+      "title": "Paradoja Temporal",
+      "description": "Estudió cómo funciona el cerebro humano solo para después programar mundos que lo confunden. Motivaciones: SOSPECHOSAS."
+    },
+    {
+      "title": "Vector de Contagio Creativo",
+      "description": "Ha infectado múltiples departamentos universitarios con su obsesión por la VR. Cuarentena recomendada pero... demasiado tarde."
     }
   ]
 }

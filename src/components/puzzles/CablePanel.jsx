@@ -1,141 +1,69 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { useGame } from '../../context/GameContext'
 import WireSystem from './WireSystem'
 import WireNode from './WireNode'
 
 export default function CablePanel() {
   const { plateConnections, connectPlate, plateOpen, setPlateOpen, gameState, unlockAnimations } = useGame()
-  const plateRef = useRef(null)
-  const [nodes] = useState([
-    // Nodos de origen - extremo izquierdo absoluto
-    {
-      id: 'src-FURY',
-      x: 10,
-      y: 50,
-      label: 'Fu2Y_R4g3',
-      color: '#dc2626', // Rojo intenso
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-JOY',
-      x: 15,
-      y: 90,
-      label: 'J0y_H4pp1',
-      color: '#fbbf24', // Amarillo brillante
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-SADNESS',
-      x: 5,
-      y: 130,
-      label: 'S4dn3ss_7',
-      color: '#7c3aed', // Morado profundo
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-FEAR',
-      x: 20,
-      y: 170,
-      label: 'F34r_X9',
-      color: '#065f46', // Verde oscuro
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-LOVE',
-      x: 0,
-      y: 210,
-      label: 'L0v3_Amp4',
-      color: '#ec4899', // Rosa intenso
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-CALM',
-      x: 25,
-      y: 250,
-      label: 'C4lm_Z3n',
-      color: '#0ea5e9', // Azul sereno
-      inputs: [],
-      outputs: ['out1']
-    },
-    {
-      id: 'src-ENVY',
-      x: 12,
-      y: 290,
-      label: '3nvy_Gr33n',
-      color: '#16a34a', // Verde ácido
-      inputs: [],
-      outputs: ['out1']
-    },
-    // Nodos de destino - extremo derecho absoluto
-    {
-      id: 'dest-FEAR',
-      x: 580,
-      y: 50,
-      label: 'T4rg3t_F34r',
-      color: '#065f46',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-CALM',
-      x: 590,
-      y: 90,
-      label: 'T4rg3t_C4lm',
-      color: '#0ea5e9',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-ENVY',
-      x: 570,
-      y: 130,
-      label: 'T4rg3t_3nvy',
-      color: '#16a34a',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-LOVE',
-      x: 600,
-      y: 170,
-      label: 'T4rg3t_L0v3',
-      color: '#ec4899',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-SADNESS',
-      x: 575,
-      y: 210,
-      label: 'T4rg3t_S4d',
-      color: '#7c3aed',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-JOY',
-      x: 595,
-      y: 250,
-      label: 'T4rg3t_J0y',
-      color: '#fbbf24',
-      inputs: ['in1'],
-      outputs: []
-    },
-    {
-      id: 'dest-FURY',
-      x: 585,
-      y: 290,
-      label: 'T4rg3t_Fu2Y',
-      color: '#dc2626',
-      inputs: ['in1'],
-      outputs: []
+  const containerRef = useRef(null)
+  
+  // Definición base de nodos
+  const baseNodes = [
+    // Nodos de origen
+    { id: 'src-FURY', label: 'Fu2Y_R4g3', color: '#dc2626', inputs: [], outputs: ['out1'] },
+    { id: 'src-JOY', label: 'J0y_H4pp1', color: '#fbbf24', inputs: [], outputs: ['out1'] },
+    { id: 'src-SADNESS', label: 'S4dn3ss_7', color: '#7c3aed', inputs: [], outputs: ['out1'] },
+    { id: 'src-FEAR', label: 'F34r_X9', color: '#065f46', inputs: [], outputs: ['out1'] },
+    { id: 'src-LOVE', label: 'L0v3_Amp4', color: '#ec4899', inputs: [], outputs: ['out1'] },
+    { id: 'src-CALM', label: 'C4lm_Z3n', color: '#0ea5e9', inputs: [], outputs: ['out1'] },
+    { id: 'src-ENVY', label: '3nvy_Gr33n', color: '#16a34a', inputs: [], outputs: ['out1'] },
+    // Nodos de destino
+    { id: 'dest-FEAR', label: 'T4rg3t_F34r', color: '#065f46', inputs: ['in1'], outputs: [] },
+    { id: 'dest-CALM', label: 'T4rg3t_C4lm', color: '#0ea5e9', inputs: ['in1'], outputs: [] },
+    { id: 'dest-ENVY', label: 'T4rg3t_3nvy', color: '#16a34a', inputs: ['in1'], outputs: [] },
+    { id: 'dest-LOVE', label: 'T4rg3t_L0v3', color: '#ec4899', inputs: ['in1'], outputs: [] },
+    { id: 'dest-SADNESS', label: 'T4rg3t_S4d', color: '#7c3aed', inputs: ['in1'], outputs: [] },
+    { id: 'dest-JOY', label: 'T4rg3t_J0y', color: '#fbbf24', inputs: ['in1'], outputs: [] },
+    { id: 'dest-FURY', label: 'T4rg3t_Fu2Y', color: '#dc2626', inputs: ['in1'], outputs: [] }
+  ]
+
+  const [nodes, setNodes] = useState([])
+
+  // Actualizar posiciones basado en dimensiones
+  useLayoutEffect(() => {
+    if (!containerRef.current) return
+    
+    const updateNodes = () => {
+      const { clientWidth, clientHeight } = containerRef.current
+      
+      const paddingY = 80
+      const availableHeight = clientHeight - paddingY * 2
+      const stepY = availableHeight / 6 // 7 items, 6 spaces
+      
+      const newNodes = baseNodes.map((node, index) => {
+        const isSource = node.id.startsWith('src-')
+        const idx = index % 7
+        
+        return {
+          ...node,
+          // Posicionar en los extremos absolutos
+          x: isSource ? 80 : clientWidth - 80, 
+          y: paddingY + idx * stepY,
+          // Invertir dirección flex para que los puertos queden hacia afuera
+          // Source: Port Left (Outer) - Text Right
+          // Dest: Text Left - Port Right (Outer)
+          className: 'flex-row-reverse'
+        }
+      })
+      setNodes(newNodes)
     }
-  ])
+
+    const observer = new ResizeObserver(updateNodes)
+    observer.observe(containerRef.current)
+    updateNodes()
+    
+    return () => observer.disconnect()
+  }, [])
   
   const [connections, setConnections] = useState([])
   const canInteract = Boolean(
@@ -189,20 +117,51 @@ export default function CablePanel() {
     connectPlate(sourceType, null)
   }
 
+  // Calcular conexiones correctas para feedback visual
+  const correctConnections = Object.entries(plateConnections).filter(([source, target]) => {
+    if (!target) return false
+    const map = {
+      FURY: 'FEAR',
+      JOY: 'CALM',
+      SADNESS: 'ENVY',
+      FEAR: 'LOVE',
+      LOVE: 'SADNESS',
+      CALM: 'JOY',
+      ENVY: 'FURY'
+    }
+    return map[source] === target
+  }).length
+
   return (
     <aside
-      ref={plateRef}
-      className={`bg-panel p-4 rounded-lg border border-border relative overflow-hidden flex-1 min-h-0 ${
+      ref={containerRef}
+      className={`relative overflow-hidden flex-1 min-h-0 ${
         isPulsing ? 'glow-success unlock-pulse' : ''
       }`}
     >
       {!canInteract && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-center px-4 text-xs text-slate-300 font-mono z-20">
-          <span>Descifra el Buffer y estabiliza el sonido para acceder al panel de cables.</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-center px-4 text-xs text-muted font-mono z-20 rounded-lg">
+          <span>Descifra Buffer + Sonido</span>
         </div>
       )}
       
-      <div className="relative w-full h-full" style={{ minHeight: '340px' }}>
+      <div className="flex items-center gap-2 mb-3 absolute top-2 left-2 z-10 pointer-events-none">
+        <div className="w-6 h-6 rounded-lg bg-accent/20 flex items-center justify-center">
+          <span className="text-xs">🔌</span>
+        </div>
+        <h3 className="text-sm font-semibold text-white">Cables</h3>
+        {canInteract && (
+          <span className={`text-xs font-mono ml-2 px-2 py-0.5 rounded ${correctConnections === 7 ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-muted'}`}>
+            {correctConnections}/7
+          </span>
+        )}
+      </div>
+      
+      <div className="relative w-full h-full">
+        {/* Paneles de fondo para dar estructura visual */}
+        <div className="absolute left-4 top-12 bottom-4 w-48 bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm" />
+        <div className="absolute right-4 top-12 bottom-4 w-48 bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm" />
+
         {/* Nodos del sistema de cables */}
         {nodes.map(node => (
           <WireNode
@@ -214,7 +173,7 @@ export default function CablePanel() {
             color={node.color}
             inputs={node.inputs}
             outputs={node.outputs}
-            className={!canInteract ? 'opacity-50' : ''}
+            className={`${!canInteract ? 'opacity-50' : ''} ${node.className || ''}`}
           />
         ))}
         
@@ -233,18 +192,18 @@ export default function CablePanel() {
         />
         
         {/* Instrucciones */}
-        <div className="absolute bottom-2 left-2 text-xs text-slate-400 font-mono">
-          {canInteract ? 'Neural cross-wiring: drag from output ports (●) to input ports (○)' : 'Neural matrix locked'}
+        <div className="absolute bottom-1 left-1 text-[10px] text-subtle font-mono">
+          {canInteract ? 'Drag ● → ○' : 'Bloqueado'}
         </div>
       </div>
 
       {plateOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-30" role="dialog" aria-modal="true">
-          <div className="w-[500px] max-h-[80vh] overflow-y-auto bg-panel p-4 rounded border border-border" tabIndex={-1}>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-30" role="dialog" aria-modal="true">
+          <div className="w-[500px] max-h-[80vh] overflow-y-auto bg-card p-4 rounded-xl border border-white/5" tabIndex={-1}>
             <div className="flex justify-between items-center mb-2">
-              <div className="font-semibold">Neural Matrix — Cross-Wiring Protocol</div>
-              <button onClick={() => setPlateOpen(false)} className="text-sm hover:text-accent transition-colors">
-                Close
+              <div className="font-semibold text-white">Neural Matrix</div>
+              <button onClick={() => setPlateOpen(false)} className="text-sm text-muted hover:text-white transition-colors">
+                Cerrar
               </button>
             </div>
             <div className="grid grid-cols-2 gap-4">

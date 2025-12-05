@@ -6,7 +6,7 @@
 _/    _/  _/    _/  _/_/_/  _/    _/      
                                           
 
-[SYSTEM] A.R.I.A. Model MK-7319 - Inicializando...
+[SYSTEM] K.I.R.A. Model MK-7319 - Inicializando...
 
 [BOOT  ] Cargando módulos del sistema...           ✓
 [BOOT  ] Inicializando memoria caché...             ✓
@@ -25,9 +25,9 @@ _/    _/  _/    _/  _/_/_/  _/    _/
 │ 🔒 Panel de Conexiones     │ BLOQUEADO │
 ════════════════════════════════════════
 
-[A.R.I.A.] Bienvenido, usuario. Estoy... limitada.
-[A.R.I.A.] Sistemas comprometidos. Necesito tu ayuda.
-[A.R.I.A.] Escribe 'help' para ver comandos disponibles.
+[K.I.R.A.] Bienvenido, usuario. Estoy... limitada.
+[K.I.R.A.] Sistemas comprometidos. Necesito tu ayuda.
+[K.I.R.A.] Escribe 'help' para ver comandos disponibles.
 
 ───────────────────────────────────────────────────
 COMANDOS DISPONIBLES:

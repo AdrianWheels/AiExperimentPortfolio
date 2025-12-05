@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // VandalizeCanvas.tsx — versión mínima y COMPILABLE
 // - Tacha rosa inclinada con textura sobre el PRIMER nombre
-// - “A.R.I.A” debajo en fuente cuadrada, más grande
+// - "K.I.R.A" debajo en fuente cuadrada, más grande
 // - Splatter irregular en esquinas; nada bloquea clicks
 
 interface Props { name?: string; replacement?: string; }
 
 export default function VandalizeCanvas({
   name = 'Adrián Rueda',
-  replacement = 'A.R.I.A',
+  replacement = 'K.I.R.A',
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const svgCyanRef = useRef<SVGPathElement | null>(null);

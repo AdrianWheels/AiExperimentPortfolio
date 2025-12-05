@@ -4,7 +4,7 @@
  * Orden de importación:
  * 1. Componentes CSS personalizados (debe ir antes de Tailwind)
  * 2. Tailwind CSS (base, components, utilities)
- * 3. Estilos base globales (si es necesario)
+ * 3. Estilos base globales
  */
 
 /* ===== COMPONENTES PERSONALIZADOS ===== */
@@ -16,27 +16,202 @@
 @tailwind utilities;
 
 /* ===== ESTILOS BASE GLOBALES ===== */
-/* Solo estilos que no se pueden hacer con Tailwind o que son muy específicos */
 
-/* Layout del header - ajustes específicos que complementan Tailwind */
-header {
-  padding-top: 1.2rem;
-  padding-bottom: 1.2rem;
+/* Mejoras globales de tipografía y suavizado */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  body {
+    @apply bg-bgStart text-text;
+  }
+  
+  /* Mejor contraste en selección de texto */
+  ::selection {
+    @apply bg-accent/30 text-white;
+  }
+  
+  /* Scrollbar estilizado */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-bgEnd;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-card-elevated rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-600;
+  }
 }
 
-/* Posicionamiento específico para componentes del header */
-.bezel-list {
+/* ===== COMPONENTES REUTILIZABLES ===== */
+@layer components {
+  /* Panel base para puzzles y contenido */
+  .panel {
+    @apply rounded-xl border border-zinc-700/50 bg-zinc-900/80 backdrop-blur-sm p-4 lg:p-5;
+  }
+  
+  /* Botón primario */
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg bg-accent hover:bg-accent-dark text-white font-medium transition-colors;
+  }
+  
+  /* Botón secundario */
+  .btn-secondary {
+    @apply px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 font-medium transition-colors;
+  }
+}
+
+/* ===== UTILIDADES ESPECÍFICAS ===== */
+@layer utilities {
+  /* Texto con gradiente */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-light to-accent;
+  }
+  
+  /* Efecto de brillo sutil */
+  .glow {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+  }
+}
+
+/* ===== ANIMACIONES DE SEGURIDAD (SecurityOverlay) ===== */
+@keyframes scanline {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.animate-scanline {
+  animation: scanline 3s linear infinite;
+}
+
+.animate-scanline-fast {
+  animation: scanline 1.5s linear infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.95); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes glitch-dissolve {
+  0% { 
+    opacity: 1;
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+    clip-path: inset(10% 0 40% 0);
+  }
+  40% {
+    transform: translate(5px, -5px);
+    clip-path: inset(40% 0 10% 0);
+    opacity: 0.8;
+  }
+  60% {
+    transform: translate(-5px, 0);
+    clip-path: inset(0 0 0 0);
+    filter: hue-rotate(90deg) blur(2px);
+  }
+  80% {
+    transform: translate(5px, 5px);
+    clip-path: inset(50% 0 30% 0);
+    opacity: 0.4;
+  }
+  100% { 
+    opacity: 0;
+    transform: scale(1.1);
+    filter: hue-rotate(180deg) blur(10px);
+  }
+}
+
+.animate-glitch-dissolve {
+  animation: glitch-dissolve 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Sonar Effect Animations */
+@keyframes sonar-pulse {
+  0% {
+    transform: translate(-50%, 50%) scale(0.1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, 50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes text-scan {
+  0% {
+    color: inherit;
+    text-shadow: none;
+  }
+  20% {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    color: inherit;
+    text-shadow: none;
+  }
+}
+
+.sonar-wave {
   position: absolute;
-  left: 80px;
-  top: 68px;
+  bottom: 0;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sonar-pulse 4s infinite linear;
+  animation-direction: normal;
 }
 
-.groovy-name {
-  right: 18px;
-  top: 10px;
+.scan-text span {
+  display: inline-block;
+  animation: text-scan 4s infinite linear;
 }
-
-/* ===== UTILIDADES ESPECÍFICAS DEL PROYECTO ===== */
-/* Solo agregar aquí estilos que son muy específicos de este proyecto 
-   y que no se pueden hacer fácilmente con Tailwind */
 

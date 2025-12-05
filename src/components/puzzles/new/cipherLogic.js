@@ -1,4 +1,4 @@
-export const CIPHER_SOLUTION = 'MK7319'
+export const CIPHER_SOLUTION = '7319'
 
 export function normalizeCipherInput(value) {
   if (typeof value !== 'string') return ''

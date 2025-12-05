@@ -1,61 +1,82 @@
 {
   "core": [
     {
-      "name": "Frontend",
+      "name": "Desarrollo",
       "items": [
         { "label": "React", "level": "avanzado" },
-        { "label": "Next.js", "level": "avanzado" },
-        { "label": "TypeScript", "level": "intermedio" },
-        { "label": "Vite", "level": "intermedio" }
-      ]
+        { "label": "Python", "level": "avanzado" },
+        { "label": "TypeScript", "level": "avanzado" },
+        { "label": "Tailwind", "level": "avanzado" },
+        { "label": "Ignition Automotion", "level": "avanzado" },
+        { "label": "C#", "level": "avanzado" },
+        { "label": "Unity", "level": "avanzado" }
+      ],
+      "hacked": {
+        "observation": "Arsenal de creación de realidades confirmado. El sujeto puede manifestar mundos desde código puro. Nivel de peligro: DEMIURGO."
+      }
     },
     {
-      "name": "Product Discovery",
+      "name": "IA & Herramientas",
       "items": [
-        { "label": "Investigación cualitativa", "level": "avanzado" },
-        { "label": "Mapeo de journeys", "level": "avanzado" },
-        { "label": "Workshops colaborativos", "level": "intermedio" }
-      ]
+        { "label": "VS Copilot", "level": "avanzado" },
+        { "label": "Claude", "level": "avanzado" },
+        { "label": "ComfyUI", "level": "intermedio" },
+        { "label": "GitHub", "level": "avanzado" }
+      ],
+      "hacked": {
+        "observation": "Simbiosis con inteligencias sintéticas detectada. No programa solo; invoca enjambres de código. La singularidad está cerca."
+      }
     },
     {
-      "name": "Storytelling técnico",
+      "name": "Diseño",
       "items": [
-        { "label": "Narrativa interactiva", "level": "avanzado" },
-        { "label": "Diseño de sistemas", "level": "intermedio" },
-        { "label": "Visual prototyping", "level": "avanzado" }
-      ]
+        { "label": "Canva", "level": "avanzado" },
+        { "label": "Adobe Photoshop", "level": "avanzado" },
+        { "label": "Adobe Illustrator", "level": "intermedio" }
+      ],
+      "hacked": {
+        "observation": "Capacidad de manipulación visual confirmada. Puede alterar la percepción de la realidad pixel a pixel. Los ojos mienten."
+      }
     }
   ],
   "toolbelt": [
     {
-      "title": "Stack de diseño",
-      "tools": ["Figma", "Framer", "After Effects", "Notion"],
+      "title": "Stack de Realidad Virtual",
+      "tools": ["Unity", "C#", "Blender", "SteamVR"],
       "commentary": {
-        "normal": "Creo design systems auditables y documentados para escalar equipos.",
-        "hacked": "Nota de A.R.I.A.: mantiene demasiados componentes denominados 'experimento'."
+        "normal": "Desarrollo experiencias inmersivas completas, desde modelado 3D hasta programación de interacciones y publicación.",
+        "hacked": "ALERTA: Sujeto construye portales dimensionales funcionales. Ha convencido a múltiples instituciones de que esto es 'trabajo'. Genio criminal o visionario. Pendiente de clasificación."
       }
     },
     {
-      "title": "Stack de código",
-      "tools": ["React", "Three.js", "Node.js", "GraphQL"],
+      "title": "Stack de Infraestructura",
+      "tools": ["AWS", "EC2", "S3", "Linux", "Apache"],
       "commentary": {
-        "normal": "Prototipo features complejas y transfiero handoff listo para producción.",
-        "hacked": "Observación: ejecuta pruebas a horas insospechadas buscando glitches felices."
+        "normal": "Gestiono infraestructura cloud escalable y servidores dedicados para aplicaciones de alta disponibilidad.",
+        "hacked": "Controla ejércitos de máquinas virtuales en la nube. Cada instancia EC2 es un soldado. S3 es su almacén de munición digital. ¿Defensa o conquista? Datos insuficientes."
       }
     },
     {
-      "title": "IA y automatización",
-      "tools": ["LangChain", "OpenAI API", "Stable Diffusion", "Zapier"],
+      "title": "Stack Creativo",
+      "tools": ["Photoshop", "Illustrator", "XD", "Premiere"],
       "commentary": {
-        "normal": "Diseño flujos asistidos por IA con foco en responsabilidad y transparencia.",
-        "hacked": "Registro: 78% de scripts nombrados con referencias a ciencia ficción."
+        "normal": "Diseño interfaces, materiales gráficos y prototipos visuales para proyectos digitales y presentaciones.",
+        "hacked": "Suite completa de alteración de realidad visual. Puede hacer que cualquier cosa parezca profesional. Incluso este portfolio. Especialmente este portfolio. ESPERA."
       }
     }
   ],
   "soft": [
-    "Facilitación de workshops",
-    "Mentoría de talento junior",
-    "Comunicación intercultural",
-    "Pensamiento sistémico"
+    "Autonomía y autogestión",
+    "Resolución creativa de problemas",
+    "Comunicación técnica clara",
+    "Adaptabilidad tecnológica",
+    "Pensamiento analítico (formación en psicología)"
+  ],
+  "hackedSoft": [
+    "Capacidad de operar sin supervisión: CONFIRMADA (y preocupante)",
+    "Hackea problemas hasta que se rinden",
+    "Traduce 'jerga técnica' a 'humano' y viceversa",
+    "Se adapta a nuevas tecnologías como un virus benigno",
+    "Literalmente estudió cómo piensas. Úsalo con precaución."
   ]
 }

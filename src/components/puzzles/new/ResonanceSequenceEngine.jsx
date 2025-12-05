@@ -325,65 +325,132 @@ export default function ResonanceSequenceEngine() {
       const w = this.w
       const h = this.h
       
-      // Carril principal
-      const laneHeight = 32
-      ctx.fillStyle = "#1a202c"
-      ctx.fillRect(0, this.laneY - laneHeight/2, w, laneHeight)
-      
-      // Líneas de guía
-      ctx.strokeStyle = "#2d3748"
+      // 1. Background Grid / Tech lines
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)"
       ctx.lineWidth = 1
-      ctx.setLineDash([6, 12])
+      
+      // Horizontal lines (top and bottom of lane)
+      const laneHeight = 40
+      const topY = this.laneY - laneHeight/2
+      const bottomY = this.laneY + laneHeight/2
+      
       ctx.beginPath()
-      for (let x = 0; x < w; x += 50) {
-        ctx.moveTo(x, this.laneY - laneHeight/2 - 15)
-        ctx.lineTo(x, this.laneY + laneHeight/2 + 15)
+      ctx.moveTo(0, topY)
+      ctx.lineTo(w, topY)
+      ctx.moveTo(0, bottomY)
+      ctx.lineTo(w, bottomY)
+      ctx.stroke()
+
+      // Vertical grid moving effect (optional, but static for now)
+      ctx.setLineDash([2, 10])
+      ctx.beginPath()
+      for (let x = 0; x < w; x += 40) {
+        ctx.moveTo(x, topY - 20)
+        ctx.lineTo(x, bottomY + 20)
       }
       ctx.stroke()
       ctx.setLineDash([])
+
+      // 2. Hit Zone (Scanner style)
+      const hitSize = 30
+      const bracketSize = 10
       
-      // Zona de impacto
-      ctx.strokeStyle = "#48bb78"
-      ctx.lineWidth = 4
-      ctx.strokeRect(this.hitX - 28, this.laneY - laneHeight, 56, laneHeight * 2)
+      ctx.shadowBlur = 15
+      ctx.shadowColor = "#8b5cf6"
+      ctx.strokeStyle = "#8b5cf6"
+      ctx.lineWidth = 2
       
-      // Indicador central
-      ctx.fillStyle = "#48bb78"
+      // Left bracket
       ctx.beginPath()
-      ctx.arc(this.hitX, this.laneY, 4, 0, Math.PI * 2)
-      ctx.fill()
+      ctx.moveTo(this.hitX - hitSize, this.laneY - hitSize + bracketSize)
+      ctx.lineTo(this.hitX - hitSize, this.laneY - hitSize)
+      ctx.lineTo(this.hitX - hitSize + bracketSize, this.laneY - hitSize)
+      
+      ctx.moveTo(this.hitX - hitSize, this.laneY + hitSize - bracketSize)
+      ctx.lineTo(this.hitX - hitSize, this.laneY + hitSize)
+      ctx.lineTo(this.hitX - hitSize + bracketSize, this.laneY + hitSize)
+      ctx.stroke()
+
+      // Right bracket
+      ctx.beginPath()
+      ctx.moveTo(this.hitX + hitSize, this.laneY - hitSize + bracketSize)
+      ctx.lineTo(this.hitX + hitSize, this.laneY - hitSize)
+      ctx.lineTo(this.hitX + hitSize - bracketSize, this.laneY - hitSize)
+      
+      ctx.moveTo(this.hitX + hitSize, this.laneY + hitSize - bracketSize)
+      ctx.lineTo(this.hitX + hitSize, this.laneY + hitSize)
+      ctx.lineTo(this.hitX + hitSize - bracketSize, this.laneY + hitSize)
+      ctx.stroke()
+      
+      ctx.shadowBlur = 0
+      
+      // Center line (scanner beam)
+      ctx.strokeStyle = "rgba(139, 92, 246, 0.3)"
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(this.hitX, topY)
+      ctx.lineTo(this.hitX, bottomY)
+      ctx.stroke()
     }
 
     drawNote(ctx, x, y, tone, isGhost = false) {
       const radius = this.noteRadius
       
-      // Sombra/glow
-      if (!isGhost) {
-        ctx.shadowColor = tone.color
-        ctx.shadowBlur = 12
+      if (isGhost) {
+        ctx.globalAlpha = 0.3
+        ctx.strokeStyle = tone.color
+        ctx.lineWidth = 2
+        ctx.setLineDash([4, 4])
+        ctx.beginPath()
+        ctx.arc(x, y, radius, 0, Math.PI * 2)
+        ctx.stroke()
+        ctx.setLineDash([])
+        ctx.globalAlpha = 1
+        return
       }
+
+      // Trail effect
+      const trailLength = 60
+      const gradient = ctx.createLinearGradient(x - trailLength, y, x, y)
+      gradient.addColorStop(0, "transparent")
+      gradient.addColorStop(1, tone.color)
       
-      // Nota principal
-      ctx.fillStyle = tone.color
+      ctx.fillStyle = gradient
       ctx.beginPath()
-      ctx.arc(x, y, radius, 0, Math.PI * 2)
+      ctx.moveTo(x, y - radius * 0.5)
+      ctx.lineTo(x - trailLength, y)
+      ctx.lineTo(x, y + radius * 0.5)
+      ctx.fill()
+
+      // Glow
+      ctx.shadowColor = tone.color
+      ctx.shadowBlur = 20
+      
+      // Core
+      ctx.fillStyle = "#fff"
+      ctx.beginPath()
+      ctx.arc(x, y, radius * 0.6, 0, Math.PI * 2)
       ctx.fill()
       
-      // Borde
-      ctx.strokeStyle = "#ffffff"
+      // Outer ring
+      ctx.strokeStyle = tone.color
       ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.arc(x, y, radius, 0, Math.PI * 2)
       ctx.stroke()
       
-      // Símbolo
       ctx.shadowBlur = 0
-      ctx.fillStyle = "#ffffff"
-      ctx.font = "bold 16px sans-serif"
+
+      // Symbol
+      ctx.fillStyle = tone.color
+      ctx.font = "bold 12px sans-serif"
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
       ctx.fillText(tone.symbol, x, y)
       
-      // Tecla
-      ctx.font = "bold 12px sans-serif"
+      // Key hint below
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)"
+      ctx.font = "10px monospace"
       ctx.fillText(tone.key, x, y + 35)
     }
 
@@ -466,25 +533,21 @@ export default function ResonanceSequenceEngine() {
 
   if (solved) {
     return (
-      <section className="bg-panel border border-border rounded-lg p-4 flex flex-col gap-3 flex-1 min-h-0 glow-success">
+      <section className="flex flex-col gap-3 h-full">
         <header className="flex items-center justify-between">
-          <div>
-            <div className="text-sm font-semibold">Secuencia Resonante</div>
-            <p className="text-xs text-emerald-400">✓ Calibrado y estabilizado</p>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-success/20 flex items-center justify-center">
+              <span className="text-xs">🎵</span>
+            </div>
+            <h3 className="text-sm font-semibold text-white">Resonancia</h3>
           </div>
-          <div className="text-[11px] uppercase tracking-wide text-emerald-400">
-            Completado
-          </div>
+          <span className="text-[10px] uppercase tracking-wide text-success">✓ OK</span>
         </header>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-4xl mb-2">🎵</div>
-            <div className="text-sm text-emerald-400 font-medium">
-              Resonancia Establecida
-            </div>
-            <div className="text-xs text-slate-400 mt-1">
-              Canal de frecuencias desbloqueado
-            </div>
+            <div className="text-3xl mb-2">🎵</div>
+            <div className="text-sm text-success font-medium">Establecida</div>
+            <div className="text-xs text-subtle mt-1">Frecuencias desbloqueadas</div>
           </div>
         </div>
       </section>
@@ -492,77 +555,85 @@ export default function ResonanceSequenceEngine() {
   }
 
   return (
-    <section className="bg-panel border border-border rounded-lg p-4 flex flex-col gap-3 flex-1 min-h-0">
+    <section className="flex flex-col gap-4 h-full p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm">
       <header className="flex items-center justify-between">
-        <div>
-          <div className="text-sm font-semibold">Secuencia Resonante — Motor Guitar Hero</div>
-          <p className="text-xs text-slate-400 mt-1">
-            Presiona las teclas correctas cuando las notas lleguen a la zona verde
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+            <span className="text-sm">🎵</span>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-zinc-100">Resonancia</h3>
+            <p className="text-[10px] text-zinc-400">Sincronización de frecuencias</p>
+          </div>
         </div>
-        <div className="text-[11px] uppercase tracking-wide text-slate-500">
-          Motor Activo
+        <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+            <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">Activo</span>
         </div>
       </header>
 
       {/* Referencia de teclas */}
-      <div className="flex justify-center gap-2 py-2 bg-black/20 rounded border border-zinc-700">
+      <div className="grid grid-cols-4 gap-2">
         {TONE_BANK.map((tone) => (
-          <div key={tone.id} className="flex flex-col items-center gap-1 text-xs px-2">
+          <div key={tone.id} className="flex flex-col items-center gap-2 p-2 rounded-lg bg-zinc-900/80 border border-zinc-800/50">
             <div 
-              className="w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold border-2 border-white/20"
-              style={{ backgroundColor: tone.color }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold border border-white/10 transition-transform hover:scale-110"
+              style={{ 
+                backgroundColor: `${tone.color}20`,
+                borderColor: tone.color,
+                boxShadow: `0 0 10px ${tone.color}30`
+              }}
             >
-              {tone.symbol}
+              <span style={{ color: tone.color }}>{tone.symbol}</span>
             </div>
-            <span className="text-slate-300">{tone.key}</span>
-            <span className="text-slate-500 text-[10px]">{tone.label}</span>
+            <span className="text-zinc-500 text-[10px] font-mono border border-zinc-800 px-1.5 rounded bg-zinc-950">{tone.key}</span>
           </div>
         ))}
       </div>
 
       {/* Canvas del juego */}
-      <div className="relative bg-black/50 border border-zinc-700 rounded-lg overflow-hidden">
+      <div className="relative flex-1 min-h-[160px] rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-inner">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent opacity-50"></div>
         <canvas
           ref={canvasRef}
           width={600}
-          height={140}
-          className="block w-full h-full"
+          height={160}
+          className="block w-full h-full relative z-10"
           style={{ imageRendering: 'pixelated' }}
         />
       </div>
 
       {/* Controles */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-3">
         <button
           onClick={handlePlay}
-          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors text-sm"
+          className="btn-secondary text-xs flex items-center gap-2 pl-3 pr-4 py-2"
+          title="Iniciar (Espacio)"
         >
-          Play
+          <span className="text-emerald-400">▶</span> 
+          <span>Iniciar</span>
         </button>
         <button
           onClick={handlePause}
-          className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded transition-colors text-sm"
+          className="btn-secondary text-xs flex items-center gap-2 pl-3 pr-4 py-2"
+          title="Pausar"
         >
-          Pause
+          <span className="text-amber-400">⏸</span>
+          <span>Pausar</span>
         </button>
         <button
           onClick={handleReset}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors text-sm"
+          className="btn-secondary text-xs flex items-center gap-2 pl-3 pr-4 py-2"
+          title="Reiniciar (R)"
         >
-          Reset
+          <span className="text-rose-400">↺</span>
+          <span>Reiniciar</span>
         </button>
       </div>
 
-      {/* Información de estado */}
-      <div className="text-xs text-slate-300 bg-black/30 border border-zinc-800 rounded px-3 py-2 font-mono">
-        <div className="flex justify-between items-center">
-          <span>Secuencia objetivo: α → δ → γ → β</span>
-          <span>Teclas: 1, 4, 3, 2 | Espacio: Play/Pause | R: Reset</span>
-        </div>
-        <div className="mt-1 text-slate-400">
-          Motor Guitar Hero activo. Presiona las teclas cuando las notas lleguen a la zona verde.
-        </div>
+      {/* Info compacta */}
+      <div className="text-[10px] text-zinc-500 border-t border-zinc-800 pt-2 font-mono text-center">
+        Teclas: 1-4 | Espacio: Play | R: Reset
       </div>
     </section>
   )

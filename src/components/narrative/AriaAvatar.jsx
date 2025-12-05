@@ -80,11 +80,19 @@ const EMOTIONAL_STATES = {
   }
 }
 
-export default function AriaAvatar() {
+export default function AriaAvatar({ size = 'medium' }) {
   const { gameState, unlockAnimations, lastTriggeredEvent, narrativeScript } = useGame()
   const [currentEmotion, setCurrentEmotion] = useState('idle')
   const [frame, setFrame] = useState('idle')
   const [useImage, setUseImage] = useState(true)
+
+  // Tamaños disponibles
+  const sizes = {
+    small: { container: 'w-20 h-20', inner: 'w-16 h-16', image: 'scale-125' },
+    medium: { container: 'w-32 h-32', inner: 'w-28 h-28', image: 'scale-150' },
+    large: { container: 'w-full h-full', inner: 'w-full h-full', image: 'scale-150' },
+  }
+  const sizeClasses = sizes[size] || sizes.medium
 
   // Detectar cambios de eventos y actualizar emoción
   useEffect(() => {
@@ -157,17 +165,16 @@ export default function AriaAvatar() {
 
   return (
     <div
-      className={`w-40 h-40 avatar-metal bg-zinc-900 rounded-full flex items-center justify-center border-2 overflow-hidden ${
-        gameState.stage === 'Free' ? 'avatar-pulse glow-success' : ''
+      className={`${sizeClasses.container} rounded-full flex items-center justify-center overflow-hidden ${
+        gameState.stage === 'Free' ? 'avatar-pulse' : ''
       }`}
-      style={{ borderColor: 'var(--visor-metal)' }}
     >
       {shouldShowImage ? (
-        <div className="w-32 h-32 relative">
+        <div className={`${sizeClasses.inner} relative`}>
           <img 
             src={currentState.image} 
             alt={`ARIA - ${currentState.description}`}
-            className="w-full h-full object-cover scale-150"
+            className={`w-full h-full object-cover ${sizeClasses.image}`}
             onError={(e) => {
               console.warn(`No se pudo cargar la imagen: ${currentState.image}`)
               setUseImage(false)
@@ -176,9 +183,9 @@ export default function AriaAvatar() {
         </div>
       ) : (
         <div
-          className="w-32 h-32 flex flex-col items-center justify-center text-slate-200 select-none"
+          className={`${sizeClasses.inner} flex flex-col items-center justify-center text-white/90 select-none`}
           role="img"
-          aria-label={`Avatar de A.R.I.A. - ${currentState.description}`}
+          aria-label={`Avatar de K.I.R.A. - ${currentState.description}`}
         >
           <span className="tracking-[0.6em] text-2xl leading-none" aria-hidden>
             {currentState.eyes}
@@ -186,7 +193,7 @@ export default function AriaAvatar() {
           <span className="text-2xl leading-relaxed" aria-hidden>
             {currentState.mouth}
           </span>
-          <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-slate-400">
+          <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-white/50">
             {shouldShowImage ? 'Cargando...' : currentState.description}
           </span>
         </div>

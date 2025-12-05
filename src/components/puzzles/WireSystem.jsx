@@ -79,9 +79,12 @@ export default function WireSystem({
       
       // Dibujar sombra/glow
       ctx.shadowColor = this.color
-      ctx.shadowBlur = 12
-      ctx.lineWidth = 8
-      ctx.strokeStyle = this.color + '30'
+      ctx.shadowBlur = 15
+      ctx.lineWidth = 6
+      ctx.strokeStyle = this.color + '40'
+      
+      // Asegurar que el cable se dibuje detrás del texto si es necesario
+      // (Aunque el z-index del canvas ya es menor que el de los nodos)
       
       ctx.beginPath()
       ctx.moveTo(this.points[0].x, this.points[0].y)
@@ -103,16 +106,21 @@ export default function WireSystem({
       
       ctx.stroke()
       
-      // Dibujar cable principal
-      ctx.shadowBlur = 2
-      ctx.lineWidth = 4
+      // Dibujar cable principal (núcleo brillante)
+      ctx.shadowBlur = 5
+      ctx.lineWidth = 3
       ctx.strokeStyle = this.color
       ctx.stroke()
       
-      // Dibujar conectores en los extremos
+      // Dibujar núcleo blanco interior para efecto neón
       ctx.shadowBlur = 0
-      this.drawConnector(ctx, this.points[0], 6)
-      this.drawConnector(ctx, this.points[this.points.length - 1], 6)
+      ctx.lineWidth = 1
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.stroke()
+      
+      // Dibujar conectores en los extremos
+      this.drawConnector(ctx, this.points[0], 5)
+      this.drawConnector(ctx, this.points[this.points.length - 1], 5)
       
       ctx.restore()
     }
@@ -136,62 +144,39 @@ export default function WireSystem({
 
   // Función mejorada para encontrar el nodo y puerto más cercano a una posición
   const findNearestPort = useCallback((x, y, radius = 25) => {
-    for (const node of nodesRef.current) {
-      if (!node.element) continue
+    const canvas = canvasRef.current
+    if (!canvas) return null
+    const canvasRect = canvas.getBoundingClientRect()
+
+    // Buscar elementos de puerto en el DOM
+    const portElements = document.querySelectorAll('[data-port-id]')
+    
+    for (const el of portElements) {
+      const rect = el.getBoundingClientRect()
+      const portX = rect.left - canvasRect.left + rect.width / 2
+      const portY = rect.top - canvasRect.top + rect.height / 2
       
-      const nodeRect = node.element.getBoundingClientRect()
-      const canvasRect = canvasRef.current.getBoundingClientRect()
-      
-      // Calcular posiciones de puertos usando utilidades
-      const outputs = node.data.outputs || []
-      const inputs = node.data.inputs || []
-      
-      // Verificar puertos de salida
-      for (let i = 0; i < outputs.length; i++) {
-        const portPos = WireSystemUtils.getPortPosition(
-          { x: nodeRect.left - canvasRect.left + nodeRect.width / 2, 
-            y: nodeRect.top - canvasRect.top + nodeRect.height / 2 },
-          outputs[i], 
-          'output', 
-          i, 
-          outputs.length
-        )
+      if (WireSystemUtils.distance({ x, y }, { x: portX, y: portY }) < radius) {
+        const nodeId = el.getAttribute('data-node-id')
+        const portId = el.getAttribute('data-port-id')
+        const type = el.getAttribute('data-port-type')
         
-        if (WireSystemUtils.distance({ x, y }, portPos) < radius) {
-          return {
-            node: node.data,
-            port: outputs[i],
-            type: 'output',
-            x: portPos.x,
-            y: portPos.y
-          }
-        }
-      }
-      
-      // Verificar puertos de entrada
-      for (let i = 0; i < inputs.length; i++) {
-        const portPos = WireSystemUtils.getPortPosition(
-          { x: nodeRect.left - canvasRect.left + nodeRect.width / 2, 
-            y: nodeRect.top - canvasRect.top + nodeRect.height / 2 },
-          inputs[i], 
-          'input', 
-          i, 
-          inputs.length
-        )
+        // Encontrar el nodo en los datos
+        const nodeData = nodes.find(n => n.id === nodeId)
         
-        if (WireSystemUtils.distance({ x, y }, portPos) < radius) {
+        if (nodeData) {
           return {
-            node: node.data,
-            port: inputs[i],
-            type: 'input',
-            x: portPos.x,
-            y: portPos.y
+            node: nodeData,
+            port: portId,
+            type: type,
+            x: portX,
+            y: portY
           }
         }
       }
     }
     return null
-  }, [])
+  }, [nodes])
 
   // Manejar eventos del mouse
   const handleMouseDown = useCallback((e) => {
@@ -286,29 +271,37 @@ export default function WireSystem({
   // Crear cables para conexiones existentes
   useEffect(() => {
     wiresRef.current = []
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const canvasRect = canvas.getBoundingClientRect()
     
-    connections.forEach(connection => {
-      const fromNode = nodesRef.current.find(n => n.data.id === connection.from.node)
-      const toNode = nodesRef.current.find(n => n.data.id === connection.to.node)
-      
-      if (fromNode && toNode) {
-        const fromRect = fromNode.element.getBoundingClientRect()
-        const toRect = toNode.element.getBoundingClientRect()
-        const canvasRect = canvasRef.current?.getBoundingClientRect()
+    // Pequeño delay para asegurar que el DOM se ha renderizado
+    const timer = setTimeout(() => {
+      connections.forEach(connection => {
+        const fromNode = nodes.find(n => n.id === connection.from.node)
         
-        if (canvasRect) {
-          const fromX = fromRect.left - canvasRect.left + fromRect.width
+        // Buscar elementos DOM para los puertos
+        const fromPortEl = document.querySelector(`[data-node-id="${connection.from.node}"][data-port-id="${connection.from.port}"]`)
+        const toPortEl = document.querySelector(`[data-node-id="${connection.to.node}"][data-port-id="${connection.to.port}"]`)
+        
+        if (fromPortEl && toPortEl) {
+          const fromRect = fromPortEl.getBoundingClientRect()
+          const toRect = toPortEl.getBoundingClientRect()
+          
+          const fromX = fromRect.left - canvasRect.left + fromRect.width / 2
           const fromY = fromRect.top - canvasRect.top + fromRect.height / 2
-          const toX = toRect.left - canvasRect.left
+          const toX = toRect.left - canvasRect.left + toRect.width / 2
           const toY = toRect.top - canvasRect.top + toRect.height / 2
           
-          const wire = new Wire(fromX, fromY, toX, toY, fromNode.data.color || '#00ff00')
+          const wire = new Wire(fromX, fromY, toX, toY, fromNode?.color || '#00ff00')
           wire.connected = true
           wiresRef.current.push(wire)
         }
-      }
-    })
-  }, [connections])
+      })
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [connections, nodes])
 
   // Loop de animación
   useEffect(() => {

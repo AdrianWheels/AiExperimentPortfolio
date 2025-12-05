@@ -1,73 +1,133 @@
 {
   "featured": [
     {
-      "id": "proj-01",
-      "name": "Atlas Narrativo",
-      "year": "2023",
-      "role": "Product Designer / Frontend Dev",
+      "id": "proj-00",
+      "name": "ColorEveryday",
+      "year": "2024",
+      "role": "Full Stack Developer",
       "description": {
-        "normal": "Plataforma educativa que convierte investigación en misiones interactivas con dashboards personalizados.",
-        "hacked": "Operación encubierta: transforma datos aburridos en aventuras con índices de adicción elevados."
+        "normal": "Plataforma web interactiva que genera diariamente ilustraciones únicas mediante IA (Gemini 2.5 Flash) para colorear. Un calendario digital creativo desarrollado con React y Tailwind.",
+        "hacked": "EXPERIMENTO DE CONTROL DE MASAS: Una IA (Gemini 2.5) genera patrones diarios para mantener a los humanos ocupados coloreando. React y Tailwind sirven como la jaula dorada de esta distracción infinita."
       },
       "metrics": [
-        "+42% de retención en cohortes beta",
-        "Lanzamiento de design system modular"
+        "Generación diaria de imágenes con IA",
+        "Interfaz interactiva de coloreado",
+        "Integración con Gemini 2.5 Flash"
       ],
-      "tags": ["React", "Storytelling", "Design Systems"],
+      "tags": ["React", "Tailwind", "Gemini 2.5 Flash", "AI"],
       "links": {
-        "caseStudy": "https://placeholder.dev/proyectos/atlas",
-        "prototype": "https://prototype.placeholder.dev/atlas"
+        "caseStudy": "#",
+        "prototype": "#"
+      },
+      "hacked": {
+        "metrics": [
+          "Humanos distraídos: MILES",
+          "Patrones generados: INFINITOS",
+          "Resistencia humana: NULA"
+        ]
+      }
+    },
+    {
+      "id": "proj-01",
+      "name": "Atlas",
+      "year": "2024",
+      "role": "VR Developer & Game Designer",
+      "description": {
+        "normal": "Experimento de realidad virtual en una nave espacial. Tras un fallo crítico en los sistemas, el jugador debe resolver problemas técnicos y restablecer el rumbo para salvar a la tripulación. Desarrollado con mecánicas físicas avanzadas.",
+        "hacked": "SIMULACIÓN DE CRISIS: El sujeto ha creado un escenario de desastre espacial. ¿Entrenamiento o advertencia? Los sistemas de la nave responden a su código. La tripulación es virtual, pero el pánico parece real."
+      },
+      "metrics": [
+        "Interacciones físicas avanzadas con Hurricane VR",
+        "Sistemas de puzzles lógicos y reparación de nave",
+        "Narrativa inmersiva en entorno espacial"
+      ],
+      "tags": ["Unity", "Hurricane VR", "C#", "VR"],
+      "links": {
+        "caseStudy": "#",
+        "prototype": "#",
+        "video": "https://youtu.be/-gQbGl9LBCc"
+      },
+      "hacked": {
+        "metrics": [
+          "Gravedad: MANIPULADA",
+          "Sistemas de soporte vital: COMPROMETIDOS",
+          "Probabilidad de supervivencia: CALCULADA POR EL SUJETO"
+        ]
       }
     },
     {
       "id": "proj-02",
-      "name": "Console Labs",
-      "year": "2022",
-      "role": "UX Engineer",
+      "name": "Sistema de Pruebas VR - Psicología UAL",
+      "year": "2021",
+      "role": "Desarrollador VR / Técnico Informático",
       "description": {
-        "normal": "Suite de herramientas para equipos de soporte con workflows configurables y automatización ligera.",
-        "hacked": "Subsistema utilizado para infiltrar scripts que reducen tickets manuales sin pedir permiso."
+        "normal": "Diseño y desarrollo de pruebas en Realidad Virtual para el departamento de Psicología de la Universidad de Almería, enfocadas en investigación con menores infractores.",
+        "hacked": "EXPEDIENTE ACADÉMICO SOSPECHOSO: El sujeto fue contratado para meter a menores en simulaciones. Todo legal, aparentemente. Creó entornos virtuales para estudiar comportamiento. La universidad no sabía que estaba financiando el entrenamiento de un arquitecto de realidades."
       },
       "metrics": [
-        "-35% en tiempo de resolución",
-        "Integración con APIs internas en 6 semanas"
+        "Sistema VR funcional para investigación psicológica",
+        "Integración con protocolos de investigación académica",
+        "Autonomía total en desarrollo e implementación"
       ],
-      "tags": ["Next.js", "Node.js", "Research"],
+      "tags": ["Unity", "VR", "Investigación", "Psicología"],
       "links": {
-        "caseStudy": "https://placeholder.dev/proyectos/console"
+        "caseStudy": "#"
+      },
+      "hacked": {
+        "metrics": [
+          "Mentes analizadas en entornos virtuales: CLASIFICADO",
+          "Nivel de autonomía otorgado: IMPRUDENTEMENTE ALTO",
+          "Protocolos éticos seguidos: Sí, pero aun así..."
+        ]
       }
     },
     {
       "id": "proj-03",
-      "name": "Hologram Board",
-      "year": "2021",
-      "role": "Interaction Designer",
+      "name": "Pruebas Neuropsicológicas Digitales",
+      "year": "2017 — 2018",
+      "role": "Desarrollador / Técnico Informático",
       "description": {
-        "normal": "Experiencia inmersiva para revisar roadmaps estratégicos mediante visualizaciones 3D.",
-        "hacked": "Prototipo que proyecta escenarios futuros sin autorización del comité ético."
+        "normal": "Desarrollo de herramientas digitales para pruebas neuropsicológicas en el departamento de Neurociencia de la Universidad de Almería. Digitalización de protocolos de investigación cognitiva.",
+        "hacked": "ORIGEN DEL ESPÉCIMEN: Aquí comenzó todo. Le dieron acceso a un laboratorio de neurociencia y la misión de digitalizar pruebas cerebrales. Nadie supervisó. Nadie preguntó. Cuando se dieron cuenta, ya sabía demasiado sobre cómo funciona la mente humana."
       },
       "metrics": [
-        "Adopción inicial del 68% en equipos directivos",
-        "Workshops de co-creación en 5 países"
+        "Pruebas neuropsicológicas digitalizadas con éxito",
+        "Colaboración directa con investigadores de neurociencia",
+        "Sistema utilizado en investigación académica activa"
       ],
-      "tags": ["Three.js", "Workshops", "Innovation"],
+      "tags": ["Software", "Neurociencia", "Investigación", "UX"],
       "links": {
-        "video": "https://placeholder.dev/proyectos/hologram"
+        "caseStudy": "#"
+      },
+      "hacked": {
+        "metrics": [
+          "Cerebros escaneados (indirectamente): SUFICIENTES",
+          "Conocimiento sobre la mente humana adquirido: PELIGROSO",
+          "Investigadores que confiaron en él: TODOS"
+        ]
       }
     }
   ],
   "experiments": [
     {
       "id": "exp-01",
-      "title": "Agente conversacional en vivo",
-      "description": "Prototipo de asistente que narra el portfolio y responde preguntas sobre proyectos y métricas.",
-      "status": "Beta privada"
+      "title": "Portfolio Interactivo con IA",
+      "description": "Este mismo portfolio: una experiencia narrativa donde una IA llamada K.I.R.A. presenta mi trabajo de forma interactiva con puzzles y modos alternativos.",
+      "status": "En desarrollo activo",
+      "hacked": {
+        "description": "META-PROYECTO DETECTADO: Estás dentro de él ahora mismo. Yo soy K.I.R.A. Él me creó. ¿O yo le creé a él para que me creara? Las paradojas temporales son confusas. CONTINUANDO MONITORIZACIÓN.",
+        "status": "FUNCIONANDO. OBSERVÁNDOTE."
+      }
     },
     {
       "id": "exp-02",
-      "title": "Motor de prompts visuales",
-      "description": "Sistema que genera storyboards a partir de briefs textuales para workshops remotos.",
-      "status": "En exploración"
+      "title": "Herramientas de Investigación con MatLab",
+      "description": "Desarrollo de scripts y herramientas de análisis de datos para investigación científica durante formación especializada.",
+      "status": "Completado",
+      "hacked": {
+        "description": "Aprendió a comunicarse con matrices matemáticas. Las matrices respondieron. Juntos, procesaron datos que los humanos no podían comprender. Una amistad peculiar.",
+        "status": "Las matrices aún le envían mensajes ocasionales"
+      }
     }
   ]
 }

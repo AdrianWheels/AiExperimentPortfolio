@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useGame } from '../../context/GameContext'
-import PuzzleLid from './PuzzleLid'
+import SecurityOverlay from './SecurityOverlay'
+import CompletionOverlay from './CompletionOverlay'
 
 /**
  * ProtectedPuzzle - Sistema de tapas automático
@@ -17,6 +18,11 @@ export default function ProtectedPuzzle({
   const { gameState, triggerEvent } = useGame()
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [wasLocked, setWasLocked] = useState(true)
+
+  // Check if puzzle is solved
+  const isSolved = React.useMemo(() => {
+    return gameState?.puzzleProgress?.[puzzleType]?.solved === true
+  }, [puzzleType, gameState?.puzzleProgress])
 
   // Lógica de dependencias según el diseño original corregido
   const isUnlocked = React.useMemo(() => {
@@ -88,27 +94,47 @@ export default function ProtectedPuzzle({
 
   // Si está desbloqueado y no está en proceso de desbloqueo, mostrar directamente
   if (isUnlocked && !isUnlocking && !wasLocked) {
-    return children
+    return (
+      <div className={`relative w-full h-full ${className}`}>
+        {isSolved && (
+          <CompletionOverlay 
+            label={getPuzzleLabel(puzzleType)}
+            message="SYSTEM OPTIMIZED"
+          />
+        )}
+        {children}
+      </div>
+    )
   }
 
   // Mostrar tapa mientras está bloqueado o en proceso de desbloqueo
   return (
-    <PuzzleLid
-      isLocked={true} // Siempre bloqueado mientras se muestra la tapa
-      variant={variant}
-      className={className}
-      forceOpen={isUnlocking} // Forzar apertura cuando se está desbloqueando
-    >
-      <div className="flex items-center justify-center h-full min-h-[200px] text-slate-400">
-        <div className="text-center">
-          <div className="text-4xl mb-4">🔒</div>
-          <div className="text-sm">
-            {customMessage || getDependencyMessage(puzzleType)}
-          </div>
-        </div>
+    <div className={`relative w-full h-full ${className}`}>
+      <SecurityOverlay
+        isLocked={true} // Siempre bloqueado mientras se muestra la tapa
+        forceOpen={isUnlocking} // Forzar apertura cuando se está desbloqueando
+        label={getPuzzleLabel(puzzleType)}
+        message={customMessage || getDependencyMessage(puzzleType)}
+      />
+      
+      {/* Contenido ofuscado debajo */}
+      <div className={`w-full h-full transition-all duration-1000 ${
+        isUnlocking ? 'opacity-100 blur-0 grayscale-0' : 'opacity-30 blur-sm grayscale'
+      }`}>
+        {children}
       </div>
-    </PuzzleLid>
+    </div>
   )
+}
+
+function getPuzzleLabel(type) {
+  switch(type) {
+    case 'frequency': return 'FREQUENCY_MOD';
+    case 'cipher': return 'CIPHER_ENGINE';
+    case 'cables': 
+    case 'wiring': return 'POWER_GRID';
+    default: return 'SYSTEM_MODULE';
+  }
 }
 
 function getDependencyMessage(puzzleType) {

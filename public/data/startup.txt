@@ -5,7 +5,7 @@
 			 _/    _/  _/    _/    _/    _/    _/     
 			_/    _/  _/    _/  _/_/_/  _/    _/      
                                                   
-IA: A.R.I.A. model MK-7319 online.
+IA: K.I.R.A. model MK-7319 online.
 
 [boot] Inicializando procesos del sistema...
 [boot] Iniciando memoria cache...

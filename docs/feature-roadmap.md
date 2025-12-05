@@ -14,14 +14,14 @@
   - Terminal de texto con comandos (`help`, `locks`, `unlock security --code=XXXX`, `freq open`, `plate open`, `bypass`).【F:src/App.jsx†L96-L126】
   - Control deslizante triple para ajustar frecuencias con tolerancia definida por `TARGETS` y `TOL`.【F:src/App.jsx†L40-L51】【F:src/App.jsx†L269-L311】
   - Panel de cables (drag & drop) que compara conexiones esperadas `R`, `A`, `Y`.【F:src/App.jsx†L132-L170】
-- **UI/UX**: Panel central con avatar, leds, animación de rejilla y terminal que se pre-puebla desde `data/startup.txt` con log de arranque de A.R.I.A.【F:src/App.jsx†L172-L224】【F:data/startup.txt†L1-L39】
+- **UI/UX**: Panel central con avatar, leds, animación de rejilla y terminal que se pre-puebla desde `data/startup.txt` con log de arranque de K.I.R.A.【F:src/App.jsx†L172-L224】【F:data/startup.txt†L1-L39】
 
 ### 1.3 Contenido del portfolio
 - `data/assistant.json` solo contiene dos proyectos placeholder sin campos biográficos, estudios o skills.【F:data/assistant.json†L1-L7】
 - No existe aún una vista diferenciada "normal" vs "hackeada", ni toggles para cambiarlas.
 
 ### 1.4 Identidad narrativa
-- A.R.I.A. habla de forma neutral; todavía no se refleja el tono cínico/irónico solicitado.
+- K.I.R.A. habla de forma neutral; todavía no se refleja el tono cínico/irónico solicitado.
 - No se han implementado diálogos ramificados, voces ni reacciones dinámicas de la IA según el progreso.
 
 ## 2. Gaps principales vs. visión objetivo
@@ -45,7 +45,7 @@
 1. **Refactor en módulos**
    - Crear layout base y separar componentes (`Header`, `Terminal`, `PuzzlePanel`, `FrequencyControls`, `CablePanel`).
    - Implementar contexto global (`GameContext`) o máquina de estados para orquestar progresión.
-2. **Guion y personalidad de A.R.I.A.**
+2. **Guion y personalidad de K.I.R.A.**
    - Definir script en JSON/Markdown con escenas, triggers y tono irónico.
    - Añadir sistema de diálogos en pantalla (bocadillos, overlay o terminal enriquecido) con temporización.
 3. **Intro cinemática**

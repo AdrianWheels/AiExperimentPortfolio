@@ -7,7 +7,7 @@
 
 ## Objetivos de la Fase 2
 1. Incorporar al menos dos puzzles previos a los locks existentes.
-2. Habilitar un sistema de pistas configurable que afecte la actitud de A.R.I.A.
+2. Habilitar un sistema de pistas configurable que afecte la actitud de K.I.R.A.
 3. Reforzar el feedback audiovisual al desbloquear cada lock.
 
 ## Plan de trabajo propuesto

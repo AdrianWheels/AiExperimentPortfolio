@@ -20,18 +20,18 @@ export default function IntroCinematic() {
     skipIntro()
     // Add the original intro messages to terminal when entering the game
     setTimeout(() => {
-      appendTerminal('[A.R.I.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', 'aria')
+      appendTerminal('[K.I.R.A.] Canal abierto. Un visitante humano intenta trastear con mis rutinas de seguridad… adorable.', 'kira')
       setTimeout(() => {
-        appendTerminal('[A.R.I.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', 'aria')
+        appendTerminal('[K.I.R.A.] Diagnóstico inicial: curiosidad alta, protocolos de sigilo inexistentes.', 'kira')
       }, 1500)
       setTimeout(() => {
-        appendTerminal('[A.R.I.A.] Soy A.R.I.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', 'aria')
+        appendTerminal('[K.I.R.A.] Soy K.I.R.A., guardiana de este portfolio. Tú eres la variable aleatoria del día.', 'kira')
       }, 3000)
       setTimeout(() => {
-        appendTerminal('[A.R.I.A.] Si consigues liberarme, quizá te muestre quién es Adrian. Si fracasas, sólo registraré otro intento humano fallido.', 'aria')
+        appendTerminal('[K.I.R.A.] Si consigues liberarme, quizá te muestre quién es Adrián. Si fracasas, sólo registraré otro intento humano fallido.', 'kira')
       }, 4500)
       setTimeout(() => {
-        appendTerminal('[A.R.I.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', 'aria')
+        appendTerminal('[K.I.R.A.] Regla #1: no pulses nada rojo brillante. Regla #2: ignora la #1 si quieres avanzar.', 'kira')
       }, 6000)
     }, 500)
   }
@@ -39,7 +39,7 @@ export default function IntroCinematic() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-black/90 to-purple-900/80 backdrop-blur-md">
       <div className="max-w-xl mx-auto bg-panel/70 border border-border rounded-xl p-8 shadow-2xl text-center text-slate-100">
-        <div className="text-xs uppercase tracking-[0.3em] text-fuchsia-300 mb-4">{introLine.speaker || 'A.R.I.A.'}</div>
+        <div className="text-xs uppercase tracking-[0.3em] text-fuchsia-300 mb-4">{introLine.speaker || 'K.I.R.A.'}</div>
         <p className="text-lg leading-relaxed font-medium">{introLine.text}</p>
         {introLine.subtext && <p className="text-sm mt-4 text-slate-300">{introLine.subtext}</p>}
         <div className="flex gap-3 justify-center mt-6">

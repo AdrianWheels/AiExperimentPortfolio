@@ -20,9 +20,14 @@ export default function Terminal() {
   }
 
   return (
-    <section className="bg-panel p-4 rounded-lg border border-border flex flex-col flex-1 min-h-0 max-h-full">
+    <section className="flex flex-col h-full min-h-0">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-xs text-muted font-mono">{'>'}_</span>
+        <h3 className="text-sm font-semibold text-white">Terminal</h3>
+      </div>
+      
       <div 
-        className="term-output flex-1 overflow-y-auto bg-black/90 p-4 rounded text-sm font-mono max-h-[400px]"
+        className="term-output flex-1 overflow-y-auto bg-black/40 p-3 rounded-lg text-sm font-mono min-h-[120px] max-h-[200px]"
         ref={outputRef}
       >
         <div className="flex flex-col gap-1">
@@ -36,7 +41,7 @@ export default function Terminal() {
 
       <div className="term-input flex gap-2 mt-3 items-center flex-shrink-0">
         <input
-          className="flex-1 p-3 bg-zinc-900 rounded text-sm font-mono border border-zinc-700 focus:border-blue-500 focus:outline-none"
+          className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-sm font-mono border border-white/5 focus:border-purple-glow focus:outline-none placeholder:text-subtle transition-all"
           value={input}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={(event) => {
@@ -44,10 +49,10 @@ export default function Terminal() {
               submit()
             }
           }}
-          placeholder="Escribe comando..."
+          placeholder="comando..."
         />
-        <button className="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 rounded text-sm font-medium transition-colors flex-shrink-0" onClick={submit}>
-          Send
+        <button className="px-3 py-2 bg-purple-glow/80 hover:bg-purple-glow rounded-lg text-xs font-semibold transition-colors flex-shrink-0" onClick={submit}>
+          →
         </button>
       </div>
     </section>

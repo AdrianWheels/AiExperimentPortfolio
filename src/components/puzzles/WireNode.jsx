@@ -6,62 +6,77 @@ export default function WireNode({
   y, 
   label, 
   color = '#00ff00', 
-  inputs = ['in1'], 
-  outputs = ['out1'],
+  inputs = [], 
+  outputs = [],
   className = "",
   children
 }) {
+  const isSource = outputs.length > 0;
+
   return (
     <div
       id={`node-${id}`}
-      className={`absolute bg-panel border border-border rounded-lg p-3 min-w-[120px] ${className}`}
+      className={`absolute flex items-center ${className}`}
       style={{
         left: `${x}px`,
         top: `${y}px`,
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        zIndex: 20
       }}
     >
       {/* Puertos de entrada (izquierda) */}
-      <div className="absolute left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2">
-        {inputs.map((input, index) => (
-          <div
-            key={input}
-            className="w-3 h-3 rounded-full border-2 border-white bg-zinc-700 hover:bg-zinc-600 cursor-pointer transition-colors"
-            style={{
-              borderColor: color,
-              transform: `translateY(${(index - (inputs.length - 1) / 2) * 30}px)`
-            }}
-            title={`Input: ${input}`}
-          />
-        ))}
-      </div>
+      {inputs.length > 0 && (
+        <div className="mr-3 flex flex-col gap-2">
+          {inputs.map((input, index) => (
+            <div
+              key={input}
+              data-port-id={input}
+              data-port-type="input"
+              data-node-id={id}
+              className="w-4 h-4 rounded-full border-2 border-white bg-black hover:bg-zinc-800 cursor-pointer transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+              style={{
+                borderColor: color,
+                boxShadow: `0 0 8px ${color}40`
+              }}
+              title={`Input: ${input}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Contenido del nodo */}
-      <div className="text-center">
-        <div className="text-sm font-medium text-white mb-1">{label}</div>
+      <div 
+        className={`text-sm font-bold tracking-wider whitespace-nowrap ${isSource ? 'text-right mr-2' : 'text-left ml-2'}`} 
+        style={{ 
+          color: color, 
+          textShadow: `0 0 10px ${color}60`,
+          fontFamily: 'monospace'
+        }}
+      >
+        {label}
         {children}
       </div>
 
       {/* Puertos de salida (derecha) */}
-      <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 flex flex-col gap-2">
-        {outputs.map((output, index) => (
-          <div
-            key={output}
-            className="w-3 h-3 rounded-full border-2 border-white bg-zinc-700 hover:bg-zinc-600 cursor-pointer transition-colors"
-            style={{
-              backgroundColor: color,
-              transform: `translateY(${(index - (outputs.length - 1) / 2) * 30}px)`
-            }}
-            title={`Output: ${output}`}
-          />
-        ))}
-      </div>
-
-      {/* Indicador de color del nodo */}
-      <div
-        className="absolute top-1 right-1 w-2 h-2 rounded-full"
-        style={{ backgroundColor: color }}
-      />
+      {outputs.length > 0 && (
+        <div className="ml-3 flex flex-col gap-2">
+          {outputs.map((output, index) => (
+            <div
+              key={output}
+              data-port-id={output}
+              data-port-type="output"
+              data-node-id={id}
+              className="w-4 h-4 rounded-full border-2 border-white bg-black hover:bg-zinc-800 cursor-pointer transition-all"
+              style={{
+                backgroundColor: color,
+                borderColor: '#fff',
+                boxShadow: `0 0 12px ${color}`
+              }}
+              title={`Output: ${output}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

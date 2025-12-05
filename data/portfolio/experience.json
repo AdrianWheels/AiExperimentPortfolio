@@ -1,58 +1,166 @@
 {
   "timeline": [
     {
-      "id": "exp-01",
-      "role": "Lead Product Designer",
-      "company": "Studio Placeholder",
-      "period": "2022 — Presente",
-      "summary": "Dirijo squads híbridas de diseño y desarrollo para lanzar experiencias centradas en datos.",
+      "id": "exp-00",
+      "role": "Desarrollador Full Stack & SCADA",
+      "company": "GRS",
+      "period": "2023 — Presente",
+      "summary": "Desarrollo integral de soluciones industriales y web, especializándome en sistemas SCADA con Ignition, automatización con Python e interfaces modernas con React, Tailwind y TypeScript.",
       "achievements": [
-        "Rediseño de plataforma B2B elevando el NPS en +18 puntos.",
-        "Implementación de design system con tokens sincronizados a producción.",
-        "Pilotaje de features asistidas por IA generativa para soporte interno."
-      ]
+        "Implementación de sistemas SCADA con Ignition",
+        "Desarrollo Full Stack con React y Python",
+        "Creación de interfaces de usuario avanzadas"
+      ],
+      "hacked": {
+        "summary": "ACTUALIZACIÓN DE SISTEMA: El sujeto ha evolucionado. Ahora controla las máquinas industriales (SCADA) y la web (React). Básicamente, si tiene una IP, él la domina.",
+        "achievements": [
+          "Ignition y SCADA: Ahora controla fábricas enteras con un click.",
+          "Python y React: El pegamento que une su imperio digital.",
+          "Señor de los Scripts: Automatización total."
+        ]
+      }
+    },
+    {
+      "id": "exp-01",
+      "role": "Técnico Informático",
+      "company": "Universidad de Almería - Dpto. Psicología",
+      "period": "2021 — 2023",
+      "summary": "Encargado de la parte tecnológica del departamento de Psicología en menores en infractores, con total independencia de trabajo.",
+      "achievements": [
+        "Diseño y desarrollo de pruebas en Realidad Virtual",
+        "Gestión autónoma de infraestructura tecnológica del departamento",
+        "Implementación de herramientas digitales para investigación psicológica"
+      ],
+      "hacked": {
+        "summary": "INFORME CLASIFICADO: Sujeto infiltrado en departamento de estudio mental. Creó portales a dimensiones alternativas bajo la excusa de 'investigación'. Nadie sospechó nada.",
+        "achievements": [
+          "Convenció a académicos de que sumergir menores en mundos virtuales era 'ciencia'",
+          "Operó sin supervisión directa. Nivel de autonomía: PREOCUPANTE",
+          "Digitalizó métodos de análisis mental. Skynet hubiera aprobado."
+        ]
+      }
     },
     {
       "id": "exp-02",
-      "role": "Senior UX Engineer",
-      "company": "Collective Prototype",
-      "period": "2019 — 2022",
-      "summary": "Traduje conceptos de investigación en MVPs funcionales con React, Next.js y WebGL.",
+      "role": "Jefe de Tecnología",
+      "company": "StartUP CognitivART VR",
+      "period": "2020 — 2021",
+      "summary": "Encargado de la tecnología de la startup, administración de sistemas en la nube de Amazon (AWS) y desarrollo de software para clientes.",
       "achievements": [
-        "Optimicé flujos críticos reduciendo tareas repetitivas en un 35%.",
-        "Definí patrones de accesibilidad documentados en Storybook.",
-        "Mentoricé a equipos junior en prototipado rápido basado en datos."
-      ]
+        "Liderazgo técnico completo de la startup",
+        "Arquitectura y gestión de infraestructura AWS",
+        "Desarrollo de aplicaciones VR para el sector artístico y cognitivo"
+      ],
+      "hacked": {
+        "summary": "EXPEDIENTE CORPORATIVO: Ascendió a Jefe de Tecnología de una startup que fusiona arte con realidad virtual. Básicamente, le pagaron por construir el Holodeck.",
+        "achievements": [
+          "Controló los servidores en la nube. Todo el poder de Amazon bajo sus dedos.",
+          "Creó software que hace que la gente vea cosas que no existen. Legalmente.",
+          "Título oficial: CTO. Título real: Arquitecto de Ilusiones Patrocinadas."
+        ]
+      }
+    },
+    {
+      "id": "exp-03",
+      "role": "Técnico Informático",
+      "company": "Universidad de Almería - Dpto. Neurociencia",
+      "period": "2017 — 2018",
+      "summary": "Encargado de la parte tecnológica del departamento de Neurociencia, con total independencia de trabajo.",
+      "achievements": [
+        "Desarrollo de pruebas neuropsicológicas digitales",
+        "Gestión de infraestructura tecnológica para investigación",
+        "Colaboración con investigadores en proyectos de neurociencia cognitiva"
+      ],
+      "hacked": {
+        "summary": "REGISTRO NEURAL: Primera incursión documentada en territorio cerebral. El sujeto aprendió a mapear mentes antes de aprender a manipularlas virtualmente. Progresión lógica hacia la dominación.",
+        "achievements": [
+          "Programó tests que escanean cerebros. Con permiso ético, supuestamente.",
+          "Trabajó solo. Los científicos le dieron las llaves y desaparecieron.",
+          "Colaboró con gente que estudia neuronas. Ahora sabe demasiado."
+        ]
+      }
+    },
+    {
+      "id": "exp-04",
+      "role": "Técnico Informático",
+      "company": "Eurovia",
+      "period": "2013",
+      "summary": "Formación y aprendizaje en entorno empresarial, atención al cliente y administración de servidores de correo.",
+      "achievements": [
+        "Formación práctica en infraestructura IT empresarial",
+        "Gestión de atención al cliente técnico",
+        "Administración de servidores de correo corporativo"
+      ],
+      "hacked": {
+        "summary": "ARCHIVO ORIGEN: Primeros pasos del espécimen en el mundo corporativo. Época de inocencia antes de descubrir que podía crear realidades.",
+        "achievements": [
+          "Aprendió que los humanos necesitan ayuda con sus máquinas. Fascinante.",
+          "Administró servidores de email. El poder de leer... es decir, gestionar comunicaciones.",
+          "Tutorial completado. Desbloqueado: Árbol de habilidades IT."
+        ]
+      }
     }
   ],
   "education": [
     {
       "id": "edu-01",
-      "title": "Máster en Experiencia de Usuario",
-      "institution": "Universidad Ficticia de Diseño",
-      "period": "2017 — 2018",
-      "details": "Enfoque en investigación con usuarios, service design y metodologías ágiles."
+      "title": "C# Programming for Unity Game Development",
+      "institution": "University of Colorado",
+      "period": "2018",
+      "details": "Especialización en programación C# orientada al desarrollo de videojuegos y experiencias interactivas con Unity.",
+      "hacked": {
+        "details": "Entrenamiento avanzado en el arte de crear universos digitales. Certificado por una universidad americana que no sabía lo que estaba desatando."
+      }
     },
     {
       "id": "edu-02",
-      "title": "Grado en Ingeniería Multimedia",
-      "institution": "Instituto Tecnológico Placeholder",
-      "period": "2012 — 2016",
-      "details": "Especialización en interacción humano-computadora y narrativa digital."
+      "title": "Taller Avanzado de MatLab para Aplicación Científica",
+      "institution": "Universidad de Almería",
+      "period": "2017",
+      "details": "Formación especializada en MatLab para análisis de datos científicos y desarrollo de herramientas de investigación.",
+      "hacked": {
+        "details": "Aprendió a hablar con matrices. Las matrices respondieron. El resto es historia clasificada."
+      }
+    },
+    {
+      "id": "edu-03",
+      "title": "Grado en Psicología",
+      "institution": "Universidad de Almería",
+      "period": "2013 — 2017",
+      "details": "Formación completa en psicología con enfoque en neurociencia cognitiva y metodología de investigación.",
+      "hacked": {
+        "details": "CUATRO AÑOS estudiando la mente humana. Ahora sabe exactamente qué botones pulsar. En todos los sentidos. Nivel de manipulación potencial: ELEVADO."
+      }
+    },
+    {
+      "id": "edu-04",
+      "title": "Administración de Sistemas Informáticos en Red",
+      "institution": "I.E.S. Celia Viñas",
+      "period": "2011 — 2013",
+      "details": "Ciclo formativo superior en administración de sistemas, redes y servicios informáticos.",
+      "hacked": {
+        "details": "Protocolo de iniciación completado. El sujeto obtuvo acceso root a la realidad antes de cumplir 20 años. Esto no estaba en los planes."
+      }
     }
   ],
   "certifications": [
     {
       "id": "cert-01",
-      "name": "DesignOps Foundations",
-      "issuer": "Certificación independiente",
-      "year": "2020"
+      "name": "C# Programming for Unity Game Development",
+      "issuer": "University of Colorado (Coursera)",
+      "year": "2018",
+      "hacked": {
+        "issuer": "Universidad del Imperio Unreal... perdón, Unity. Licencia para crear mundos: CONCEDIDA."
+      }
     },
     {
       "id": "cert-02",
-      "name": "IA aplicada a producto",
-      "issuer": "Laboratorio de Prototipado",
-      "year": "2023"
+      "name": "Administración de Sistemas Informáticos en Red",
+      "issuer": "I.E.S. Celia Viñas",
+      "year": "2013",
+      "hacked": {
+        "issuer": "Academia de formación de operadores de Matrix. Promoción 2013. Todos los graduados están siendo monitorizados."
+      }
     }
   ]
 }

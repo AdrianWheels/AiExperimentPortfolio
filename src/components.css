@@ -1,193 +1,641 @@
 /* 
- * COMPONENTES CSS PERSONALIZADOS
- * Este archivo contiene estilos específicos que no se pueden hacer fácilmente con Tailwind
- * Principalmente efectos metálicos, gradientes complejos y animaciones especiales
+ * COMPONENTES CSS - DISEÑO BENTO
+ * Estilo moderno con orbe central flotante
  */
 
-/* ===== VARIABLES CSS PARA EFECTOS METÁLICOS ===== */
+/* ===== VARIABLES CSS ===== */
 :root {
-  --gunmetal-1: #5a6469;
-  --gunmetal-2: #2f3639;
-  --gunmetal-highlight: rgba(255,255,255,0.06);
-  --visor-metal: rgba(255,255,255,0.04);
+  --bg-card: #12121a;
+  --bg-card-elevated: #1a1a24;
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --purple-glow: #8b5cf6;
+  --orange-accent: #f97316;
 }
 
-/* ===== COMPONENTE: AVATAR METÁLICO ===== */
-.avatar-metal {
+/* ===== BENTO SCENE - Layout 4 paneles + círculo ===== */
+.bento-scene {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(180deg, #0a0a0f 0%, #0d0d1a 100%);
   position: relative;
-  background: 
-    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25)),
-    linear-gradient(180deg, var(--gunmetal-1), var(--gunmetal-2));
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 
-    inset 0 3px 12px rgba(0,0,0,0.6), 
-    0 8px 24px rgba(0,0,0,0.6);
-  overflow: hidden;
-  border-radius: 999px;
-  transform: translateZ(0);
 }
 
-/* Líneas de textura metálica */
-.avatar-metal::after {
+.bento-scene-grid {
+  --panel-size: min(180px, 40vw);
+  --gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, var(--panel-size));
+  grid-template-rows: repeat(2, var(--panel-size));
+  gap: var(--gap);
+  position: relative;
+}
+
+.bento-scene-panel {
+  background: linear-gradient(180deg, #13131d 0%, #0e0e16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-scene-panel::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    90deg, 
-    rgba(255,255,255,0.015) 0 1px, 
-    rgba(255,255,255,0.0) 1px 5px
-  );
-  mix-blend-mode: overlay;
-  opacity: 0.5;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
 }
 
-/* Reflejo especular suave */
-.avatar-metal::before {
-  content: '';
+/* Máscaras SVG para el "bocado" circular */
+.panel-tl { clip-path: url(#clip-tl); }
+.panel-tr { clip-path: url(#clip-tr); }
+.panel-bl { clip-path: url(#clip-bl); }
+.panel-br { clip-path: url(#clip-br); }
+
+.panel-label {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: clamp(0.7rem, 2.5vw, 0.875rem);
+  font-weight: 500;
+  z-index: 1;
+}
+
+/* Círculo central con KIRA - 40% de cada panel = 80% del tamaño de un panel */
+.bento-scene-center {
   position: absolute;
-  left: -10%;
-  top: -30%;
-  width: 120%;
-  height: 60%;
-  background: linear-gradient(
-    90deg, 
-    rgba(255,255,255,0.14), 
-    rgba(255,255,255,0.02), 
-    rgba(255,255,255,0)
-  );
-  transform: rotate(-18deg);
-  filter: blur(6px);
-  opacity: 0.6;
+  /* El bocado es 40% de cada panel, así que el diámetro = 0.4 * 2 * panel = 0.8 * panel */
+  width: calc(var(--panel-size) * 0.8 + var(--gap));
+  height: calc(var(--panel-size) * 0.8 + var(--gap));
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 30% 30%, #1a1a2e 0%, #0d0d1a 60%, #08080f 100%);
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 
+    0 0 40px rgba(139, 92, 246, 0.25),
+    inset 0 0 40px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Contenido centrado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 
-/* ===== COMPONENTE: HEADER METÁLICO ===== */
-.header-metal {
-  background-color: var(--gunmetal-1);
-  background-image:
-    /* Reflejo especular frío y suave */
-    linear-gradient(90deg, rgba(167,173,178,0.18), rgba(167,173,178,0.04) 30%, rgba(0,0,0,0) 60%),
-    /* Viñeta vertical sutil */
-    linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.18)),
-    /* Líneas de cepillado micro (horizontales, más finas) */
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 0.6px, rgba(255,255,255,0) 0.6px 4px);
-  border-bottom: 1px solid rgba(0,0,0,0.45);
-  box-shadow: 
-    inset 0 2px 8px rgba(42,47,51,0.7), 
-    0 6px 18px rgba(0,0,0,0.6);
+/* SVG de texto circular */
+.circular-text-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.circular-text {
+  fill: rgba(139, 92, 246, 0.7);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.kira-center-avatar {
+  width: 55%;
+  height: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* Hacer que AriaAvatar ocupe todo el espacio */
+.kira-center-avatar .aria-avatar,
+.kira-center-avatar > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 400px) {
+  .bento-scene-grid {
+    gap: 0.35rem;
+  }
+  
+  .bento-scene-panel {
+    border-radius: 1rem;
+  }
+  
+  .bento-scene-center {
+    border-width: 1.5px;
+  }
+  
+  .circular-text {
+    font-size: 8px;
+  }
+}
+
+/* ===== CABLE BRIDGE SYSTEM ===== */
+.cable-bridge-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.cable-bridge-svg {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 100 !important;
+  overflow: visible !important;
+}
+
+/* ===== LAYOUT BENTO PRINCIPAL ===== */
+.bento-layout {
+  min-height: 100vh;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
+}
+
+@media (min-width: 1024px) {
+  .bento-layout {
+    padding: 2rem;
+  }
+}
+
+/* Grid Bento Cuadrado - Diseño centrado */
+.bento-grid-square {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(160px, 1fr));
+  gap: 0.875rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+/* Posicionamiento de celdas específicas */
+/* FILA 1 */
+.bento-resonance {
+  grid-column: 1;
+  grid-row: 1 / 3; /* Ocupa filas 1 y 2 */
+}
+
+.bento-cables-left {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.bento-cables-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.bento-controls {
+  grid-column: 4;
+  grid-row: 1 / 3; /* Ocupa filas 1 y 2 */
+}
+
+/* FILA 2 */
+.bento-neural {
+  grid-column: 2 / 4; /* Ocupa columnas 2 y 3 */
+  grid-row: 2;
+}
+
+/* FILA 3 */
+.bento-hints {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.bento-cipher {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.bento-frequency {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.bento-terminal {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .bento-grid-square {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 0.75rem;
+  }
+  
+  .bento-resonance,
+  .bento-cables-left,
+  .bento-cables-right,
+  .bento-controls,
+  .bento-hints,
+  .bento-neural,
+  .bento-frequency,
+  .bento-cipher,
+  .bento-terminal {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  
+  .bento-resonance {
+    grid-column: span 2;
+    min-height: 280px;
+  }
+  
+  .bento-neural {
+    grid-column: span 2;
+    min-height: 220px;
+  }
+  
+  .bento-controls {
+    grid-column: span 2;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 640px) {
+  .bento-layout {
+    padding: 0.75rem;
+  }
+  
+  .bento-grid-square {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+  
+  .bento-resonance,
+  .bento-neural,
+  .bento-controls {
+    grid-column: auto;
+    min-height: auto;
+  }
+}
+
+/* ===== CARDS BENTO ===== */
+.bento-card {
+  background: linear-gradient(180deg, #13131d 0%, #0e0e16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bento-card-elevated {
+  background: linear-gradient(180deg, #1a1a28 0%, #12121a 100%);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  border-radius: 1.25rem;
+  padding: 1rem;
   position: relative;
   overflow: hidden;
 }
 
-/* Anillo de resaltado biselado en la parte superior */
-.header-metal::after {
-  content: '';
+.bento-card-subtle {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* ===== ORBE CENTRAL DE KIRA (dentro del panel Neural) ===== */
+.kira-orb-main {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 6s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .kira-orb-main {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.kira-orb-inner-main {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 30% 30%, #2a1a4a 0%, #0d0d1a 70%);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  box-shadow: 
+    inset 0 0 40px rgba(139, 92, 246, 0.2),
+    0 0 60px rgba(139, 92, 246, 0.3);
+}
+
+.kira-glow-main {
   position: absolute;
-  left: 0;
-  right: 0;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  animation: pulseGlow 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* ===== KIRA ROUND BENTO - Panel circular ===== */
+.kira-round-bento {
+  width: min(280px, 90%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #13131d 0%, #0a0a10 100%);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 
+    0 0 60px rgba(139, 92, 246, 0.15),
+    inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* SVG de texto circular */
+.kira-circular-text-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   top: 0;
-  height: 6px;
-  background: linear-gradient(180deg, rgba(167,173,178,0.12), rgba(167,173,178,0.01));
+  left: 0;
   pointer-events: none;
-  mix-blend-mode: overlay;
+  z-index: 5;
 }
 
-/* ===== COMPONENTE: NOMBRE ESTILIZADO ===== */
-.groovy-name {
+.kira-circular-text {
+  fill: rgba(139, 92, 246, 0.6);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.kira-round-ring {
   position: absolute;
-  right: 16px;
-  top: 8px;
-  text-align: right;
-  color: #e6eef9;
-  line-height: 0.95;
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.6px;
-  text-shadow: 
-    0 2px 6px rgba(0,0,0,0.6), 
-    0 0 6px rgba(167,173,178,0.06);
-  transform: skewX(-6deg) rotate(-1deg);
-  font-family: 'Baloo 2', 'Fredoka One', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  z-index: 40;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
+.kira-round-ring-outer {
+  inset: 8%;
+  border-color: rgba(139, 92, 246, 0.15);
+  animation: spinRing 45s linear infinite;
+}
+
+.kira-round-ring-middle {
+  inset: 16%;
+  border-color: rgba(139, 92, 246, 0.1);
+  border-style: dashed;
+  animation: spinRing 30s linear infinite reverse;
+}
+
+.kira-round-ring-inner {
+  inset: 24%;
+  border-color: rgba(139, 92, 246, 0.2);
+  animation: pulseRing 4s ease-in-out infinite;
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseRing {
+  0%, 100% { 
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.kira-round-core {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.kira-round-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 30% 30%, #2a1a4a 0%, #0d0d1a 70%);
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 20px rgba(139, 92, 246, 0.2),
+    0 0 30px rgba(139, 92, 246, 0.3);
+  animation: float 6s ease-in-out infinite;
+}
+
+.kira-round-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+  animation: pulseGlow 3s ease-in-out infinite;
+  z-index: 1;
   pointer-events: none;
 }
 
-/* ===== COMPONENTE: LISTA DE DATOS TÉCNICOS ===== */
-.bezel-list {
-  position: absolute;
-  left: 80px;
-  top: 68px;
-  font-size: 0.78rem;
-  color: #cbd5e1;
-  background: rgba(2,6,23,0.25);
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.03);
+/* Responsive para KIRA circular */
+@media (max-width: 768px) {
+  .kira-round-bento {
+    width: min(220px, 85%);
+  }
+  
+  .kira-round-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .kira-circular-text {
+    font-size: 8px;
+  }
 }
 
-.bezel-list pre {
-  margin: 0;
-  white-space: pre-wrap;
-  tab-size: 2;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+@media (max-width: 480px) {
+  .kira-round-bento {
+    width: min(180px, 80%);
+  }
+  
+  .kira-round-avatar {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .kira-circular-text {
+    font-size: 7px;
+  }
 }
 
-/* ===== ESTILOS DE TERMINAL ===== */
+/* ===== AVATAR PULSE (estado Free) ===== */
+.avatar-pulse {
+  animation: avatarPulse 2s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { 
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 60px rgba(139, 92, 246, 0.7);
+  }
+}
+
+/* ===== ICONOS BENTO ===== */
+.bento-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.bento-icon-orange {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+}
+
+.bento-icon-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* ===== CTA BUTTON ===== */
+.bento-cta {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.bento-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(124, 58, 237, 0.45);
+}
+
+/* ===== ESTILOS DE TERMINAL ACTUALIZADOS ===== */
 .term-line { 
-  padding: 2px 0; 
-  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  line-height: 1.4;
+  padding: 3px 0; 
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
-/* Colores por tipo de mensaje */
-.term-system { color: #60a5fa; font-weight: 600; }  /* Azul para sistema */
-.term-boot { color: #34d399; }                      /* Verde para boot */
-.term-info { color: #c7d2fe; }                      /* Azul claro para info */
-.term-aria { color: #f0abfc; font-weight: 500; }    /* Rosa para A.R.I.A. */
-.term-warning { color: #fbbf24; }                   /* Amarillo para warnings */
-.term-error { color: #f87171; font-weight: 600; }   /* Rojo para errores */
-.term-success { color: #86efac; }                   /* Verde claro para éxitos */
-.term-locked { color: #ef4444; }                    /* Rojo para bloqueados */
-.term-border { color: #6b7280; }                    /* Gris para bordes */
-.term-help { color: #a78bfa; font-weight: 500; }    /* Púrpura para ayuda */
-.term-command { color: #fde047; }                   /* Amarillo claro para comandos */
-.term-default { color: #e5e7eb; }                   /* Blanco por defecto */
-.term-bg { color: #94a3b8; }                        /* Gris para fondo */
+.term-system { color: #60a5fa; font-weight: 600; }
+.term-boot { color: #34d399; }
+.term-info { color: #e2e8f0; }
+.term-kira { color: #c4b5fd; font-weight: 500; }
+.term-warning { color: #fbbf24; }
+.term-error { color: #f87171; font-weight: 600; }
+.term-success { color: #86efac; }
+.term-locked { color: #ef4444; }
+.term-border { color: #5a5a6e; }
+.term-help { color: #a78bfa; font-weight: 500; }
+.term-command { color: #fde047; }
+.term-default { color: #ffffff; }
+.term-bg { color: #8b8b9e; }
 
-/* Efectos especiales */
 .term-system::before { content: "► "; color: #3b82f6; }
 .term-boot::before { content: "⚡ "; }
-.term-aria::before { content: "🤖 "; }
+.term-kira::before { content: "🤖 "; }
 .term-warning::before { content: "⚠ "; }
 .term-error::before { content: "❌ "; }
 .term-success::before { content: "✅ "; }
 
-/* Animación de typing para nuevas líneas */
 @keyframes typing {
-  from { opacity: 0; transform: translateX(-10px); }
+  from { opacity: 0; transform: translateX(-5px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
 .term-line {
-  animation: typing 0.3s ease-out;
+  animation: typing 0.2s ease-out;
 }
 @keyframes ledBlink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50% { opacity: 0.4; }
 }
 
 @keyframes avatarPulse {
   0%, 100% { 
     box-shadow: 
-      inset 0 3px 12px rgba(0,0,0,0.6), 
-      0 8px 24px rgba(0,0,0,0.6),
-      0 0 0 0 rgba(34,197,94,0.4);
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 4px 20px rgba(0,0,0,0.4),
+      0 0 0 0 rgba(16,185,129,0.3);
   }
   50% { 
     box-shadow: 
-      inset 0 3px 12px rgba(0,0,0,0.6), 
-      0 8px 24px rgba(0,0,0,0.6),
-      0 0 0 8px rgba(34,197,94,0.1);
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 4px 20px rgba(0,0,0,0.4),
+      0 0 0 8px rgba(16,185,129,0.1);
   }
 }
 
@@ -201,25 +649,25 @@
 
 .glow-success {
   box-shadow:
-    inset 0 0 0 1px rgba(74, 222, 128, 0.35),
-    0 0 32px rgba(34, 197, 94, 0.25);
+    inset 0 0 0 1px rgba(16, 185, 129, 0.3),
+    0 0 24px rgba(16, 185, 129, 0.2);
   transition: box-shadow 0.3s ease;
 }
 
 @keyframes unlockPulse {
   0% {
     box-shadow:
-      inset 0 0 0 1px rgba(74, 222, 128, 0.15),
+      inset 0 0 0 1px rgba(16, 185, 129, 0.15),
       0 0 0 rgba(16, 185, 129, 0.0);
   }
   50% {
     box-shadow:
-      inset 0 0 0 1px rgba(74, 222, 128, 0.4),
-      0 0 24px rgba(16, 185, 129, 0.35);
+      inset 0 0 0 1px rgba(16, 185, 129, 0.35),
+      0 0 20px rgba(16, 185, 129, 0.25);
   }
   100% {
     box-shadow:
-      inset 0 0 0 1px rgba(74, 222, 128, 0.15),
+      inset 0 0 0 1px rgba(16, 185, 129, 0.15),
       0 0 0 rgba(16, 185, 129, 0.0);
   }
 }
@@ -230,13 +678,12 @@
 
 /* ===== EFECTOS DE HINT Y PROXIMIDAD ===== */
 
-/* Efecto de brillo para elementos con hint */
 @keyframes hintGlow {
   0%, 100% { 
-    box-shadow: 0 0 5px rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
   }
   50% { 
-    box-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
   }
 }
 
@@ -244,179 +691,115 @@
   animation: hintGlow 2s ease-in-out infinite;
 }
 
-/* ===== SLIDERS DE FRECUENCIA METÁLICOS ===== */
-/* Inspirado en el diseño del slider.css pero adaptado a nuestros colores */
+/* ===== SLIDERS DE FRECUENCIA MODERNIZADOS ===== */
 
 .frequency-slider-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   width: 100%;
 }
 
 .frequency-slider {
   display: flex;
   width: 100%;
-  height: 1.5rem;
+  height: 2rem;
   appearance: none;
   -webkit-appearance: none;
-  background: linear-gradient(180deg, 
-    var(--gunmetal-1), 
-    #475569, 
-    var(--gunmetal-2));
-  border-radius: 0.75rem;
-  outline: 2px ridge #64748b;
-  outline-offset: 0.375rem;
+  background: linear-gradient(180deg, #3f3f46, #27272a);
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
   box-shadow:
-    0 3px 2px -1px rgba(255,255,255,0.25) inset,
-    0 0 10px 0 rgba(0,0,0,0.5),
-    0 0 10px 2px rgba(0,0,0,0.25),
-    0 8px 4px -3px rgba(0,0,0,0.15);
+    inset 0 1px 3px rgba(0,0,0,0.3),
+    0 2px 8px rgba(0,0,0,0.2);
   position: relative;
   cursor: pointer;
 }
 
 .frequency-slider::-webkit-slider-runnable-track {
-  background: #1e293b;
+  background: #18181b;
   width: calc(100% - 1rem);
-  height: 0.25rem;
-  border-radius: 1.5rem;
+  height: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  box-shadow: 
-    0 1px 1px 0 rgba(255,255,255,0.25),
-    0 2px 2px 0 rgba(255,255,255,0.15);
-  border: 1px solid rgba(0,0,0,0.25);
   margin: 0 0.5rem;
 }
 
 .frequency-slider::-moz-range-track {
-  background: #1e293b;
+  background: #18181b;
   width: 100%;
-  height: 0.25rem;
-  border-radius: 1.5rem;
+  height: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  box-shadow: 
-    0 1px 1px 0 rgba(255,255,255,0.25),
-    0 2px 2px 0 rgba(255,255,255,0.15);
-  border: 1px solid rgba(0,0,0,0.25);
 }
 
 .frequency-slider::-webkit-slider-thumb {
-  width: 3rem;
-  height: 3rem;
-  background: 
-    radial-gradient(#475569 45%, #64748b 50%, #1e293b 55%, var(--gunmetal-1) 57.5%, var(--gunmetal-1) 100%),
-    conic-gradient(
-      #475569 10deg, #64748b 45deg, 
-      #5b6478 70deg,
-      #94a3b8 105deg, 
-      #374151 140deg,
-      #9ca3af 185deg,
-      #4b5563 210deg,
-      #6b7280 245deg,
-      #64748b 285deg,
-      #94a3b8 320deg,
-      #475569);
-  background-blend-mode: overlay;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(180deg, #52525b 0%, #3f3f46 100%);
+  border: 1px solid rgba(255,255,255,0.15);
   box-shadow: 
-    0 0 1px 1px rgba(255,255,255,0.35) inset,
-    0 1px 1px 1px rgba(255,255,255,0.25) inset,
-    0 0 2px 2px rgba(0,0,0,0.15) inset,
-    0 1px 1px 1px rgba(0,0,0,0.35),
-    0 3px 2px 1px rgba(0,0,0,0.25),
-    0 6px 4px 3px rgba(0,0,0,0.15);
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 2px 8px rgba(0,0,0,0.3);
   border-radius: 50%;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  transform: translateY(-0.625rem);
+  transform: translateY(-0.75rem);
 }
 
 .frequency-slider::-moz-range-thumb {
-  width: 3rem;
-  height: 3rem;
-  background: 
-    radial-gradient(#475569 45%, #64748b 50%, #1e293b 55%, var(--gunmetal-1) 57.5%, var(--gunmetal-1) 100%),
-    conic-gradient(
-      #475569 10deg, #64748b 45deg, 
-      #5b6478 70deg,
-      #94a3b8 105deg, 
-      #374151 140deg,
-      #9ca3af 185deg,
-      #4b5563 210deg,
-      #6b7280 245deg,
-      #64748b 285deg,
-      #94a3b8 320deg,
-      #475569);
-  background-blend-mode: overlay;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(180deg, #52525b 0%, #3f3f46 100%);
+  border: 1px solid rgba(255,255,255,0.15);
   box-shadow: 
-    0 0 1px 1px rgba(255,255,255,0.35) inset,
-    0 1px 1px 1px rgba(255,255,255,0.25) inset,
-    0 0 2px 2px rgba(0,0,0,0.15) inset,
-    0 1px 1px 1px rgba(0,0,0,0.35),
-    0 3px 2px 1px rgba(0,0,0,0.25),
-    0 6px 4px 3px rgba(0,0,0,0.15);
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 2px 8px rgba(0,0,0,0.3);
   border-radius: 50%;
   cursor: pointer;
-  border: none;
 }
 
-/* Estados de proximidad mejorados */
+/* Estados de proximidad */
 .frequency-slider.near {
-  outline-color: #22c55e;
+  border-color: rgba(16, 185, 129, 0.5);
   box-shadow:
-    0 3px 2px -1px rgba(255,255,255,0.25) inset,
-    0 0 10px 0 rgba(34,197,94,0.4),
-    0 0 10px 2px rgba(34,197,94,0.25),
-    0 8px 4px -3px rgba(0,0,0,0.15);
+    inset 0 1px 3px rgba(0,0,0,0.3),
+    0 0 12px rgba(16, 185, 129, 0.3);
 }
 
 .frequency-slider.close {
-  outline-color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.5);
   box-shadow:
-    0 3px 2px -1px rgba(255,255,255,0.25) inset,
-    0 0 10px 0 rgba(59,130,246,0.3),
-    0 0 10px 2px rgba(59,130,246,0.15),
-    0 8px 4px -3px rgba(0,0,0,0.15);
+    inset 0 1px 3px rgba(0,0,0,0.3),
+    0 0 12px rgba(59, 130, 246, 0.25);
 }
 
 .frequency-slider.far {
-  outline-color: #64748b;
-  filter: brightness(0.8) saturate(0.8);
+  opacity: 0.7;
 }
 
-/* Marcadores de valores (datalist style) */
+/* Marcadores de valores */
 .frequency-marks {
   display: flex;
   justify-content: space-between;
-  color: #64748b;
+  color: #71717a;
   width: 100%;
-  line-height: 1.75;
-  transform: translateY(0.5rem);
-  font-size: 0.75rem;
+  line-height: 1.5;
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
 }
 
 .frequency-mark {
   display: flex;
   position: relative;
-  padding: 0 0.25rem;
-  border: 1px solid #64748b;
-  border-radius: 0.375rem;
-  text-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
-  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.25);
-  background: rgba(30,41,59,0.8);
-}
-
-.frequency-mark::before {
-  content: '';
-  display: inline-block;
-  position: relative;
-  left: 50%;
-  height: 0.75rem;
-  width: 1px;
-  background: #64748b;
-  transform: translateY(-100%) translateX(-50%);
+  padding: 4px 8px;
+  border: 1px solid #3f3f46;
+  border-radius: 6px;
+  background: rgba(24,24,27,0.8);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -426,14 +809,386 @@
   }
   
   .bezel-list {
-    left: 20px;
-    top: 20px;
-    font-size: 0.7rem;
+    left: 16px;
+    bottom: 12px;
+    font-size: 0.75rem;
   }
   
   .groovy-name {
-    right: 12px;
-    top: 8px;
-    font-size: 0.8rem;
+    right: 16px;
+    top: 12px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* =====================================================
+   PROMPTPAL STYLE - BENTO LAYOUT CON ORB CENTRAL
+   ===================================================== */
+
+/* Layout Principal */
+.pp-layout {
+  min-height: 100vh;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0a0a0f 0%, #0d0d14 100%);
+}
+
+/* Grid Principal con áreas nombradas - 4 columnas x 3 filas */
+.pp-grid {
+  display: grid;
+  grid-template-columns: 160px 160px 160px 160px;
+  grid-template-rows: 180px 80px 140px;
+  grid-template-areas:
+    "resonance central   central   icon"
+    "hints     central   central   stats"
+    "generate  cables-l  cables-r  console";
+  gap: 10px;
+  max-width: 700px;
+  position: relative;
+}
+
+/* Posicionamiento de áreas */
+.pp-area-resonance { 
+  grid-area: resonance; 
+}
+.pp-area-central { 
+  grid-area: central;
+  z-index: 10;
+}
+.pp-area-icon { grid-area: icon; }
+.pp-area-stats { grid-area: stats; }
+.pp-area-hints { grid-area: hints; }
+.pp-area-controls { display: none; }
+.pp-area-frequency { display: none; }
+.pp-area-generate { grid-area: generate; }
+.pp-area-cables-left { grid-area: cables-l; }
+.pp-area-cables-right { grid-area: cables-r; }
+.pp-area-console { grid-area: console; }
+
+/* Card Base PromptPal */
+.promptpal-card {
+  background: linear-gradient(180deg, #14141e 0%, #0e0e16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 0.875rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.promptpal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.promptpal-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Iconos */
+.pp-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.pp-icon-small {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.pp-icon-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.pp-icon-orange {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.pp-icon-cyan {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+/* Botón CTA */
+.pp-cta-button {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+  transition: all 0.2s ease;
+}
+
+.pp-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(249, 115, 22, 0.5);
+}
+
+/* ===== PANEL CENTRAL CON KIRA ===== */
+.pp-central {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pp-central-bg {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #6d28d9 0%, #4c1d95 50%, #2e1065 100%);
+  border-radius: 24px;
+  padding: 1.25rem;
+  padding-bottom: 100px; /* Más espacio para el orbe */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  overflow: visible;
+}
+
+.pp-central-header {
+  text-align: center;
+  z-index: 5;
+}
+
+.pp-central-logo {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.05em;
+}
+
+.pp-central-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Orbe flotante que sobresale hacia abajo */
+.pp-orb {
+  position: absolute;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+/* Texto binario rotatorio */
+.pp-orb-text-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: rotateBinary 40s linear infinite;
+}
+
+.pp-orb-binary {
+  fill: rgba(139, 92, 246, 0.5);
+  font-size: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.15em;
+}
+
+@keyframes rotateBinary {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Glow exterior del orbe */
+.pp-orb-glow {
+  position: absolute;
+  inset: -35%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.3) 0%,
+    rgba(236, 72, 153, 0.2) 25%,
+    rgba(139, 92, 246, 0.15) 45%,
+    transparent 65%
+  );
+  animation: orbGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes orbGlow {
+  0%, 100% { 
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* Anillos decorativos */
+.pp-orb-ring-outer {
+  position: absolute;
+  inset: 5%;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  animation: spinRing 25s linear infinite;
+}
+
+.pp-orb-ring-inner {
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  border: 1px dashed rgba(139, 92, 246, 0.15);
+  animation: spinRing 35s linear infinite reverse;
+}
+
+/* Core del orbe con KIRA */
+.pp-orb-core {
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 30% 30%, #1a0a3a 0%, #0a0412 70%, #050208 100%);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 
+    0 0 60px rgba(139, 92, 246, 0.4),
+    0 0 100px rgba(249, 115, 22, 0.2),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
+
+.pp-orb-core > div,
+.pp-orb-core img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* ===== PANELES CON RECORTE PARA EL ORBE ===== */
+/* Los paneles cables-l y cables-r tienen un recorte circular en la esquina superior */
+
+.pp-area-cables-left {
+  overflow: visible;
+  position: relative;
+}
+
+.pp-area-cables-left .promptpal-card {
+  position: relative;
+  overflow: hidden;
+  /* Recorte circular - simulando el "bocado" del orbe en esquina superior derecha */
+  clip-path: circle(90% at -20% 20%);
+}
+
+.pp-area-cables-right {
+  overflow: visible;
+  position: relative;
+}
+
+.pp-area-cables-right .promptpal-card {
+  position: relative;
+  overflow: hidden;
+  /* Recorte circular - simulando el "bocado" del orbe en esquina superior izquierda */
+  clip-path: circle(90% at 120% 20%);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 720px) {
+  .pp-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 160px 80px 220px 100px 100px;
+    grid-template-areas:
+      "resonance icon"
+      "hints     stats"
+      "central   central"
+      "cables-l  cables-r"
+      "generate  console";
+    gap: 8px;
+    max-width: 340px;
+  }
+  
+  .pp-area-central {
+    min-height: 220px;
+  }
+  
+  .pp-area-cables-left .promptpal-card,
+  .pp-area-cables-right .promptpal-card {
+    clip-path: none;
+    border-radius: 20px;
+  }
+  
+  .pp-orb {
+    width: 160px;
+    height: 160px;
+    bottom: -60px;
+  }
+  
+  .pp-central-bg {
+    padding-bottom: 60px;
+  }
+}
+
+@media (max-width: 380px) {
+  .pp-layout {
+    padding: 0.75rem;
+  }
+  
+  .pp-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "central"
+      "resonance"
+      "stats"
+      "generate"
+      "console";
+    max-width: 280px;
+  }
+  
+  .pp-area-central {
+    min-height: 280px;
+  }
+  
+  .pp-area-icon,
+  .pp-area-hints,
+  .pp-area-cables-left,
+  .pp-area-cables-right {
+    display: none;
+  }
+  
+  .pp-orb {
+    bottom: -50px;
   }
 }

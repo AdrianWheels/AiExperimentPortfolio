@@ -240,7 +240,7 @@ export default function App(){
         if (l.includes('[SYSTEM]') || l.includes('[system]')) return { text: l, type: 'system' }
         if (l.includes('[WARN]') || l.includes('[warn]')) return { text: l, type: 'warning' }
         if (l.includes('[ERROR]') || l.includes('[error]')) return { text: l, type: 'error' }
-        if (l.includes('[A.R.I.A.]') || l.includes('IA:')) return { text: l, type: 'aria' }
+        if (l.includes('[K.I.R.A.]') || l.includes('IA:')) return { text: l, type: 'kira' }
         if (l.includes('[INFO]') || l.includes('[info]')) return { text: l, type: 'info' }
         if (l.includes('✓')) return { text: l, type: 'success' }
         if (l.includes('⚠')) return { text: l, type: 'warning' }
@@ -254,7 +254,7 @@ export default function App(){
       setTerminalLines(processedLines)
       setTimeout(()=> termRef.current && (termRef.current.scrollTop = termRef.current.scrollHeight),100)
     }).catch(()=>{
-      setTerminalLines([{text:`[SYSTEM] A.R.I.A. model ${MODEL} online.`, type:'system'}])
+      setTerminalLines([{text:`[SYSTEM] K.I.R.A. model ${MODEL} online.`, type:'system'}])
     })
   },[])
 
@@ -288,7 +288,7 @@ export default function App(){
             
             {/* Información del modelo */}
             <div className="text-sm text-slate-300 flex gap-2 items-center" role="status" aria-live="polite">
-              A.R.I.A. <span className="text-xs text-slate-400">{MODEL}</span>
+              K.I.R.A. <span className="text-xs text-slate-400">{MODEL}</span>
             </div>
           </div>
           
