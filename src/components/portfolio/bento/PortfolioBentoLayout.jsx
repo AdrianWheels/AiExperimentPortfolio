@@ -10,6 +10,7 @@ import KiraMessageBoard from '../../ui/KiraMessageBoard'
 
 const PortfolioBentoLayout = () => {
   const biteRadius = '100px'
+  const BASE_URL = import.meta.env.BASE_URL || '/'
 
   return (
     <div className="shared-layout-container bg-[#0a0a12] overflow-hidden">
@@ -89,7 +90,7 @@ const PortfolioBentoLayout = () => {
             <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 via-purple-600 to-blue-500 opacity-80 blur-md animate-pulse"></div>
             <div className="absolute inset-1 bg-black rounded-full overflow-hidden flex items-center justify-center">
               <img
-                src="/me.jpg"
+                src={`${BASE_URL}me.jpg`}
                 alt="Profile"
                 className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
               />

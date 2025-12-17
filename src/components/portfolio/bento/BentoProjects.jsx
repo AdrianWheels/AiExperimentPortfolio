@@ -3,22 +3,25 @@ import projectsData from '../../../../data/portfolio/projects.json'
 import ProjectModal from './ProjectModal'
 import ProjectCard from './ProjectCard'
 
+// Base ID for assets
+const BASE_URL = import.meta.env.BASE_URL || '/'
+
 // Images mapping - Hardcoded for demo
 const projectImages = {
   'proj-00': [
-    '/projects/coloreverday/coloreveryday.png',
-    '/projects/coloreverday/coloreveryday-calendar.png'
+    `${BASE_URL}projects/coloreverday/coloreveryday.png`,
+    `${BASE_URL}projects/coloreverday/coloreveryday-calendar.png`
   ],
   'proj-01': [
-    '/projects/atlas/atlascentromando.png',
-    '/projects/atlas/atlasfuego.png',
-    '/projects/atlas/atlasinvernadero.png',
-    '/projects/atlas/atlasmanos.png',
-    '/projects/atlas/Atlasnotas.png'
+    `${BASE_URL}projects/atlas/atlascentromando.png`,
+    `${BASE_URL}projects/atlas/atlasfuego.png`,
+    `${BASE_URL}projects/atlas/atlasinvernadero.png`,
+    `${BASE_URL}projects/atlas/atlasmanos.png`,
+    `${BASE_URL}projects/atlas/Atlasnotas.png`
   ],
   'proj-02': [
-    '/projects/vrhat/vrhatintro.png',
-    '/projects/vrhat/vrhatpiso.png'
+    `${BASE_URL}projects/vrhat/vrhatintro.png`,
+    `${BASE_URL}projects/vrhat/vrhatpiso.png`
   ]
 }
 

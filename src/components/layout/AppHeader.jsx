@@ -6,8 +6,8 @@ function Led({ status }) {
   return (
     <div
       className={`w-3 h-3 rounded-full transition-all duration-300 ${status === 'on'
-          ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
-          : 'bg-zinc-600 shadow-inner'
+        ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
+        : 'bg-zinc-600 shadow-inner'
         }`}
     >
       <div className="w-full h-full rounded-full bg-gradient-to-br from-white/20 to-transparent" />
@@ -16,8 +16,8 @@ function Led({ status }) {
 }
 
 export default function AppHeader() {
-  const { gameState, triggerBypass, resetGame, MODEL, setActiveView, setPortfolioMode } = useGame()
-  const { portfolioUnlocked, activeView, portfolioMode } = gameState
+  const { gameState, triggerBypass, resetGame, MODEL, setActiveView } = useGame()
+  const { portfolioUnlocked } = gameState
 
   return (
     <header className="relative header-metal px-4 lg:px-8 py-4">

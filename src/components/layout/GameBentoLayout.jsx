@@ -3,7 +3,7 @@ import { useGame, MODEL } from '../../context/GameContext'
 import { CableBridgeProvider, CablePanelLeft, CablePanelRight } from '../puzzles/CableBridge'
 import ResonanceSequenceEngine from '../puzzles/new/ResonanceSequenceEngine'
 import FrequencyControls from '../puzzles/FrequencyControls'
-import HintPanel from '../narrative/HintPanel'
+
 import KiraAvatar from '../narrative/KiraAvatar'
 import ProtectedPuzzle from '../ui/ProtectedPuzzle'
 import CipherPuzzle from '../puzzles/new/CipherPuzzle'

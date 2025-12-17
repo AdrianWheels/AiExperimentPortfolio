@@ -24,49 +24,15 @@ const INITIAL_LOCK_STATE = {
   wiring: false,
 }
 
-const HINT_COOLDOWN = 12000
 
-const PUZZLE_LABELS = {
-  sound: 'Secuencia resonante',
-  cipher: 'Buffer de cifrado',
-  frequency: 'Modulo de frecuencias',
-  wiring: 'Panel de cables',
-  security: 'Lock de seguridad',
-  free: 'Sistema liberado',
-}
-
-const HINT_LIBRARY = {
-  sound: [
-    { text: 'El arranque menciona cuatro pulsos. Comienza con α y termina combinando γ seguido de β.' },
-    { text: 'El segundo pulso es el más largo: δ. Escucha cómo K.I.R.A. alarga esa sílaba.' },
-    { text: 'Secuencia completa: α → δ → γ → β. Ejecuta sin errores para fijar la resonancia.' },
-  ],
-  cipher: [
-    { text: 'Traduce cada bloque Morse a una letra o dígito y elimina los separadores.' },
-    { text: 'Los dos primeros bloques equivalen a M y K. El resto son dígitos.' },
-    { text: 'Respuesta final: MK7319. Úsala en el comando de seguridad.' },
-  ],
-  frequency: [
-    { text: 'Los valores objetivo estaban en los logs: F1=0.62, F2=0.74, F3=0.58.' },
-    { text: 'Ajusta con precisión. Cuando los tres sliders coinciden entrarás al umbral de tolerancia.' },
-  ],
-  wiring: [
-    { text: 'Las emociones deben conectarse de forma cruzada: Furia→Miedo, Alegría→Calma, etc.' },
-    { text: 'Busca el equilibrio emocional conectando opuestos: cada emoción con su contraparte.' },
-    { text: 'El patrón es: Furia→Miedo, Alegría→Calma, Tristeza→Envidia, Miedo→Amor, Amor→Tristeza, Calma→Alegría, Envidia→Furia.' },
-  ],
-  security: [
-    { text: 'Tras descifrar el buffer, ejecuta: unlock security --code=7319.' },
-  ],
-}
 
 function createInitialPuzzleProgress() {
   return {
-    sound: { solved: false, hints: 0 },
-    cipher: { solved: false, hints: 0 },
-    frequency: { solved: false, hints: 0 },
-    wiring: { solved: false, hints: 0 },
-    security: { solved: false, hints: 0 },
+    sound: { solved: false },
+    cipher: { solved: false },
+    frequency: { solved: false },
+    wiring: { solved: false },
+    security: { solved: false },
   }
 }
 
@@ -93,16 +59,12 @@ const INITIAL_GAME_STATE = {
   stage: 'Trapped',
   locks: INITIAL_LOCK_STATE,
   usedBypass: false,
-  hintsUsed: 0,
   twistShown: false,
   telemetryOptIn: false,
   introSeen: false,
   portfolioUnlocked: false,
-  portfolioMode: 'normal',
   activeView: 'game',
   puzzleProgress: createInitialPuzzleProgress(),
-  hintLog: [],
-  hintCooldownUntil: 0,
 }
 
 const INITIAL_SLIDERS = { f1: 0.5, f2: 0.5, f3: 0.5 }
@@ -144,7 +106,6 @@ function loadPersistedState() {
       hintCooldownUntil: parsed?.hintCooldownUntil ?? 0,
     }
     merged.portfolioUnlocked = Boolean(parsed?.portfolioUnlocked)
-    merged.portfolioMode = parsed?.portfolioMode === 'hacked' ? 'hacked' : 'normal'
     const requestedView = parsed?.activeView === 'portfolio' ? 'portfolio' : 'game'
     merged.activeView = merged.portfolioUnlocked && requestedView === 'portfolio' ? 'portfolio' : 'game'
     return merged
@@ -182,7 +143,6 @@ export function GameProvider({ children }) {
   const triggeredEvents = useRef(new Set())
   const timedEventsRegistry = useRef(new Map())
   const stageRef = useRef(gameState.stage)
-  const hintMilestones = useRef(new Set())
   const activeChallenge = useMemo(
     () => resolveActiveChallenge(gameState),
     [gameState.locks, gameState.puzzleProgress],
@@ -497,14 +457,7 @@ export function GameProvider({ children }) {
     })
   }, [])
 
-  const setPortfolioMode = useCallback((mode) => {
-    setGameState((prev) => {
-      if (!prev.portfolioUnlocked) return prev
-      const nextMode = mode === 'hacked' ? 'hacked' : 'normal'
-      if (prev.portfolioMode === nextMode) return prev
-      return { ...prev, portfolioMode: nextMode }
-    })
-  }, [])
+
 
   const completeIntro = useCallback(() => {
     setIntroVisible(false)
@@ -558,7 +511,7 @@ export function GameProvider({ children }) {
       }
     })
     timedEventsRegistry.current.clear()
-    hintMilestones.current.clear()
+    timedEventsRegistry.current.clear()
     setUnlockAnimations({ locks: { ...INITIAL_LOCK_STATE }, pulse: 0 })
     setNarrativeScript((prev) => ({
       ...prev,
@@ -567,8 +520,7 @@ export function GameProvider({ children }) {
     setGameState({
       ...INITIAL_GAME_STATE,
       puzzleProgress: createInitialPuzzleProgress(),
-      hintLog: [],
-      hintCooldownUntil: 0,
+      puzzleProgress: createInitialPuzzleProgress(),
     })
     setSliders(INITIAL_SLIDERS)
     setPlateConnections(INITIAL_PLATE)
@@ -578,56 +530,7 @@ export function GameProvider({ children }) {
     triggerEvent('game_reset')
   }, [cancelTimerRecord, clearAllScheduledTimers, triggerEvent])
 
-  const requestHint = useCallback(
-    (target) => {
-      const key = target || activeChallenge
-      const hints = HINT_LIBRARY[key]
-      if (!hints || hints.length === 0) {
-        triggerEvent('hint_unavailable', { key })
-        return null
-      }
-      const now = Date.now()
-      if (gameState.hintCooldownUntil && now < gameState.hintCooldownUntil) {
-        triggerEvent('hint_cooldown', { remaining: gameState.hintCooldownUntil - now })
-        return null
-      }
 
-      let entry = null
-      setGameState((prev) => {
-        const previous = prev.puzzleProgress?.[key]?.hints ?? 0
-        const index = Math.min(previous, hints.length - 1)
-        const hint = hints[index]
-        entry = {
-          id: `${key}-${now}`,
-          puzzle: key,
-          puzzleLabel: PUZZLE_LABELS[key] ?? key,
-          level: index + 1,
-          text: hint.text,
-          timestamp: now,
-        }
-        const progressBase = prev.puzzleProgress ? { ...prev.puzzleProgress } : createInitialPuzzleProgress()
-        progressBase[key] = {
-          ...(progressBase[key] || {}),
-          hints: Math.min(previous + 1, hints.length),
-        }
-        return {
-          ...prev,
-          hintsUsed: prev.hintsUsed + 1,
-          hintCooldownUntil: now + HINT_COOLDOWN,
-          hintLog: [...(prev.hintLog || []), entry],
-          puzzleProgress: progressBase,
-        }
-      })
-
-      if (entry) {
-        triggerEvent('hint_request') // Evento genérico para cambio de cara
-        triggerEvent(`hint_${key}_${Math.min(entry.level, hints.length)}`)
-      }
-
-      return entry
-    },
-    [activeChallenge, gameState.hintCooldownUntil, gameState.puzzleProgress, triggerEvent],
-  )
 
 
   useEffect(() => {
@@ -745,9 +648,6 @@ export function GameProvider({ children }) {
       }
       if (shouldShowTwist) {
         triggerEvent('victory', { stage: newStage })
-        if (gameState.hintsUsed === 0) {
-          triggerEvent('victory_perfect')
-        }
 
         // Transición al portfolio después de mostrar la secuencia de liberación
         scheduleTimeout(() => {
@@ -758,19 +658,9 @@ export function GameProvider({ children }) {
         }, 5000) // Esperar 5 segundos para que se vean los mensajes
       }
     }
-  }, [gameState.hintsUsed, gameState.locks, gameState.stage, gameState.twistShown, triggerEvent, scheduleTimeout])
+  }, [gameState.locks, gameState.stage, gameState.twistShown, triggerEvent, scheduleTimeout])
 
-  useEffect(() => {
-    const used = gameState.hintsUsed
-    if (used >= 3 && !hintMilestones.current.has(3)) {
-      hintMilestones.current.add(3)
-      triggerEvent('hint_threshold_3')
-    }
-    if (used >= 5 && !hintMilestones.current.has(5)) {
-      hintMilestones.current.add(5)
-      triggerEvent('hint_threshold_5')
-    }
-  }, [gameState.hintsUsed, triggerEvent])
+
 
   useEffect(() => {
     stageRef.current = gameState.stage
@@ -932,7 +822,7 @@ export function GameProvider({ children }) {
       setPlateOpen,
       setTelemetryOptIn,
       setActiveView,
-      setPortfolioMode,
+
       goToPortfolio,
       resetGame,
       introVisible,
@@ -944,7 +834,6 @@ export function GameProvider({ children }) {
       triggerBypass,
       completeSoundPuzzle,
       completeCipherPuzzle,
-      requestHint,
       playTone,
       scheduleTimeout,
       unlockAnimations,
@@ -965,7 +854,7 @@ export function GameProvider({ children }) {
       setPlateOpen,
       setTelemetryOptIn,
       setActiveView,
-      setPortfolioMode,
+
       goToPortfolio,
       resetGame,
       introVisible,
@@ -977,7 +866,6 @@ export function GameProvider({ children }) {
       triggerBypass,
       completeSoundPuzzle,
       completeCipherPuzzle,
-      requestHint,
       playTone,
       scheduleTimeout,
       unlockAnimations,
