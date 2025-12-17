@@ -18,9 +18,14 @@
     "timeZone": "UTC+1 (CET)"
   },
   "social": [
-    { "label": "LinkedIn", "url": "https://linkedin.com/in/placeholder" },
-    { "label": "GitHub", "url": "https://github.com/AdrianWheels" },
-    { "label": "Behance", "url": "https://behance.net/placeholder" }
+    {
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/placeholder"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/AdrianWheels"
+    }
   ],
   "highlights": [
     {

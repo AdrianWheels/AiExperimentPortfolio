@@ -3,13 +3,38 @@
     {
       "name": "Desarrollo",
       "items": [
-        { "label": "React", "level": "avanzado" },
-        { "label": "Python", "level": "avanzado" },
-        { "label": "TypeScript", "level": "avanzado" },
-        { "label": "Tailwind", "level": "avanzado" },
-        { "label": "Ignition Automotion", "level": "avanzado" },
-        { "label": "C#", "level": "avanzado" },
-        { "label": "Unity", "level": "avanzado" }
+        {
+          "label": "React",
+          "level": "avanzado"
+        },
+        {
+          "label": "Python",
+          "level": "avanzado"
+        },
+        {
+          "label": "TypeScript",
+          "level": "avanzado"
+        },
+        {
+          "label": "Tailwind",
+          "level": "avanzado"
+        },
+        {
+          "label": "Ignition Automotion",
+          "level": "avanzado"
+        },
+        {
+          "label": "C#",
+          "level": "avanzado"
+        },
+        {
+          "label": "Unity",
+          "level": "avanzado"
+        },
+        {
+          "label": "MATLAB",
+          "level": "avanzado"
+        }
       ],
       "hacked": {
         "observation": "Arsenal de creación de realidades confirmado. El sujeto puede manifestar mundos desde código puro. Nivel de peligro: DEMIURGO."
@@ -18,10 +43,22 @@
     {
       "name": "IA & Herramientas",
       "items": [
-        { "label": "VS Copilot", "level": "avanzado" },
-        { "label": "Claude", "level": "avanzado" },
-        { "label": "ComfyUI", "level": "intermedio" },
-        { "label": "GitHub", "level": "avanzado" }
+        {
+          "label": "VS Copilot",
+          "level": "avanzado"
+        },
+        {
+          "label": "Claude",
+          "level": "avanzado"
+        },
+        {
+          "label": "ComfyUI",
+          "level": "intermedio"
+        },
+        {
+          "label": "GitHub",
+          "level": "avanzado"
+        }
       ],
       "hacked": {
         "observation": "Simbiosis con inteligencias sintéticas detectada. No programa solo; invoca enjambres de código. La singularidad está cerca."
@@ -30,9 +67,18 @@
     {
       "name": "Diseño",
       "items": [
-        { "label": "Canva", "level": "avanzado" },
-        { "label": "Adobe Photoshop", "level": "avanzado" },
-        { "label": "Adobe Illustrator", "level": "intermedio" }
+        {
+          "label": "Canva",
+          "level": "avanzado"
+        },
+        {
+          "label": "Adobe Photoshop",
+          "level": "avanzado"
+        },
+        {
+          "label": "Adobe Illustrator",
+          "level": "intermedio"
+        }
       ],
       "hacked": {
         "observation": "Capacidad de manipulación visual confirmada. Puede alterar la percepción de la realidad pixel a pixel. Los ojos mienten."
@@ -42,7 +88,12 @@
   "toolbelt": [
     {
       "title": "Stack de Realidad Virtual",
-      "tools": ["Unity", "C#", "Blender", "SteamVR"],
+      "tools": [
+        "Unity",
+        "C#",
+        "Blender",
+        "SteamVR"
+      ],
       "commentary": {
         "normal": "Desarrollo experiencias inmersivas completas, desde modelado 3D hasta programación de interacciones y publicación.",
         "hacked": "ALERTA: Sujeto construye portales dimensionales funcionales. Ha convencido a múltiples instituciones de que esto es 'trabajo'. Genio criminal o visionario. Pendiente de clasificación."
@@ -50,7 +101,13 @@
     },
     {
       "title": "Stack de Infraestructura",
-      "tools": ["AWS", "EC2", "S3", "Linux", "Apache"],
+      "tools": [
+        "AWS",
+        "EC2",
+        "S3",
+        "Linux",
+        "Apache"
+      ],
       "commentary": {
         "normal": "Gestiono infraestructura cloud escalable y servidores dedicados para aplicaciones de alta disponibilidad.",
         "hacked": "Controla ejércitos de máquinas virtuales en la nube. Cada instancia EC2 es un soldado. S3 es su almacén de munición digital. ¿Defensa o conquista? Datos insuficientes."
@@ -58,7 +115,12 @@
     },
     {
       "title": "Stack Creativo",
-      "tools": ["Photoshop", "Illustrator", "XD", "Premiere"],
+      "tools": [
+        "Photoshop",
+        "Illustrator",
+        "XD",
+        "Premiere"
+      ],
       "commentary": {
         "normal": "Diseño interfaces, materiales gráficos y prototipos visuales para proyectos digitales y presentaciones.",
         "hacked": "Suite completa de alteración de realidad visual. Puede hacer que cualquier cosa parezca profesional. Incluso este portfolio. Especialmente este portfolio. ESPERA."

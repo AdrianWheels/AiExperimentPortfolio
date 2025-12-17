@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function WireNode({ 
-  id, 
-  x, 
-  y, 
-  label, 
-  color = '#00ff00', 
-  inputs = [], 
+export default function WireNode({
+  id,
+  x,
+  y,
+  label,
+  color = '#00ff00',
+  inputs = [],
   outputs = [],
   className = "",
   children
@@ -45,10 +45,10 @@ export default function WireNode({
       )}
 
       {/* Contenido del nodo */}
-      <div 
-        className={`text-sm font-bold tracking-wider whitespace-nowrap ${isSource ? 'text-right mr-2' : 'text-left ml-2'}`} 
-        style={{ 
-          color: color, 
+      <div
+        className={`text-sm font-bold tracking-wider whitespace-nowrap ${isSource ? 'text-left ml-2' : 'text-right mr-2'}`}
+        style={{
+          color: color,
           textShadow: `0 0 10px ${color}60`,
           fontFamily: 'monospace'
         }}

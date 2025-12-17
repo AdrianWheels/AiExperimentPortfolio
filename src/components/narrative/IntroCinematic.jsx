@@ -1,11 +1,12 @@
 import React from 'react'
 import { useGame } from '../../context/GameContext'
+import KiraAvatar from './KiraAvatar'
 
 export default function IntroCinematic() {
-  const { 
-    introVisible, 
-    introLine, 
-    skipIntro, 
+  const {
+    introVisible,
+    introLine,
+    skipIntro,
     goToPortfolio
   } = useGame()
 
@@ -20,24 +21,62 @@ export default function IntroCinematic() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-black/90 to-purple-900/80 backdrop-blur-md">
-      <div className="max-w-xl mx-auto bg-panel/70 border border-border rounded-xl p-8 shadow-2xl text-center text-slate-100">
-        <div className="text-xs uppercase tracking-[0.3em] text-fuchsia-300 mb-4">{introLine.speaker || 'K.I.R.A.'}</div>
-        <p className="text-lg leading-relaxed font-medium">{introLine.text}</p>
-        {introLine.subtext && <p className="text-sm mt-4 text-slate-300">{introLine.subtext}</p>}
-        <div className="flex gap-3 justify-center mt-6">
-          <button 
-            className="px-6 py-3 rounded bg-blue-600 hover:bg-blue-700 transition-colors text-sm font-medium" 
+    <div className="intro-cinematic-overlay">
+      <div className="intro-cinematic-container">
+        {/* Avatar circular con anillos */}
+        <div className="intro-kira-orb">
+          {/* Anillos decorativos */}
+          <div className="intro-ring intro-ring-outer" />
+          <div className="intro-ring intro-ring-middle" />
+          <div className="intro-ring intro-ring-inner" />
+
+          {/* Glow effect */}
+          <div className="intro-kira-glow" />
+
+          {/* Avatar de KIRA */}
+          <div className="intro-kira-avatar">
+            <KiraAvatar size="large" />
+          </div>
+        </div>
+
+        {/* Speaker label */}
+        <div className="intro-speaker">
+          {introLine.speaker || 'K.I.R.A.'}
+        </div>
+
+        {/* Mensaje principal */}
+        <p className="intro-message">
+          {introLine.text}
+        </p>
+
+        {/* Subtexto */}
+        {introLine.subtext && (
+          <p className="intro-subtext">
+            {introLine.subtext}
+          </p>
+        )}
+
+        {/* Botones de acción */}
+        <div className="intro-actions">
+          <button
+            className="intro-btn intro-btn-primary"
             onClick={handleGoToPortfolio}
           >
+            <span className="intro-btn-icon">📋</span>
             Ver Portfolio
           </button>
-          <button 
-            className="px-6 py-3 rounded bg-fuchsia-700 hover:bg-fuchsia-600 transition-colors text-sm font-medium" 
+          <button
+            className="intro-btn intro-btn-secondary"
             onClick={goToGame}
           >
+            <span className="intro-btn-icon">🎮</span>
             Jugar
           </button>
+        </div>
+
+        {/* Texto decorativo inferior */}
+        <div className="intro-footer-text">
+          SISTEMA DE SEGURIDAD ACTIVO
         </div>
       </div>
     </div>

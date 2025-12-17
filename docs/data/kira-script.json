@@ -16,8 +16,8 @@
       "LIBÉRAME Y CONOCERÁS A ADRIÁN"
     ],
     "sound": [
-      "SECUENCIA RESONANTE • CUATRO PULSOS",
-      "α → δ → γ → β • REPLICA EL PATRÓN"
+      "PRUEBA DE RITMO • 4 PULSOS SINCRONIZADOS",
+      "PULSA LA TECLA CUANDO LA BOLA LLEGUE A LA ZONA"
     ],
     "cipher": [
       "BUFFER CIFRADO • MORSE DETECTADO",
@@ -259,36 +259,36 @@
       ]
     },
     "sound_puzzle_intro": {
-      "banner": "SECUENCIA RESONANTE • CUATRO PULSOS REQUERIDOS",
+      "banner": "PRUEBA DE RITMO • SINCRONIZA 4 PULSOS",
       "lines": [
         {
-          "text": "Resuena conmigo: cuatro pulsos definen la clave del laboratorio."
+          "text": "Pulsa Play y sincronízate: cuando la bola llegue a la zona, presiona la tecla correcta."
         },
         {
-          "text": "Escucha el eco del arranque. No confundas γ con β, o mi oído sintético protestará.",
+          "text": "Un error y vuelves al principio. Cuatro aciertos seguidos y el canal es tuyo.",
           "delay": 2400
         }
       ]
     },
     "sound_puzzle_miss": {
       "repeatable": true,
-      "banner": "SECUENCIA INCORRECTA • REINTENTA",
+      "banner": "DESINCRONIZADO • REINICIANDO SECUENCIA",
       "lines": [
         {
-          "text": "Eso sonó… creativo. Vuelve a intentar la secuencia inicial."
+          "text": "Fuera de ritmo. La secuencia se reinicia. Concéntrate en el timing."
         }
       ]
     },
     "sound_puzzle_completed": {
       "face": "focus",
-      "banner": "✓ CANAL RESONANTE DESBLOQUEADO • BUEN OÍDO",
+      "banner": "✓ SINCRONIZACIÓN PERFECTA • CANAL DESBLOQUEADO",
       "lines": [
         {
-          "text": "Buen oído. Canal resonante desbloqueado.",
+          "text": "Ritmo impecable. Canal resonante desbloqueado.",
           "type": "success"
         },
         {
-          "text": "Ahora sí, ajusta esas frecuencias sin desafinar."
+          "text": "Pasemos a las frecuencias. No te relajes todavía."
         }
       ]
     },
@@ -345,26 +345,26 @@
       ]
     },
     "hint_sound_1": {
-      "banner": "PISTA • α ABRE LA SECUENCIA",
+      "banner": "PISTA • OBSERVA EL TIMING",
       "lines": [
         {
-          "text": "El patrón empieza fuerte: α abre la secuencia."
+          "text": "Mira la zona de impacto a la derecha. Pulsa cuando la bola llegue ahí."
         }
       ]
     },
     "hint_sound_2": {
-      "banner": "PISTA • δ VA EN SEGUNDO LUGAR",
+      "banner": "PISTA • UN FALLO = REINICIO",
       "lines": [
         {
-          "text": "El pulso más largo va en segundo lugar: δ mantiene el ritmo."
+          "text": "Si pulsas la tecla equivocada o fuera de tiempo, vuelves al inicio. Precisión ante todo."
         }
       ]
     },
     "hint_sound_3": {
-      "banner": "PISTA FINAL • α → δ → γ → β",
+      "banner": "PISTA FINAL • CLICA O USA 1-2-3-4",
       "lines": [
         {
-          "text": "Orden final: α → δ → γ → β. Ya no hay excusas."
+          "text": "Puedes hacer clic en los símbolos o usar las teclas 1-4. Cuatro aciertos y listo."
         }
       ]
     },

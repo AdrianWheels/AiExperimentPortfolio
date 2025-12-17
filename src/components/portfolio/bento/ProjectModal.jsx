@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const ProjectModal = ({ project, onClose }) => {
+const ProjectModal = ({ project, onClose, projectImages = {} }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -18,36 +18,18 @@ const ProjectModal = ({ project, onClose }) => {
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(onClose, 500); // Wait for animation
+    // Wait for CSS animation to complete before removing
+    setTimeout(onClose, 500);
   };
 
   if (!project) return null;
-
-  // Images mapping - Hardcoded for demo as requested
-  const projectImages = {
-    'proj-00': [
-      '/projects/coloreverday/coloreveryday.png',
-      '/projects/coloreverday/coloreveryday-calendar.png'
-    ],
-    'proj-01': [
-      '/projects/atlas/atlascentromando.png',
-      '/projects/atlas/atlasfuego.png',
-      '/projects/atlas/atlasinvernadero.png',
-      '/projects/atlas/atlasmanos.png',
-      '/projects/atlas/Atlasnotas.png'
-    ],
-    'proj-02': [
-      '/projects/vrhat/vrhatintro.png',
-      '/projects/vrhat/vrhatpiso.png'
-    ]
-  };
 
   const images = projectImages[project.id] || [];
 
   const ImagePlaceholder = ({ label }) => (
     <div className="w-full h-full flex flex-col items-center justify-center bg-[#0f0f16] relative overflow-hidden">
-      <div className="absolute inset-0 opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}>
+      <div className="absolute inset-0 opacity-20"
+        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}>
       </div>
       <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
         <svg className="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,11 +41,11 @@ const ProjectModal = ({ project, onClose }) => {
   );
 
   return createPortal(
-    <div 
+    <div
       className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${isVisible ? 'bg-black/80 backdrop-blur-sm' : 'bg-black/0 pointer-events-none'}`}
       onClick={handleClose}
     >
-      <div 
+      <div
         className={`
           bg-[#12121a] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row 
           w-[90vw] max-w-5xl h-[70vh] shadow-2xl 
@@ -97,7 +79,7 @@ const ProjectModal = ({ project, onClose }) => {
 
           <div className="space-y-6 text-gray-300 leading-relaxed text-sm md:text-base">
             <p>{project.description.normal}</p>
-            
+
             {project.metrics && (
               <div className="bg-white/5 rounded-xl p-5 border border-white/5">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Key Metrics</h4>
@@ -114,9 +96,9 @@ const ProjectModal = ({ project, onClose }) => {
           </div>
 
           <div className="mt-auto pt-8 flex gap-4">
-             <button className="px-6 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition-colors text-sm">
-               View Case Study
-             </button>
+            <button className="px-6 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition-colors text-sm">
+              View Case Study
+            </button>
           </div>
         </div>
 
@@ -125,9 +107,9 @@ const ProjectModal = ({ project, onClose }) => {
           {/* Video Section */}
           {project.links?.video && (
             <div className="w-full aspect-video border-b border-white/5 shrink-0">
-              <iframe 
-                width="100%" 
-                height="100%" 
+              <iframe
+                width="100%"
+                height="100%"
                 src={(() => {
                   const url = project.links.video;
                   if (url.includes('youtu.be/')) return `https://www.youtube.com/embed/${url.split('youtu.be/')[1]}`;
@@ -135,8 +117,8 @@ const ProjectModal = ({ project, onClose }) => {
                   return url;
                 })()}
                 title="Project Video"
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full"
               ></iframe>
@@ -147,9 +129,9 @@ const ProjectModal = ({ project, onClose }) => {
           {images.length > 0 ? (
             images.map((img, idx) => (
               <div key={idx} className="w-full aspect-video relative overflow-hidden group border-b border-white/5 shrink-0">
-                <img 
-                  src={img} 
-                  alt={`${project.name} preview ${idx + 1}`} 
+                <img
+                  src={img}
+                  alt={`${project.name} preview ${idx + 1}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
@@ -158,11 +140,11 @@ const ProjectModal = ({ project, onClose }) => {
               </div>
             ))
           ) : (
-             !project.links?.video && (
+            !project.links?.video && (
               <div className="flex-1">
                 <ImagePlaceholder label="Preview Unavailable" />
               </div>
-             )
+            )
           )}
         </div>
       </div>

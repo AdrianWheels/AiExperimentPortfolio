@@ -106,14 +106,14 @@ const INITIAL_GAME_STATE = {
 }
 
 const INITIAL_SLIDERS = { f1: 0.5, f2: 0.5, f3: 0.5 }
-const INITIAL_PLATE = { 
-  FURY: null, 
-  JOY: null, 
-  SADNESS: null, 
-  FEAR: null, 
-  LOVE: null, 
-  CALM: null, 
-  ENVY: null 
+const INITIAL_PLATE = {
+  FURY: null,
+  JOY: null,
+  SADNESS: null,
+  FEAR: null,
+  LOVE: null,
+  CALM: null,
+  ENVY: null
 }
 
 const GameContext = createContext(null)
@@ -173,6 +173,8 @@ export function GameProvider({ children }) {
   const [introVisible, setIntroVisible] = useState(() => !(persisted?.introSeen))
   const [unlockAnimations, setUnlockAnimations] = useState({ locks: { ...INITIAL_LOCK_STATE }, pulse: 0 })
   const [lastTriggeredEvent, setLastTriggeredEvent] = useState(null)
+  // Estado de habla de Kira: { speaking: boolean, emotion: 'info'|'success'|'warning'|'humor' }
+  const [kiraSpeaking, setKiraSpeaking] = useState({ speaking: false, emotion: 'info' })
 
   const { playTone, playUnlock, playError, playSlider } = useSound()
 
@@ -206,7 +208,7 @@ export function GameProvider({ children }) {
 
   const scheduleTimeout = useCallback(
     (handler, delay = 0) => {
-      if (typeof handler !== 'function') return () => {}
+      if (typeof handler !== 'function') return () => { }
       const record = registerTimer(
         setTimeout(() => {
           handler()
@@ -232,7 +234,7 @@ export function GameProvider({ children }) {
     (key, context = {}) => {
       // Actualizar el último evento disparado para las reacciones de KIRA
       setLastTriggeredEvent(key)
-      
+
       const events = narrativeScript.events || {}
       const reactions = narrativeScript.reactions || {}
       const eventConfig = events[key]
@@ -316,42 +318,41 @@ export function GameProvider({ children }) {
       console.log(`🔌 [WIRING] Conectando: ${source} → ${target}`)
       setPlateConnections((prev) => {
         const next = { ...prev, [source]: target }
-        
-        console.log('🔌 [WIRING] Estado actual de conexiones:', next)
-        
-        // Verificar que todas las emociones estén conectadas de forma cruzada
-        const checks = {
-          'FURY→FEAR': next.FURY === 'FEAR',
-          'JOY→CALM': next.JOY === 'CALM',
-          'SADNESS→ENVY': next.SADNESS === 'ENVY',
-          'FEAR→LOVE': next.FEAR === 'LOVE',
-          'LOVE→SADNESS': next.LOVE === 'SADNESS',
-          'CALM→JOY': next.CALM === 'JOY',
-          'ENVY→FURY': next.ENVY === 'FURY'
-        }
-        
-        console.log('🔌 [WIRING] Verificación de conexiones:', checks)
-        
-        const emotionsCorrect = Object.values(checks).every(v => v === true)
-        
-        console.log(`🔌 [WIRING] ¿Todas correctas?: ${emotionsCorrect}`)
-        
+
+        // Verificar que todas las emociones estén conectadas con su igual (Color -> Color)
+        const emotions = ['FURY', 'JOY', 'SADNESS', 'FEAR', 'LOVE', 'CALM', 'ENVY']
+        const emotionsCorrect = emotions.every(emotion => next[emotion] === emotion)
+
         if (emotionsCorrect) {
           let updated = false
           setGameState((state) => {
             if (state.locks.wiring) return state
             updated = true
+
+            // DESBLOQUEO TOTAL: Al resolver los cables, se supera todo y se abre el portfolio
             return {
               ...state,
-              locks: { ...state.locks, wiring: true },
+              portfolioUnlocked: true, // Desbloquear portfolio inmediatamente
+              locks: {
+                ...state.locks,
+                wiring: true,
+                security: true,
+                frequency: true
+              },
               puzzleProgress: {
                 ...state.puzzleProgress,
                 wiring: { ...(state.puzzleProgress?.wiring || {}), solved: true },
+                sound: { ...(state.puzzleProgress?.sound || {}), solved: true },
+                cipher: { ...(state.puzzleProgress?.cipher || {}), solved: true },
+                frequency: { ...(state.puzzleProgress?.frequency || {}), solved: true },
+                security: { ...(state.puzzleProgress?.security || {}), solved: true },
               },
             }
           })
+
           if (updated) {
             triggerEvent('lock_wiring_unlocked')
+            triggerEvent('game_complete') // Trigger victory event
             playUnlock()
             pulseLockAnimation('wiring')
           }
@@ -442,19 +443,19 @@ export function GameProvider({ children }) {
       puzzleProgress: gameState.puzzleProgress,
       locks: gameState.locks
     })
-    
+
     // Simular completar sound puzzle
     setTimeout(() => {
       console.log('🐛 [DEBUG] Simulando sound puzzle completado...')
       completeSoundPuzzle()
     }, 1000)
-    
+
     // Simular frequency unlock después de sound
     setTimeout(() => {
       console.log('🐛 [DEBUG] Simulando frequency unlock...')
       setSliders({ f1: TARGETS.f1, f2: TARGETS.f2, f3: TARGETS.f3 })
     }, 3000)
-    
+
     // Simular cipher después de frequency
     setTimeout(() => {
       console.log('🐛 [DEBUG] Simulando cipher puzzle completado...')
@@ -664,12 +665,12 @@ export function GameProvider({ children }) {
       targets: TARGETS,
       tolerances: TOLERANCE
     })
-    
+
     if (!gameState.puzzleProgress?.sound?.solved) {
       console.log('📡 [FREQUENCY] ❌ Sound puzzle no está resuelto, no se puede validar')
       return
     }
-    
+
     const ok =
       Math.abs(sliders.f1 - TARGETS.f1) <= TOLERANCE &&
       Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE &&
@@ -677,7 +678,7 @@ export function GameProvider({ children }) {
 
     console.log('📡 [FREQUENCY] Resultado de validación:', {
       f1Valid: Math.abs(sliders.f1 - TARGETS.f1) <= TOLERANCE,
-      f2Valid: Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE, 
+      f2Valid: Math.abs(sliders.f2 - TARGETS.f2) <= TOLERANCE,
       f3Valid: Math.abs(sliders.f3 - TARGETS.f3) <= TOLERANCE,
       allValid: ok,
       alreadyUnlocked: gameState.locks.frequency
@@ -732,7 +733,7 @@ export function GameProvider({ children }) {
           activeView: nextView,
         }
       })
-      
+
       // Disparar evento cuando se completa el juego
       if (newStage === 'Free') {
         triggerEvent('game_complete')
@@ -747,7 +748,7 @@ export function GameProvider({ children }) {
         if (gameState.hintsUsed === 0) {
           triggerEvent('victory_perfect')
         }
-        
+
         // Transición al portfolio después de mostrar la secuencia de liberación
         scheduleTimeout(() => {
           setGameState((prev) => ({
@@ -906,7 +907,7 @@ export function GameProvider({ children }) {
   useEffect(() => {
     if (!introVisible) return
     if (!narrativeScript.intro?.length) return
-    
+
     // Don't auto-advance if we only have one intro message (simplified modal)
     if (narrativeScript.intro.length === 1) return
 
@@ -949,6 +950,8 @@ export function GameProvider({ children }) {
       unlockAnimations,
       activeChallenge,
       lastTriggeredEvent,
+      kiraSpeaking,
+      setKiraSpeaking,
       MODEL,
     }),
     [
@@ -980,6 +983,8 @@ export function GameProvider({ children }) {
       unlockAnimations,
       activeChallenge,
       lastTriggeredEvent,
+      kiraSpeaking,
+      setKiraSpeaking,
     ],
   )
 

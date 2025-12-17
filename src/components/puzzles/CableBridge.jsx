@@ -8,7 +8,7 @@ import { useGame } from '../../context/GameContext'
 
 const CABLE_COLORS = {
   FURY: '#dc2626',
-  JOY: '#fbbf24', 
+  JOY: '#fbbf24',
   SADNESS: '#7c3aed',
   FEAR: '#065f46',
   LOVE: '#ec4899',
@@ -50,10 +50,10 @@ class CablePhysics {
     this.gravity = 0.5
     this.friction = 0.97
     this.stiffness = 0.85
-    
+
     this.points = []
     this.oldPoints = []
-    
+
     for (let i = 0; i <= segments; i++) {
       const t = i / segments
       const x = startX + (endX - startX) * t
@@ -61,49 +61,49 @@ class CablePhysics {
       this.points.push({ x, y })
       this.oldPoints.push({ x, y })
     }
-    
+
     const dist = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2))
     this.segmentLength = dist / segments
   }
-  
+
   setEndpoints(startX, startY, endX, endY) {
     this.points[0].x = startX
     this.points[0].y = startY
     this.points[this.points.length - 1].x = endX
     this.points[this.points.length - 1].y = endY
   }
-  
+
   update() {
     // Verlet integration
     for (let i = 1; i < this.points.length - 1; i++) {
       const p = this.points[i]
       const old = this.oldPoints[i]
-      
+
       const vx = (p.x - old.x) * this.friction
       const vy = (p.y - old.y) * this.friction
-      
+
       old.x = p.x
       old.y = p.y
-      
+
       p.x += vx
       p.y += vy + this.gravity
     }
-    
+
     // Distance constraints
     for (let iter = 0; iter < 4; iter++) {
       for (let i = 0; i < this.points.length - 1; i++) {
         const p1 = this.points[i]
         const p2 = this.points[i + 1]
-        
+
         const dx = p2.x - p1.x
         const dy = p2.y - p1.y
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist === 0) continue
-        
+
         const diff = (this.segmentLength - dist) / dist
         const offsetX = dx * diff * 0.5 * this.stiffness
         const offsetY = dy * diff * 0.5 * this.stiffness
-        
+
         if (i > 0) {
           p1.x -= offsetX
           p1.y -= offsetY
@@ -115,12 +115,12 @@ class CablePhysics {
       }
     }
   }
-  
+
   getPath() {
     if (this.points.length < 2) return ''
-    
+
     let d = `M ${this.points[0].x} ${this.points[0].y}`
-    
+
     for (let i = 1; i < this.points.length - 1; i++) {
       const p = this.points[i]
       const next = this.points[i + 1]
@@ -128,10 +128,10 @@ class CablePhysics {
       const midY = (p.y + next.y) / 2
       d += ` Q ${p.x} ${p.y} ${midX} ${midY}`
     }
-    
+
     const last = this.points[this.points.length - 1]
     d += ` L ${last.x} ${last.y}`
-    
+
     return d
   }
 }
@@ -143,13 +143,13 @@ export function CableBridgeProvider({ children }) {
   const sourceRefs = useRef({})
   const targetRefs = useRef({})
   const animationRef = useRef(null)
-  
+
   const [dragging, setDragging] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [, forceRender] = useState(0)
-  
+
   const { plateConnections, connectPlate, gameState } = useGame()
-  
+
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved
   )
@@ -170,11 +170,11 @@ export function CableBridgeProvider({ children }) {
     if (!element || !containerRef.current) return null
     const rect = element.getBoundingClientRect()
     const containerRect = containerRef.current.getBoundingClientRect()
-    
+
     let x = rect.left - containerRect.left + rect.width / 2
     if (side === 'right') x = rect.right - containerRect.left
     if (side === 'left') x = rect.left - containerRect.left
-    
+
     return { x, y: rect.top - containerRect.top + rect.height / 2 }
   }, [])
 
@@ -182,10 +182,10 @@ export function CableBridgeProvider({ children }) {
   const startDrag = useCallback((sourceId, event) => {
     if (!canInteract) return
     event.preventDefault()
-    
+
     const el = sourceRefs.current[sourceId]
-    const pos = getPos(el, 'right')
-    
+    const pos = getPos(el, 'center') // Changed to 'center'
+
     if (pos && containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect()
       setDragging({
@@ -214,15 +214,15 @@ export function CableBridgeProvider({ children }) {
   // Mouse up - conectar
   const handleMouseUp = useCallback(() => {
     if (!dragging) return
-    
+
     let closestTarget = null
     let minDist = 40
-    
+
     Object.entries(targetRefs.current).forEach(([targetId, el]) => {
-      const pos = getPos(el, 'left')
+      const pos = getPos(el, 'center') // Changed to 'center'
       if (pos) {
         const dist = Math.sqrt(
-          Math.pow(mousePos.x - pos.x, 2) + 
+          Math.pow(mousePos.x - pos.x, 2) +
           Math.pow(mousePos.y - pos.y, 2)
         )
         if (dist < minDist) {
@@ -231,11 +231,11 @@ export function CableBridgeProvider({ children }) {
         }
       }
     })
-    
+
     if (closestTarget) {
       connectPlate(dragging.sourceId, closestTarget)
     }
-    
+
     setDragging(null)
   }, [dragging, mousePos, getPos, connectPlate])
 
@@ -243,14 +243,14 @@ export function CableBridgeProvider({ children }) {
   useEffect(() => {
     Object.entries(plateConnections).forEach(([sourceId, targetId]) => {
       if (!targetId) return
-      
+
       const sourceEl = sourceRefs.current[sourceId]
       const targetEl = targetRefs.current[targetId]
-      
+
       if (sourceEl && targetEl) {
-        const startPos = getPos(sourceEl, 'right')
-        const endPos = getPos(targetEl, 'left')
-        
+        const startPos = getPos(sourceEl, 'center') // Changed to 'center'
+        const endPos = getPos(targetEl, 'center') // Changed to 'center'
+
         if (startPos && endPos) {
           const key = `${sourceId}-${targetId}`
           if (!cablesRef.current[key]) {
@@ -264,7 +264,7 @@ export function CableBridgeProvider({ children }) {
         }
       }
     })
-    
+
     // Eliminar cables desconectados
     Object.keys(cablesRef.current).forEach(key => {
       const [sourceId, targetId] = key.split('-')
@@ -281,22 +281,22 @@ export function CableBridgeProvider({ children }) {
         const [sourceId, targetId] = key.split('-')
         const sourceEl = sourceRefs.current[sourceId]
         const targetEl = targetRefs.current[targetId]
-        
+
         if (sourceEl && targetEl) {
-          const startPos = getPos(sourceEl, 'right')
-          const endPos = getPos(targetEl, 'left')
-          
+          const startPos = getPos(sourceEl, 'center') // Changed to 'center'
+          const endPos = getPos(targetEl, 'center') // Changed to 'center'
+
           if (startPos && endPos) {
             cable.setEndpoints(startPos.x, startPos.y, endPos.x, endPos.y)
             cable.update()
           }
         }
       })
-      
+
       forceRender(n => n + 1)
       animationRef.current = requestAnimationFrame(animate)
     }
-    
+
     animationRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(animationRef.current)
   }, [getPos])
@@ -322,7 +322,7 @@ export function CableBridgeProvider({ children }) {
 
   return (
     <CableBridgeContext.Provider value={contextValue}>
-      <div 
+      <div
         ref={containerRef}
         className="cable-bridge-container"
         onMouseMove={handleMouseMove}
@@ -331,7 +331,7 @@ export function CableBridgeProvider({ children }) {
         style={{ position: 'relative' }}
       >
         {children}
-        
+
         {/* SVG overlay para cables */}
         <svg
           className="cable-bridge-svg"
@@ -346,14 +346,14 @@ export function CableBridgeProvider({ children }) {
         >
           <defs>
             <filter id="cable-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feGaussianBlur stdDeviation="4" result="blur" />
               <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
-          
+
           {/* Cables conectados */}
           {Object.entries(cablesRef.current).map(([key, cable]) => (
             <g key={key}>
@@ -382,7 +382,7 @@ export function CableBridgeProvider({ children }) {
               />
             </g>
           ))}
-          
+
           {/* Cable siendo arrastrado */}
           {dragging && (
             <g>
@@ -422,7 +422,7 @@ export function CableBridgeProvider({ children }) {
 export function CablePanelLeft() {
   const { plateConnections, gameState } = useGame()
   const bridgeCtx = useCableBridge()
-  
+
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved
   )
@@ -435,22 +435,21 @@ export function CablePanelLeft() {
         </div>
         <h3 className="text-sm font-semibold text-white">Origen</h3>
       </div>
-      
+
       {!canInteract && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10 rounded-xl">
           <p className="text-xs text-muted text-center px-2">Descifra + Sonido</p>
         </div>
       )}
-      
+
       <div className="flex-1 flex flex-col gap-1">
         {SOURCES.map((source) => {
           const isConnected = plateConnections[source.id]
           const isDragging = bridgeCtx?.dragging?.sourceId === source.id
-          
+
           return (
             <div
               key={source.id}
-              ref={(el) => bridgeCtx?.registerSource(source.id, el)}
               onMouseDown={(e) => bridgeCtx?.startDrag(source.id, e)}
               className={`
                 flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all text-xs select-none
@@ -459,12 +458,13 @@ export function CablePanelLeft() {
                 ${isConnected ? 'opacity-60' : ''}
               `}
             >
-              <div 
+              <div
+                ref={(el) => bridgeCtx?.registerSource(source.id, el)}
                 className={`
                   w-4 h-4 rounded-full border-2 transition-all flex items-center justify-center
                   ${isDragging ? 'scale-125 shadow-lg' : ''}
                 `}
-                style={{ 
+                style={{
                   backgroundColor: isConnected ? source.color : 'transparent',
                   borderColor: source.color,
                   boxShadow: isDragging ? `0 0 12px ${source.color}` : 'none'
@@ -473,12 +473,11 @@ export function CablePanelLeft() {
                 <span className="text-[8px]">●</span>
               </div>
               <span className="font-mono text-muted truncate flex-1">{source.label}</span>
-              {isConnected && <span className="text-[10px] text-success">→</span>}
             </div>
           )
         })}
       </div>
-      
+
       <div className="text-[10px] text-subtle mt-2 text-center">
         Arrastra desde ● al destino
       </div>
@@ -490,7 +489,7 @@ export function CablePanelLeft() {
 export function CablePanelRight() {
   const { plateConnections, gameState } = useGame()
   const bridgeCtx = useCableBridge()
-  
+
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved
   )
@@ -507,22 +506,21 @@ export function CablePanelRight() {
         </div>
         <h3 className="text-sm font-semibold text-white">Destino</h3>
       </div>
-      
+
       {!canInteract && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10 rounded-xl">
           <p className="text-xs text-muted text-center px-2">Descifra + Sonido</p>
         </div>
       )}
-      
+
       <div className="flex-1 flex flex-col gap-1">
         {TARGETS.map((target) => {
           const connectedSource = getConnectedSource(target.id)
           const isDropTarget = bridgeCtx?.dragging && !connectedSource
-          
+
           return (
             <div
               key={target.id}
-              ref={(el) => bridgeCtx?.registerTarget(target.id, el)}
               className={`
                 flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg transition-all text-xs
                 ${isDropTarget ? 'bg-purple-glow/20 ring-1 ring-purple-glow/40 scale-105' : 'hover:bg-white/5'}
@@ -531,7 +529,7 @@ export function CablePanelRight() {
               <div className="flex items-center gap-2 flex-1 overflow-hidden">
                 <span className="font-mono text-muted truncate">{target.label}</span>
                 {connectedSource && (
-                  <span 
+                  <span
                     className="text-[10px] font-mono"
                     style={{ color: CABLE_COLORS[connectedSource] }}
                   >
@@ -539,13 +537,14 @@ export function CablePanelRight() {
                   </span>
                 )}
               </div>
-              
-              <div 
+
+              <div
+                ref={(el) => bridgeCtx?.registerTarget(target.id, el)}
                 className={`
                   w-4 h-4 rounded-full border-2 border-dashed transition-all flex items-center justify-center shrink-0
                   ${isDropTarget ? 'animate-pulse border-solid' : ''}
                 `}
-                style={{ 
+                style={{
                   backgroundColor: connectedSource ? CABLE_COLORS[connectedSource] : 'transparent',
                   borderColor: target.color
                 }}
@@ -556,7 +555,7 @@ export function CablePanelRight() {
           )
         })}
       </div>
-      
+
       <div className="text-[10px] text-subtle mt-2 text-center">
         Suelta sobre ○ para conectar
       </div>

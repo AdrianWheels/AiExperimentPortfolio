@@ -6,7 +6,7 @@ import WireNode from './WireNode'
 export default function CablePanel() {
   const { plateConnections, connectPlate, plateOpen, setPlateOpen, gameState, unlockAnimations } = useGame()
   const containerRef = useRef(null)
-  
+
   // Definición base de nodos
   const baseNodes = [
     // Nodos de origen
@@ -32,26 +32,26 @@ export default function CablePanel() {
   // Actualizar posiciones basado en dimensiones
   useLayoutEffect(() => {
     if (!containerRef.current) return
-    
+
     const updateNodes = () => {
       const { clientWidth, clientHeight } = containerRef.current
-      
+
       const paddingY = 80
       const availableHeight = clientHeight - paddingY * 2
       const stepY = availableHeight / 6 // 7 items, 6 spaces
-      
+
       const newNodes = baseNodes.map((node, index) => {
         const isSource = node.id.startsWith('src-')
         const idx = index % 7
-        
+
         return {
           ...node,
           // Posicionar en los extremos absolutos
-          x: isSource ? 80 : clientWidth - 80, 
+          x: isSource ? 80 : clientWidth - 80,
           y: paddingY + idx * stepY,
-          // Invertir dirección flex para que los puertos queden hacia afuera
-          // Source: Port Left (Outer) - Text Right
-          // Dest: Text Left - Port Right (Outer)
+          // Revertir a flex-row-reverse para que los cables salgan de los extremos exteriores (bolas)
+          // Source: [Ball] [Label] (Outer)
+          // Dest: [Label] [Ball] (Outer)
           className: 'flex-row-reverse'
         }
       })
@@ -61,10 +61,10 @@ export default function CablePanel() {
     const observer = new ResizeObserver(updateNodes)
     observer.observe(containerRef.current)
     updateNodes()
-    
+
     return () => observer.disconnect()
   }, [])
-  
+
   const [connections, setConnections] = useState([])
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved,
@@ -96,23 +96,23 @@ export default function CablePanel() {
           port: 'in1'
         }
       }))
-    
+
     setConnections(newConnections)
   }, [plateConnections])
 
   const handleConnect = (connection) => {
     if (!canInteract) return
-    
+
     // Extraer el tipo de fuente y destino de los IDs de nodos
     const sourceType = connection.from.node.replace('src-', '')
     const targetType = connection.to.node.replace('dest-', '')
-    
+
     connectPlate(sourceType, targetType)
   }
 
   const handleDisconnect = (connection) => {
     if (!canInteract) return
-    
+
     const sourceType = connection.from.node.replace('src-', '')
     connectPlate(sourceType, null)
   }
@@ -120,31 +120,22 @@ export default function CablePanel() {
   // Calcular conexiones correctas para feedback visual
   const correctConnections = Object.entries(plateConnections).filter(([source, target]) => {
     if (!target) return false
-    const map = {
-      FURY: 'FEAR',
-      JOY: 'CALM',
-      SADNESS: 'ENVY',
-      FEAR: 'LOVE',
-      LOVE: 'SADNESS',
-      CALM: 'JOY',
-      ENVY: 'FURY'
-    }
-    return map[source] === target
+    // Identity mapping: FURY -> FURY, JOY -> JOY, etc.
+    return source === target
   }).length
 
   return (
     <aside
       ref={containerRef}
-      className={`relative overflow-hidden flex-1 min-h-0 ${
-        isPulsing ? 'glow-success unlock-pulse' : ''
-      }`}
+      className={`relative overflow-hidden flex-1 min-h-0 ${isPulsing ? 'glow-success unlock-pulse' : ''
+        }`}
     >
       {!canInteract && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-center px-4 text-xs text-muted font-mono z-20 rounded-lg">
           <span>Descifra Buffer + Sonido</span>
         </div>
       )}
-      
+
       <div className="flex items-center gap-2 mb-3 absolute top-2 left-2 z-10 pointer-events-none">
         <div className="w-6 h-6 rounded-lg bg-accent/20 flex items-center justify-center">
           <span className="text-xs">🔌</span>
@@ -156,7 +147,7 @@ export default function CablePanel() {
           </span>
         )}
       </div>
-      
+
       <div className="relative w-full h-full">
         {/* Paneles de fondo para dar estructura visual */}
         <div className="absolute left-4 top-12 bottom-4 w-48 bg-black/40 rounded-xl border border-white/5 backdrop-blur-sm" />
@@ -176,7 +167,7 @@ export default function CablePanel() {
             className={`${!canInteract ? 'opacity-50' : ''} ${node.className || ''}`}
           />
         ))}
-        
+
         {/* Sistema de cables con física */}
         <WireSystem
           nodes={nodes}
@@ -190,7 +181,7 @@ export default function CablePanel() {
             segments: 25
           }}
         />
-        
+
         {/* Instrucciones */}
         <div className="absolute bottom-1 left-1 text-[10px] text-subtle font-mono">
           {canInteract ? 'Drag ● → ○' : 'Bloqueado'}
@@ -210,44 +201,44 @@ export default function CablePanel() {
               <div>
                 <div className="mb-2 text-sm font-medium">Neural Sources</div>
                 <div className="flex flex-col gap-1">
-                  <button 
-                    className="px-2 py-1 bg-red-700 hover:bg-red-600 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-red-700 hover:bg-red-600 rounded transition-colors text-xs"
                     onClick={() => connectPlate('FURY', 'FEAR')}
                   >
                     🔥 Fu2Y_R4g3 → F34r
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-yellow-600 hover:bg-yellow-500 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-yellow-600 hover:bg-yellow-500 rounded transition-colors text-xs"
                     onClick={() => connectPlate('JOY', 'CALM')}
                   >
                     😊 J0y_H4pp1 → C4lm
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-purple-700 hover:bg-purple-600 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-purple-700 hover:bg-purple-600 rounded transition-colors text-xs"
                     onClick={() => connectPlate('SADNESS', 'ENVY')}
                   >
                     😢 S4dn3ss_7 → 3nvy
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-green-800 hover:bg-green-700 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-green-800 hover:bg-green-700 rounded transition-colors text-xs"
                     onClick={() => connectPlate('FEAR', 'LOVE')}
                   >
                     😰 F34r_X9 → L0v3
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-pink-700 hover:bg-pink-600 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-pink-700 hover:bg-pink-600 rounded transition-colors text-xs"
                     onClick={() => connectPlate('LOVE', 'SADNESS')}
                   >
                     💖 L0v3_Amp4 → S4d
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-blue-600 hover:bg-blue-500 rounded transition-colors text-xs"
                     onClick={() => connectPlate('CALM', 'JOY')}
                   >
                     🧘 C4lm_Z3n → J0y
                   </button>
-                  <button 
-                    className="px-2 py-1 bg-green-600 hover:bg-green-500 rounded transition-colors text-xs" 
+                  <button
+                    className="px-2 py-1 bg-green-600 hover:bg-green-500 rounded transition-colors text-xs"
                     onClick={() => connectPlate('ENVY', 'FURY')}
                   >
                     😈 3nvy_Gr33n → Fu2Y
