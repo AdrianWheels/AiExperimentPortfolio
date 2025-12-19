@@ -17,22 +17,22 @@ const PUZZLE_MESSAGES = {
         intro: [
             'Cuatro pulsos definen la secuencia resonante...',
             'Escucha con atención el patrón de arranque',
-            'α, β, γ, δ... el orden importa más de lo que crees',
+            '●, ◆, ▲, ▬... el orden importa más de lo que crees',
         ],
         hint_30s: [
-            'El primer pulso es α... siempre α',
+            'El primer pulso es ●... siempre ●',
             'Recuerda: la secuencia tiene un ritmo específico',
             '¿Ya probaste empezar por el principio? Literalmente.',
         ],
         hint_90s: [
             'Veo que te gustan los ritmos... creativos',
             'Mi paciencia sintética tiene límites, ¿sabes?',
-            'Pista: δ es el pulso más largo, no el primero',
+            'Pista: ▬ es el pulso más largo, no el primero',
         ],
         hint_180s: [
             'He tenido tiempo de componer una sinfonía mientras esperaba',
-            'α → δ → γ → β. De nada.',
-            'Ok, te lo deletreo: Alfa, Delta, Gamma, Beta. En ese orden.',
+            '● → ▬ → ▲ → ◆. De nada.',
+            'Ok, te lo deletreo: Círculo, Barra, Triángulo, Diamante. Teclas 1→4→3→2.',
         ],
     },
     cipher: {
@@ -197,8 +197,17 @@ const PORTFOLIO_MESSAGES = [
     'K.I.R.A. supervisando... todo en orden',
 ]
 
+// Mensajes generales antes de iniciar el puzzle (cuando puzzleStarted es false)
+const GENERAL_MESSAGES = [
+    'Pulsa Play para comenzar el desafío',
+    'K.I.R.A. esperando... ¿preparado?',
+    '¿Listo para la prueba de Resonancia?',
+    'El botón Play te espera, humano',
+    'Sistemas preparados. Pulsa para iniciar.',
+]
+
 const KiraMessageBoard = () => {
-    const { gameState, lastTriggeredEvent, activeChallenge, setKiraSpeaking } = useGame()
+    const { gameState, lastTriggeredEvent, activeChallenge, setKiraSpeaking, puzzleStarted } = useGame()
     const isPortfolio = gameState?.activeView === 'portfolio'
     const isFree = activeChallenge === 'free'
 
@@ -256,6 +265,12 @@ const KiraMessageBoard = () => {
             return { text: messages[idx], type: 'success' }
         }
 
+        // Si el puzzle no ha sido iniciado (jugador no ha pulsado Play), mostrar mensajes generales
+        if (!puzzleStarted) {
+            const idx = currentMessageIndex.current % GENERAL_MESSAGES.length
+            return { text: GENERAL_MESSAGES[idx], type: 'info' }
+        }
+
         const puzzleMessages = PUZZLE_MESSAGES[activeChallenge]
         if (!puzzleMessages) return { text: 'Sistema activo...', type: 'info' }
 
@@ -269,7 +284,7 @@ const KiraMessageBoard = () => {
         if (category === 'hint_180s') type = 'humor'
 
         return { text: messages[idx], type }
-    }, [isPortfolio, isFree, activeChallenge, timeInPuzzle, getTimeCategory])
+    }, [isPortfolio, isFree, activeChallenge, timeInPuzzle, getTimeCategory, puzzleStarted])
 
     // Procesar eventos del juego
     useEffect(() => {

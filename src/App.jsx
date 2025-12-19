@@ -1,20 +1,11 @@
 import React from 'react'
-import { GameProvider } from './context/GameContext'
-import { CableBridgeProvider, CablePanelLeft, CablePanelRight } from './components/puzzles/CableBridge'
-import FrequencyControls from './components/puzzles/FrequencyControls'
-import ResonanceSequenceEngine from './components/puzzles/new/ResonanceSequenceEngine'
-import CipherPuzzle from './components/puzzles/new/CipherPuzzle'
+import { GameProvider, useGame } from './context/GameContext'
 
 import IntroCinematic from './components/narrative/IntroCinematic'
-import TelemetryPrompt from './components/narrative/TelemetryPrompt'
 import PortfolioView from './components/portfolio/PortfolioView'
-import ProtectedPuzzle from './components/ui/ProtectedPuzzle'
-import KiraAvatar from './components/narrative/KiraAvatar'
 import BentoScene from './components/layout/BentoScene'
-import BentoLayout from './components/layout/BentoLayout'
 import BentoClone from './components/test/BentoClone'
 import GameBentoLayout from './components/layout/GameBentoLayout'
-import { useGame } from './context/GameContext'
 
 
 
@@ -35,7 +26,7 @@ function RootLayout() {
         )}
       </main>
       {!isPortfolio && <IntroCinematic />}
-      {!isPortfolio && <TelemetryPrompt />}
+
     </div>
   )
 }

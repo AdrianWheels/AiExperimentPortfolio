@@ -10,6 +10,7 @@ import CipherPuzzle from '../puzzles/new/CipherPuzzle'
 import StarryBackground from './StarryBackground'
 import KiraMessageBoard from '../ui/KiraMessageBoard'
 import NavToggle from '../ui/NavToggle'
+import BentoSocials from '../portfolio/bento/BentoSocials'
 
 
 const GameBentoLayout = () => {
@@ -67,7 +68,25 @@ const GameBentoLayout = () => {
           }
         `}</style>
 
-        <div className="shared-layout-inner min-h-screen lg:h-full lg:overflow-hidden p-4 lg:p-0">
+        {/* MOBILE STICKY HEADER - Solo visible en móvil/tablet */}
+        <div className="mobile-sticky-header lg:hidden">
+          {/* Avatar de Kira con sistema de reacciones */}
+          <div className="mobile-header-avatar">
+            <KiraAvatar size="large" />
+          </div>
+
+          {/* Navegación y controles - toggle único + iconos */}
+          <div className="mobile-header-nav">
+            <NavToggle variant="mobile" />
+          </div>
+
+          {/* Social links compactos */}
+          <div className="flex gap-2">
+            <BentoSocials compact />
+          </div>
+        </div>
+
+        <div className="shared-layout-inner lg:aspect-video flex flex-col lg:block relative p-4 lg:p-0">
           {/* Bento Grid Container */}
           <div className="w-full h-auto lg:h-full lg:aspect-video relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-4 gap-4 w-full h-auto lg:h-full pb-24 lg:pb-0">
@@ -75,15 +94,15 @@ const GameBentoLayout = () => {
               {/* --- COLUMN 1 --- */}
 
               {/* 1. Secuencia Resonante (Top Left) */}
-              <div className="order-3 lg:order-none col-span-1 lg:col-start-1 lg:row-start-1 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden group h-64 lg:h-auto">
+              <div className="order-3 lg:order-none col-span-1 lg:col-start-1 lg:row-start-1 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden group min-h-[400px] lg:min-h-0 lg:h-auto">
                 <ProtectedPuzzle puzzleType="sound" variant="default">
                   <ResonanceSequenceEngine />
                 </ProtectedPuzzle>
               </div>
 
               {/* 6. Generate / Cipher (Bottom Left - Expanded) */}
-              <div className="order-4 lg:order-none col-span-1 lg:col-start-1 lg:row-start-3 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex items-center justify-center border border-white/5 relative overflow-hidden h-64 lg:h-auto">
-                <div className="w-full h-full overflow-auto">
+              <div className="order-4 lg:order-none col-span-1 lg:col-start-1 lg:row-start-3 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex items-center justify-center border border-white/5 relative overflow-hidden min-h-[340px] lg:min-h-0 lg:h-auto">
+                <div className="w-full h-full">
                   <ProtectedPuzzle puzzleType="cipher" variant="compact">
                     <CipherPuzzle />
                   </ProtectedPuzzle>
@@ -166,13 +185,15 @@ const GameBentoLayout = () => {
 
               {/* --- COLUMN 4 --- */}
 
-              {/* 3. Nav Toggle (Top Right) */}
-              <div className="order-1 lg:order-none col-span-1 md:col-span-2 lg:col-start-4 lg:row-start-1 bg-[#13131f] rounded-3xl p-4 flex items-center justify-center border border-white/5 h-20 lg:h-auto">
+              {/* 3. Nav Toggle + Socials (Top Right) - Oculto en móvil porque está en el header */}
+              <div className="hidden lg:flex order-1 lg:order-none col-span-1 md:col-span-2 lg:col-start-4 lg:row-start-1 bg-[#13131f] rounded-3xl p-4 flex-col items-center justify-center gap-3 border border-white/5 h-20 lg:h-auto">
                 <NavToggle />
+                <div className="w-12 h-px bg-white/10"></div>
+                <BentoSocials />
               </div>
 
               {/* 4. Control Frecuencia (Middle Right - Expanded) */}
-              <div className="order-7 lg:order-none col-span-1 lg:col-start-4 lg:row-start-2 lg:row-span-3 bg-[#13131f] rounded-3xl p-4 flex flex-col justify-center border border-white/5 relative overflow-hidden h-80 lg:h-auto">
+              <div className="order-7 lg:order-none col-span-1 lg:col-start-4 lg:row-start-2 lg:row-span-3 bg-[#13131f] rounded-3xl p-4 flex flex-col justify-center border border-white/5 relative overflow-hidden min-h-[380px] lg:min-h-0 lg:h-auto">
                 <ProtectedPuzzle puzzleType="frequency" variant="default">
                   <FrequencyControls />
                 </ProtectedPuzzle>
@@ -181,11 +202,11 @@ const GameBentoLayout = () => {
             </div>
 
             {/* CENTRAL ORB - Imagen de KIRA */}
-            {/* Mobile: Fixed Top-Right overlapping Nav, Larger. Desktop: Absolute Center of Aspect Video */}
+            {/* Mobile: Oculto (Kira está en el header sticky). Desktop: Centrado absolutamente */}
             <div className="
-              fixed top-16 right-4 w-28 h-28 z-50 
+              hidden lg:flex
               lg:absolute lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:w-[200px] lg:h-[200px] 
-              pointer-events-none flex items-center justify-center
+              pointer-events-none items-center justify-center
             ">
               {/* Outer Ring */}
               <div className="absolute inset-0 rounded-full border border-white/10 shadow-[0_0_30px_rgba(124,58,237,0.2)]"></div>
@@ -195,7 +216,7 @@ const GameBentoLayout = () => {
               <div className="absolute w-[80%] h-[80%] border border-white/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
               {/* Circular Text */}
-              <div className="absolute w-[110%] h-[110%] animate-[spin_20s_linear_infinite] opacity-50 lg:opacity-100">
+              <div className="absolute w-[110%] h-[110%] animate-[spin_20s_linear_infinite] opacity-100">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
                   <path id="circlePath" d="M 50, 50 m -44, 0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" fill="none" />
                   <text className="text-[5.5px] font-mono font-bold tracking-[1.5px] fill-white/40">
@@ -221,7 +242,7 @@ const GameBentoLayout = () => {
               </div>
 
               {/* Floating Code Text */}
-              <div className="hidden lg:block absolute text-[8px] text-white/30 font-mono tracking-widest w-full text-center top-1/2 -translate-y-1/2 rotate-12 pointer-events-none">
+              <div className="absolute text-[8px] text-white/30 font-mono tracking-widest w-full text-center top-1/2 -translate-y-1/2 rotate-12 pointer-events-none">
                 100 110101 100011
               </div>
             </div>

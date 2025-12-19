@@ -9,11 +9,12 @@ const MISS_GRACE_MS = 120
 const PERFECT_MS = 60
 const GOOD_MS = 120
 
+// Iconos geométricos en lugar de letras griegas
 const TONE_BANK = [
-  { id: 'alpha', label: 'α', description: 'Pulso corto', frequency: 320, color: '#60a5fa', symbol: '●', key: '1' },
-  { id: 'beta', label: 'β', description: 'Pulso grave', frequency: 180, color: '#34d399', symbol: '◆', key: '2' },
-  { id: 'gamma', label: 'γ', description: 'Pulso agudo', frequency: 520, color: '#f472b6', symbol: '▲', key: '3' },
-  { id: 'delta', label: 'δ', description: 'Pulso largo', frequency: 260, color: '#f59e0b', symbol: '▬', key: '4' },
+  { id: 'alpha', label: '●', frequency: 320, color: '#60a5fa', key: '1' },
+  { id: 'beta', label: '◆', frequency: 180, color: '#34d399', key: '2' },
+  { id: 'gamma', label: '▲', frequency: 520, color: '#f472b6', key: '3' },
+  { id: 'delta', label: '▬', frequency: 260, color: '#f59e0b', key: '4' },
 ]
 
 // Mapeo de teclas a tipos de tonos
@@ -22,13 +23,15 @@ const KEY_TO_TONE = {
   'Digit2': 'beta',
   'Digit3': 'gamma',
   'Digit4': 'delta',
-  'Space': 'auto' // Para auto-hit en la zona
+  'Space': 'auto'
 }
 
 export default function ResonanceSequenceEngine() {
   const canvasRef = useRef(null)
+  const containerRef = useRef(null)
   const animationRef = useRef(null)
   const [gameEngine, setGameEngine] = useState(null)
+  const [canvasSize, setCanvasSize] = useState({ width: 400, height: 120 })
 
   const {
     gameState,
@@ -37,9 +40,27 @@ export default function ResonanceSequenceEngine() {
     triggerEvent,
     scheduleTimeout,
     activeChallenge,
+    setPuzzleStarted,
   } = useGame()
 
   const solved = Boolean(gameState.puzzleProgress?.sound?.solved)
+
+  // ResizeObserver para canvas responsive
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width } = entry.contentRect
+        // Mantener aspect ratio 4:1 aproximadamente
+        const height = Math.max(100, Math.min(160, width * 0.3))
+        setCanvasSize({ width: Math.floor(width), height: Math.floor(height) })
+      }
+    })
+
+    resizeObserver.observe(containerRef.current)
+    return () => resizeObserver.disconnect()
+  }, [])
 
   // Motor del juego Guitar Hero
   class ResonanceEngine {
@@ -61,12 +82,10 @@ export default function ResonanceSequenceEngine() {
       this.startedAt = 0
       this.pauseAt = 0
 
-      // Estado del juego
       this.chart = []
       this.idxNext = 0
       this.userInput = []
 
-      // Métricas
       this.score = 0
       this.combo = 0
       this.maxCombo = 0
@@ -78,15 +97,23 @@ export default function ResonanceSequenceEngine() {
     setupGeometry() {
       this.w = this.canvas.width
       this.h = this.canvas.height
-      this.laneY = this.h * 0.6  // Carril horizontal
-      this.hitX = this.w * 0.85  // Zona de impacto a la derecha
-      this.noteRadius = 28
+      this.laneY = this.h * 0.55
+      this.hitX = this.w * 0.85
+      // Escalar noteRadius según el tamaño del canvas
+      this.noteRadius = Math.max(16, Math.min(28, this.w * 0.05))
+    }
+
+    updateGeometry() {
+      this.w = this.canvas.width
+      this.h = this.canvas.height
+      this.laneY = this.h * 0.55
+      this.hitX = this.w * 0.85
+      this.noteRadius = Math.max(16, Math.min(28, this.w * 0.05))
     }
 
     setChart(sequence) {
-      // Convertir la secuencia del patrón a chart con tiempos
       this.chart = sequence.map((toneId, index) => ({
-        t: (index + 1) * 1200, // 1.2 segundos entre notas
+        t: (index + 1) * 1200,
         toneId: toneId,
         state: "pending"
       }))
@@ -200,7 +227,6 @@ export default function ResonanceSequenceEngine() {
       this.maxCombo = Math.max(this.maxCombo, this.combo)
       this.lastResult = `${label} (${Math.round(absTime)}ms)`
 
-      // Reproducir sonido
       const tone = TONE_BANK.find(t => t.id === note.toneId)
       if (tone) {
         playTone(tone.frequency)
@@ -210,7 +236,6 @@ export default function ResonanceSequenceEngine() {
       this.userInput.push(note.toneId)
       this.idxNext++
 
-      // Verificar progreso
       const evaluation = evaluateSoundSequence(this.userInput, SOUND_PATTERN)
 
       if (evaluation.status === 'correct') {
@@ -263,6 +288,7 @@ export default function ResonanceSequenceEngine() {
     loop() {
       if (!this.isPlaying) return
 
+      this.updateGeometry()
       const ctx = this.ctx
       const w = this.w
       const h = this.h
@@ -290,7 +316,6 @@ export default function ResonanceSequenceEngine() {
         const tone = TONE_BANK.find(t => t.id === note.toneId)
         if (!tone) continue
 
-        // Renderizar nota
         ctx.globalAlpha = note.state === "miss" ? 0.3 : 1
         this.drawNote(ctx, x, this.laneY, tone)
         ctx.globalAlpha = 1
@@ -330,7 +355,7 @@ export default function ResonanceSequenceEngine() {
       ctx.lineWidth = 1
 
       // Horizontal lines (top and bottom of lane)
-      const laneHeight = 40
+      const laneHeight = Math.min(40, h * 0.4)
       const topY = this.laneY - laneHeight / 2
       const bottomY = this.laneY + laneHeight / 2
 
@@ -352,8 +377,8 @@ export default function ResonanceSequenceEngine() {
       ctx.setLineDash([])
 
       // 2. Hit Zone (Scanner style)
-      const hitSize = 30
-      const bracketSize = 10
+      const hitSize = Math.min(30, this.noteRadius * 1.1)
+      const bracketSize = Math.min(10, hitSize * 0.35)
 
       ctx.shadowBlur = 15
       ctx.shadowColor = "#8b5cf6"
@@ -395,6 +420,7 @@ export default function ResonanceSequenceEngine() {
 
     drawNote(ctx, x, y, tone, isGhost = false) {
       const radius = this.noteRadius
+      const fontSize = Math.max(12, radius * 0.7)
 
       if (isGhost) {
         ctx.globalAlpha = 0.3
@@ -410,7 +436,7 @@ export default function ResonanceSequenceEngine() {
       }
 
       // Trail effect
-      const trailLength = 60
+      const trailLength = radius * 2.2
       const gradient = ctx.createLinearGradient(x - trailLength, y, x, y)
       gradient.addColorStop(0, "transparent")
       gradient.addColorStop(1, tone.color)
@@ -443,15 +469,15 @@ export default function ResonanceSequenceEngine() {
 
       // Symbol
       ctx.fillStyle = tone.color
-      ctx.font = "bold 18px sans-serif"
+      ctx.font = `bold ${fontSize}px sans-serif`
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
-      ctx.fillText(tone.symbol, x, y)
+      ctx.fillText(tone.label, x, y)
 
       // Key hint below
       ctx.fillStyle = "rgba(255, 255, 255, 0.6)"
-      ctx.font = "10px monospace"
-      ctx.fillText(tone.key, x, y + 35)
+      ctx.font = `${Math.max(10, fontSize * 0.6)}px monospace`
+      ctx.fillText(tone.key, x, y + radius + 12)
     }
 
     renderStatic() {
@@ -518,10 +544,23 @@ export default function ResonanceSequenceEngine() {
     }
   }, [solved, completeSoundPuzzle, triggerEvent])
 
+  // Actualizar geometría cuando cambia el tamaño
+  useEffect(() => {
+    if (gameEngine && canvasRef.current) {
+      gameEngine.updateGeometry()
+      if (!gameEngine.isPlaying) {
+        gameEngine.renderStatic()
+      }
+    }
+  }, [canvasSize, gameEngine])
+
   // Controles de UI
   const handlePlay = useCallback(() => {
-    if (gameEngine) gameEngine.play()
-  }, [gameEngine])
+    if (gameEngine) {
+      gameEngine.play()
+      setPuzzleStarted(true) // Notificar a KIRA que el puzzle ha comenzado
+    }
+  }, [gameEngine, setPuzzleStarted])
 
   const handlePause = useCallback(() => {
     if (gameEngine) gameEngine.pause()
@@ -533,7 +572,7 @@ export default function ResonanceSequenceEngine() {
 
   if (solved) {
     return (
-      <section className="flex flex-col gap-3 h-full p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm">
+      <section className="flex flex-col gap-3 h-full p-3 sm:p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm">
         <header className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-white">Resonancia</h3>
           <span className="text-[10px] uppercase tracking-wide text-success">✓ Completado</span>
@@ -548,7 +587,7 @@ export default function ResonanceSequenceEngine() {
   }
 
   return (
-    <section className="flex flex-col gap-4 h-full p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm">
+    <section className="flex flex-col gap-3 sm:gap-4 h-full p-3 sm:p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm">
       <header className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-zinc-100">Resonancia</h3>
         <div className="flex items-center gap-2">
@@ -557,57 +596,59 @@ export default function ResonanceSequenceEngine() {
         </div>
       </header>
 
-      {/* Referencia de teclas - Ahora clickeables */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* Referencia de teclas - Grid responsive: 2 cols móvil, 4 cols desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {TONE_BANK.map((tone) => (
           <button
             key={tone.id}
             onClick={() => gameEngine?.onKey(tone.id)}
-            className="flex flex-col items-center gap-2 p-3 rounded-lg bg-zinc-900/80 border border-zinc-800/50 hover:bg-zinc-800/80 active:scale-95 transition-all cursor-pointer"
+            className="flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-lg bg-zinc-900/80 border border-zinc-800/50 hover:bg-zinc-800/80 active:scale-95 transition-all cursor-pointer"
           >
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold border-2 transition-all hover:scale-110 active:scale-95"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold border-2 transition-all hover:scale-110 active:scale-95"
               style={{
                 backgroundColor: `${tone.color}20`,
                 borderColor: tone.color,
                 boxShadow: `0 0 15px ${tone.color}40`
               }}
             >
-              <span style={{ color: tone.color }}>{tone.symbol}</span>
+              <span style={{ color: tone.color }}>{tone.label}</span>
             </div>
-            <span className="text-zinc-400 text-xs font-mono border border-zinc-700 px-2 py-0.5 rounded bg-zinc-950">{tone.key}</span>
+            <span className="text-zinc-300 text-sm sm:text-base font-mono font-bold border border-zinc-700 px-2.5 py-1 rounded bg-zinc-950">{tone.key}</span>
           </button>
         ))}
       </div>
 
-      {/* Canvas del juego */}
-      <div className="relative flex-1 min-h-[160px] rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-inner">
+      {/* Canvas del juego - Responsive */}
+      <div
+        ref={containerRef}
+        className="relative flex-1 min-h-[100px] sm:min-h-[120px] rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-inner"
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent opacity-50"></div>
         <canvas
           ref={canvasRef}
-          width={600}
-          height={160}
+          width={canvasSize.width}
+          height={canvasSize.height}
           className="block w-full h-full relative z-10"
-          style={{ imageRendering: 'pixelated' }}
         />
       </div>
 
       {/* Controles simplificados */}
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-2 sm:gap-3">
         <button
           onClick={handlePlay}
-          className="btn-secondary text-xs flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 hover:bg-zinc-700/50 transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs rounded-lg bg-zinc-800/50 border border-zinc-700 hover:bg-zinc-700/50 transition-colors"
           title="Iniciar (Espacio)"
         >
-          <span className="text-emerald-400">▶</span>
+          <span className="text-emerald-400 text-sm">▶</span>
           <span>Play</span>
         </button>
         <button
           onClick={handleReset}
-          className="btn-secondary text-xs flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 hover:bg-zinc-700/50 transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs rounded-lg bg-zinc-800/50 border border-zinc-700 hover:bg-zinc-700/50 transition-colors"
           title="Reiniciar (R)"
         >
-          <span className="text-rose-400">↺</span>
+          <span className="text-rose-400 text-sm">↺</span>
           <span>Reset</span>
         </button>
       </div>

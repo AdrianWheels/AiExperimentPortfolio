@@ -1,8 +1,15 @@
 import React from 'react'
 import profileData from '../../../../data/portfolio/profile.json'
-import NavToggle from '../../ui/NavToggle'
 
-const BentoSocials = () => {
+/**
+ * BentoSocials - Social links component
+ * 
+ * Props:
+ * - compact: boolean - Smaller icons for mobile header
+ * 
+ * No longer includes NavToggle - that's handled separately in its own grid cell
+ */
+const BentoSocials = ({ compact = false }) => {
   const getIcon = (label) => {
     switch (label.toLowerCase()) {
       case 'github':
@@ -14,33 +21,47 @@ const BentoSocials = () => {
     }
   }
 
-  return (
-    <div className="h-full flex flex-col justify-center gap-3 items-center">
-      {/* NavToggle unificado - solo botones de navegación sin controles */}
-      <NavToggle variant="compact" />
-
-      <div className="w-12 h-px bg-white/10"></div>
-
-      {/* Redes sociales */}
-      <div className="flex gap-2 justify-center">
+  // Compact mode: smaller icons for mobile header
+  if (compact) {
+    return (
+      <div className="flex gap-1.5">
         {profileData.social.map((social) => (
           <a
             key={social.label}
             href={social.url}
             target="_blank"
             rel="noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-all group"
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-all"
             title={social.label}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover:scale-110">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               {getIcon(social.label)}
             </svg>
           </a>
         ))}
       </div>
+    )
+  }
+
+  // Desktop mode: larger icons, centered layout (no NavToggle - it's in its own grid cell)
+  return (
+    <div className="flex gap-3 justify-center">
+      {profileData.social.map((social) => (
+        <a
+          key={social.label}
+          href={social.url}
+          target="_blank"
+          rel="noreferrer"
+          className="w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-all group"
+          title={social.label}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover:scale-110">
+            {getIcon(social.label)}
+          </svg>
+        </a>
+      ))}
     </div>
   )
 }
 
 export default BentoSocials
-

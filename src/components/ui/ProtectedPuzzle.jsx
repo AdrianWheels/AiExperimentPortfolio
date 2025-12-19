@@ -110,7 +110,10 @@ export default function ProtectedPuzzle({
             message="SYSTEM OPTIMIZED"
           />
         )}
-        {children}
+        {/* Bloquear interacción cuando está resuelto */}
+        <div className={`w-full h-full ${isSolved ? 'pointer-events-none' : ''}`}>
+          {children}
+        </div>
       </div>
     )
   }

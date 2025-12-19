@@ -7,6 +7,7 @@ import BentoTimeline from './BentoTimeline'
 import BentoAbout from './BentoAbout'
 import BentoSocials from './BentoSocials'
 import KiraMessageBoard from '../../ui/KiraMessageBoard'
+import NavToggle from '../../ui/NavToggle'
 
 const PortfolioBentoLayout = () => {
   const biteRadius = '100px'
@@ -15,6 +16,38 @@ const PortfolioBentoLayout = () => {
   return (
     <div className="shared-layout-container bg-[#0a0a12] overflow-hidden">
       <StarryBackground />
+
+      {/* MOBILE STICKY HEADER - Solo visible en móvil/tablet */}
+      <div className="mobile-sticky-header md:hidden">
+        {/* Avatar del usuario */}
+        <div className="mobile-header-avatar">
+          <img
+            src={`${BASE_URL}me.jpg`}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Navegación y controles - toggle único + iconos */}
+        <div className="mobile-header-nav">
+          <NavToggle variant="mobile" />
+        </div>
+
+        {/* Social links compactos */}
+        <div className="flex gap-2">
+          <BentoSocials compact />
+        </div>
+      </div>
+
+      {/* CSS for Mobile Mask Reset */}
+      <style>{`
+        @media (max-width: 768px) {
+          .mobile-mask-reset {
+            -webkit-mask-image: none !important;
+            mask-image: none !important;
+          }
+        }
+      `}</style>
 
       {/* Main Container - Aspect Video on Desktop, Auto on Mobile */}
       <div className="shared-layout-inner md:aspect-video flex flex-col md:block relative">
@@ -39,7 +72,7 @@ const PortfolioBentoLayout = () => {
 
           {/* Top Center: Hero */}
           <div
-            className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 bg-[#5b21b6] rounded-3xl p-4 flex flex-col items-center text-center relative overflow-hidden border border-white/10 h-80 md:h-auto"
+            className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 bg-[#5b21b6] rounded-3xl p-4 flex flex-col items-center text-center relative overflow-hidden border border-white/10 h-80 md:h-auto mobile-mask-reset"
             style={{
               maskImage: `radial-gradient(circle at 50% calc(100% + 8px), transparent ${biteRadius}, black ${biteRadius})`,
               WebkitMaskImage: `radial-gradient(circle at 50% calc(100% + 8px), transparent ${biteRadius}, black ${biteRadius})`
@@ -52,7 +85,7 @@ const PortfolioBentoLayout = () => {
 
           {/* Bottom Center: Timeline (Merged) */}
           <div
-            className="md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative group overflow-hidden h-80 md:h-auto"
+            className="md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative group overflow-hidden h-80 md:h-auto mobile-mask-reset"
             style={{
               maskImage: `radial-gradient(circle at 50% -8px, transparent ${biteRadius}, black ${biteRadius})`,
               WebkitMaskImage: `radial-gradient(circle at 50% -8px, transparent ${biteRadius}, black ${biteRadius})`
@@ -64,8 +97,10 @@ const PortfolioBentoLayout = () => {
 
           {/* --- COLUMN 4 --- */}
 
-          {/* Top Right: Socials */}
-          <div className="md:col-start-4 md:row-start-1 bg-[#13131f] rounded-3xl p-4 flex items-center justify-center border border-white/5 h-32 md:h-auto">
+          {/* Top Right: NavToggle + Socials - Oculto en móvil porque está en el header */}
+          <div className="hidden md:flex md:col-start-4 md:row-start-1 bg-[#13131f] rounded-3xl p-4 flex-col items-center justify-center gap-3 border border-white/5 h-32 md:h-auto">
+            <NavToggle />
+            <div className="w-12 h-px bg-white/10"></div>
             <BentoSocials />
           </div>
 
@@ -77,11 +112,11 @@ const PortfolioBentoLayout = () => {
         </div>
 
         {/* CENTRAL ORB - User Photo */}
-        {/* Mobile: Fixed Top-Right, Sticky, Larger. Desktop: Absolute Center */}
+        {/* Mobile: Oculto (foto en header sticky). Desktop: Centrado absolutamente */}
         <div className="
-            fixed top-16 right-4 w-28 h-28 z-50 
+            hidden md:flex
             md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[200px] md:h-[200px] 
-            pointer-events-none flex items-center justify-center
+            pointer-events-none items-center justify-center
         ">
           {/* Outer Ring */}
           <div className="absolute inset-0 rounded-full border border-white/10 shadow-[0_0_30px_rgba(124,58,237,0.2)]"></div>

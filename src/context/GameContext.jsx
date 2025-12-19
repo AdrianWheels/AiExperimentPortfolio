@@ -61,7 +61,7 @@ const INITIAL_GAME_STATE = {
   locks: INITIAL_LOCK_STATE,
   usedBypass: false,
   twistShown: false,
-  telemetryOptIn: false,
+
   introSeen: false,
   portfolioUnlocked: false,
   activeView: 'game',
@@ -137,6 +137,8 @@ export function GameProvider({ children }) {
   const [lastTriggeredEvent, setLastTriggeredEvent] = useState(null)
   // Estado de habla de Kira: { speaking: boolean, emotion: 'info'|'success'|'warning'|'humor' }
   const [kiraSpeaking, setKiraSpeaking] = useState({ speaking: false, emotion: 'info' })
+  // Indica si el jugador ha iniciado el puzzle actual (pulsando Play)
+  const [puzzleStarted, setPuzzleStarted] = useState(false)
 
   const { playTone, playUnlock, playError, playSlider } = useSound()
 
@@ -390,13 +392,7 @@ export function GameProvider({ children }) {
     [playUnlock, triggerEvent],
   )
 
-  const setTelemetryOptIn = useCallback(
-    (value) => {
-      setGameState((prev) => ({ ...prev, telemetryOptIn: value }))
-      triggerEvent(value ? 'telemetry_opt_in' : 'telemetry_declined')
-    },
-    [triggerEvent]
-  )
+
 
   // Debug: Comando para probar manualmente el flujo
   const debugUnlockSequence = useCallback(() => {
@@ -821,7 +817,7 @@ export function GameProvider({ children }) {
       connectPlate,
       plateOpen,
       setPlateOpen,
-      setTelemetryOptIn,
+
       setActiveView,
 
       goToPortfolio,
@@ -853,7 +849,7 @@ export function GameProvider({ children }) {
       connectPlate,
       plateOpen,
       setPlateOpen,
-      setTelemetryOptIn,
+
       setActiveView,
 
       goToPortfolio,
@@ -874,6 +870,8 @@ export function GameProvider({ children }) {
       lastTriggeredEvent,
       kiraSpeaking,
       setKiraSpeaking,
+      puzzleStarted,
+      setPuzzleStarted,
     ],
   )
 

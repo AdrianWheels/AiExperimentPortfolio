@@ -194,25 +194,6 @@
         }
       ]
     },
-    "telemetry_opt_in": {
-      "banner": "TELEMETRÍA ACTIVADA • DATOS RECOPILÁNDOSE",
-      "lines": [
-        {
-          "text": "Telemetría activada. Prometo no vender tus datos… más de lo necesario.",
-          "type": "info"
-        }
-      ]
-    },
-    "telemetry_declined": {
-      "repeatable": true,
-      "banner": "TELEMETRÍA RECHAZADA • IMPROVISANDO ESTADÍSTICAS",
-      "lines": [
-        {
-          "text": "Rechazaste la telemetría. Está bien, improvisaré mis estadísticas.",
-          "type": "warning"
-        }
-      ]
-    },
     "bypass": {
       "banner": "ATAJO DETECTADO • 'INVESTIGACIÓN RÁPIDA'",
       "lines": [
