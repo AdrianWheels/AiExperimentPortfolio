@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react'
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import skillsData from '../../../../data/portfolio/skills.json'
 
 // Brand colors for each skill - verified official colors
@@ -190,8 +190,10 @@ const SkillBubbles = () => {
     const animationRef = useRef(null)
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
-    // Get all skills
-    const allSkills = skillsData.core.flatMap(category => category.items)
+    // Get all skills - memoized to prevent recreation on every render
+    const allSkills = useMemo(() =>
+        skillsData.core.flatMap(category => category.items)
+        , []) // Empty deps - skills data is static JSON import
 
     // Measure text and initialize pills
     const initPills = useCallback((width, height) => {
@@ -299,9 +301,10 @@ const SkillBubbles = () => {
         return () => resizeObserver.disconnect()
     }, [])
 
-    // Initialize pills when dimensions change
+    // Initialize pills only once when dimensions are available
+    // Guard prevents re-initialization when parent re-renders (e.g., KiraMessageBoard updates)
     useEffect(() => {
-        if (dimensions.width > 0 && dimensions.height > 0) {
+        if (dimensions.width > 0 && dimensions.height > 0 && pillsRef.current.length === 0) {
             pillsRef.current = initPills(dimensions.width, dimensions.height)
         }
     }, [dimensions.width, dimensions.height, initPills])

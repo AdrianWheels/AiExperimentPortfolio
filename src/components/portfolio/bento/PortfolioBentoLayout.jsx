@@ -17,7 +17,7 @@ const PortfolioBentoLayout = () => {
       <StarryBackground />
 
       {/* Main Container - Aspect Video on Desktop, Auto on Mobile */}
-      <div className="shared-layout-inner md:aspect-video flex flex-col md:block">
+      <div className="shared-layout-inner md:aspect-video flex flex-col md:block relative">
 
         {/* Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 w-full h-full">
@@ -77,16 +77,21 @@ const PortfolioBentoLayout = () => {
         </div>
 
         {/* CENTRAL ORB - User Photo */}
-        <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] pointer-events-none z-50 items-center justify-center">
+        {/* Mobile: Fixed Top-Right, Sticky, Larger. Desktop: Absolute Center */}
+        <div className="
+            fixed top-16 right-4 w-28 h-28 z-50 
+            md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[200px] md:h-[200px] 
+            pointer-events-none flex items-center justify-center
+        ">
           {/* Outer Ring */}
           <div className="absolute inset-0 rounded-full border border-white/10 shadow-[0_0_30px_rgba(124,58,237,0.2)]"></div>
 
           {/* Inner Spinning Rings */}
-          <div className="absolute w-[180px] h-[180px] border border-white/5 rounded-full animate-[spin_10s_linear_infinite]"></div>
-          <div className="absolute w-[160px] h-[160px] border border-white/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+          <div className="absolute w-[90%] h-[90%] border border-white/5 rounded-full animate-[spin_10s_linear_infinite]"></div>
+          <div className="absolute w-[80%] h-[80%] border border-white/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
           {/* Core Orb with Photo */}
-          <div className="w-32 h-32 rounded-full bg-black relative overflow-hidden shadow-[0_0_50px_rgba(139,92,246,0.6)] border border-white/20 pointer-events-auto">
+          <div className="w-[65%] h-[65%] rounded-full bg-black relative overflow-hidden shadow-[0_0_50px_rgba(139,92,246,0.6)] border border-white/20 pointer-events-auto">
             <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 via-purple-600 to-blue-500 opacity-80 blur-md animate-pulse"></div>
             <div className="absolute inset-1 bg-black rounded-full overflow-hidden flex items-center justify-center">
               <img

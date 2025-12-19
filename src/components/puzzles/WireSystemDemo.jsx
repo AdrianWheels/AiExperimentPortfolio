@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import WireSystem from './WireSystem'
 import WireNode from './WireNode'
+import { debug } from '../../utils/debug'
 
 // Componente de demostración del sistema de cables avanzado
 export default function WireSystemDemo() {
@@ -64,29 +65,29 @@ export default function WireSystemDemo() {
 
   const handleConnect = (connection) => {
     // Evitar conexiones duplicadas
-    const exists = connections.some(conn => 
-      conn.from.node === connection.from.node && 
+    const exists = connections.some(conn =>
+      conn.from.node === connection.from.node &&
       conn.from.port === connection.from.port &&
-      conn.to.node === connection.to.node && 
+      conn.to.node === connection.to.node &&
       conn.to.port === connection.to.port
     )
-    
+
     if (!exists) {
       setConnections(prev => [...prev, connection])
-      console.log('Nueva conexión:', connection)
+      debug.log('Nueva conexión:', connection)
     }
   }
 
   const handleDisconnect = (connection) => {
-    setConnections(prev => 
-      prev.filter(conn => 
-        !(conn.from.node === connection.from.node && 
+    setConnections(prev =>
+      prev.filter(conn =>
+        !(conn.from.node === connection.from.node &&
           conn.from.port === connection.from.port &&
-          conn.to.node === connection.to.node && 
+          conn.to.node === connection.to.node &&
           conn.to.port === connection.to.port)
       )
     )
-    console.log('Conexión eliminada:', connection)
+    debug.log('Conexión eliminada:', connection)
   }
 
   const clearAllConnections = () => {
@@ -111,7 +112,7 @@ export default function WireSystemDemo() {
           </button>
         </div>
       </div>
-      
+
       <div className="relative bg-zinc-800 rounded border border-zinc-600" style={{ height: '400px' }}>
         {/* Nodos del sistema */}
         {nodes.map(node => (
@@ -138,7 +139,7 @@ export default function WireSystemDemo() {
             )}
           </WireNode>
         ))}
-        
+
         {/* Sistema de cables con física */}
         <WireSystem
           nodes={nodes}
@@ -152,13 +153,13 @@ export default function WireSystemDemo() {
             segments: 10
           }}
         />
-        
+
         {/* Instrucciones */}
         <div className="absolute bottom-2 right-2 text-xs text-zinc-500 bg-zinc-800/80 px-2 py-1 rounded">
           Arrastra desde ● a ○ para conectar
         </div>
       </div>
-      
+
       {/* Lista de conexiones activas */}
       {connections.length > 0 && (
         <div className="mt-4 p-3 bg-zinc-800 rounded border border-zinc-600">
