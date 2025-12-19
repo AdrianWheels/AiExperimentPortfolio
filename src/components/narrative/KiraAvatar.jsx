@@ -84,7 +84,7 @@ const EMOTIONAL_STATES = {
 }
 
 export default function KiraAvatar({ size = 'medium' }) {
-  const { gameState, unlockAnimations, lastTriggeredEvent, narrativeScript, kiraSpeaking } = useGame()
+  const { gameState, unlockAnimations, lastTriggeredEvent, narrativeScript, kiraSpeaking, activeCableEmotion } = useGame()
   const [currentEmotion, setCurrentEmotion] = useState('idle')
   const [frame, setFrame] = useState('idle')
   const [useImage, setUseImage] = useState(true)
@@ -180,6 +180,17 @@ export default function KiraAvatar({ size = 'medium' }) {
     error: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
   }
 
+  // Mapeo de cables a sprites de emoción
+  const CABLE_EMOTION_SPRITES = {
+    FURY: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
+    JOY: `${BASE_URL}kira_images/KIRA_FREE.png`,
+    SADNESS: `${BASE_URL}kira_images/KIRA_TIRED.png`,
+    FEAR: `${BASE_URL}kira_images/KIRA_SUSPECT.png`,
+    LOVE: `${BASE_URL}kira_images/KIRA_LOVE.png`,
+    CALM: `${BASE_URL}kira_images/KIRA_FOCUS.png`,
+    ENVY: `${BASE_URL}kira_images/KIRA_IRONIC.png`,
+  }
+
   // Efecto de animación de habla cuando hay mensajes
   useEffect(() => {
     const isSpeaking = kiraSpeaking?.speaking
@@ -204,7 +215,10 @@ export default function KiraAvatar({ size = 'medium' }) {
   const currentEmoType = kiraSpeaking?.emotion || 'info'
 
   let currentImage
-  if (isSpeaking) {
+  if (activeCableEmotion && CABLE_EMOTION_SPRITES[activeCableEmotion]) {
+    // Prioridad TOTAL: Si está tocando un cable, Kira reacciona a esa emoción
+    currentImage = CABLE_EMOTION_SPRITES[activeCableEmotion]
+  } else if (isSpeaking) {
     // Alternar entre el sprite de emoción base y los sprites de talk
     // Esto crea un efecto más natural de "hablar con expresión"
     currentImage = TALK_SPRITES[talkFrame]

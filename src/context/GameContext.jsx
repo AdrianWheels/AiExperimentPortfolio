@@ -139,6 +139,8 @@ export function GameProvider({ children }) {
   const [kiraSpeaking, setKiraSpeaking] = useState({ speaking: false, emotion: 'info' })
   // Indica si el jugador ha iniciado el puzzle actual (pulsando Play)
   const [puzzleStarted, setPuzzleStarted] = useState(false)
+  // Estado para saber qué emoción de cable se está arrastrando (para sprites de Kira)
+  const [activeCableEmotion, setActiveCableEmotion] = useState(null)
 
   const { playTone, playUnlock, playError, playSlider } = useSound()
 
@@ -838,6 +840,8 @@ export function GameProvider({ children }) {
       lastTriggeredEvent,
       kiraSpeaking,
       setKiraSpeaking,
+      activeCableEmotion,
+      setActiveCableEmotion,
       MODEL,
     }),
     [
@@ -867,11 +871,11 @@ export function GameProvider({ children }) {
       scheduleTimeout,
       unlockAnimations,
       activeChallenge,
-      lastTriggeredEvent,
-      kiraSpeaking,
       setKiraSpeaking,
       puzzleStarted,
       setPuzzleStarted,
+      activeCableEmotion,
+      setActiveCableEmotion,
     ],
   )
 

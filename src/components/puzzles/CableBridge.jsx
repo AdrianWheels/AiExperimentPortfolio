@@ -148,7 +148,7 @@ export function CableBridgeProvider({ children }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [, forceRender] = useState(0)
 
-  const { plateConnections, connectPlate, gameState } = useGame()
+  const { plateConnections, connectPlate, gameState, setActiveCableEmotion } = useGame()
 
   const canInteract = Boolean(
     gameState.puzzleProgress?.sound?.solved && gameState.puzzleProgress?.cipher?.solved
@@ -184,7 +184,7 @@ export function CableBridgeProvider({ children }) {
     event.preventDefault()
 
     const el = sourceRefs.current[sourceId]
-    const pos = getPos(el, 'center') // Changed to 'center'
+    const pos = getPos(el, 'center')
 
     if (pos && containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect()
@@ -199,7 +199,9 @@ export function CableBridgeProvider({ children }) {
         y: event.clientY - containerRect.top
       })
     }
-  }, [canInteract, getPos])
+
+    setActiveCableEmotion(sourceId)
+  }, [canInteract, getPos, setActiveCableEmotion])
 
   // Mouse move
   const handleMouseMove = useCallback((e) => {
@@ -208,6 +210,21 @@ export function CableBridgeProvider({ children }) {
     setMousePos({
       x: e.clientX - containerRect.left,
       y: e.clientY - containerRect.top
+    })
+  }, [dragging])
+
+  // Touch move handler
+  const handleTouchMove = useCallback((e) => {
+    if (!dragging || !containerRef.current) return
+    // Prevent scrolling while dragging
+    // e.preventDefault() // Removed to allow scroll if not dragging, check inside
+
+    const touch = e.touches[0]
+    const containerRect = containerRef.current.getBoundingClientRect()
+
+    setMousePos({
+      x: touch.clientX - containerRect.left,
+      y: touch.clientY - containerRect.top
     })
   }, [dragging])
 
@@ -236,8 +253,16 @@ export function CableBridgeProvider({ children }) {
       connectPlate(dragging.sourceId, closestTarget)
     }
 
+
+
     setDragging(null)
-  }, [dragging, mousePos, getPos, connectPlate])
+    setActiveCableEmotion(null)
+  }, [dragging, mousePos, getPos, connectPlate, setActiveCableEmotion])
+
+  // Touch end handler
+  const handleTouchEnd = useCallback((e) => {
+    handleMouseUp()
+  }, [handleMouseUp])
 
   // Actualizar cables según conexiones
   useEffect(() => {
@@ -327,7 +352,13 @@ export function CableBridgeProvider({ children }) {
         className="cable-bridge-container"
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={() => setDragging(null)}
+        onMouseLeave={() => {
+          setDragging(null)
+          setActiveCableEmotion(null)
+        }}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         style={{ position: 'relative' }}
       >
         {children}
@@ -451,6 +482,27 @@ export function CablePanelLeft() {
             <div
               key={source.id}
               onMouseDown={(e) => bridgeCtx?.startDrag(source.id, e)}
+              onTouchStart={(e) => {
+                // Prevent scrolling when starting to drag a cable
+                // But we need to be careful not to block scroll if not hitting the cable
+                // For this element, it is the cable source, so always prevent default
+                // e.preventDefault() // Let's try passing the touch event correctly first
+                const touch = e.touches[0]
+                // Mock a mouse event structure for startDrag or update startDrag to handle it?
+                // The current startDrag uses event.clientX which exists on mouse event but not touch event directly.
+                // We need to update startDrag to handle both or map it here.
+                // Let's rely on the fact that we updated startDrag to accept the event.
+                // Wait, startDrag uses event.clientX inside BUT getPos uses the element ref.
+                // Actually startDrag uses:
+                // setMousePos({ x: event.clientX ..., y: event.clientY ... })
+                // So we need to normalize the event passed to startDrag.
+
+                bridgeCtx?.startDrag(source.id, {
+                  preventDefault: () => e.preventDefault(),
+                  clientX: touch.clientX,
+                  clientY: touch.clientY
+                })
+              }}
               className={`
                 flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all text-xs select-none
                 ${canInteract ? 'cursor-grab active:cursor-grabbing' : 'cursor-not-allowed'}
