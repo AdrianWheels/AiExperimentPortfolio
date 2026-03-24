@@ -11,9 +11,14 @@ const StarryBackground = () => {
     let animationFrameId
     let stars = []
     
+    let cachedGradient = null
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      cachedGradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+      cachedGradient.addColorStop(0, '#050509')
+      cachedGradient.addColorStop(1, '#0f0f1a')
       initStars()
     }
 
@@ -34,11 +39,8 @@ const StarryBackground = () => {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
-      // Background gradient
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, '#050509')
-      gradient.addColorStop(1, '#0f0f1a')
-      ctx.fillStyle = gradient
+      // Background gradient (cached, only recreated on resize)
+      ctx.fillStyle = cachedGradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // Draw stars

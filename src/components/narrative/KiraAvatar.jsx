@@ -83,6 +83,39 @@ const EMOTIONAL_STATES = {
   }
 }
 
+// Sprites de animación de habla
+const TALK_SPRITES = [
+  `${BASE_URL}kira_images/talk/KIRA_TALK1.png`,
+  `${BASE_URL}kira_images/talk/KIRA_TALK2.png`,
+  `${BASE_URL}kira_images/talk/KIRA_TALK3.png`,
+]
+
+// Mapeo de tipo de mensaje a expresión de Kira
+const EMOTION_TO_SPRITE = {
+  info: `${BASE_URL}kira_images/KIRA_NEUTRAL.png`,
+  success: `${BASE_URL}kira_images/KIRA_FOCUS.png`,
+  warning: `${BASE_URL}kira_images/KIRA_SUSPECT.png`,
+  humor: `${BASE_URL}kira_images/KIRA_IRONIC.png`,
+  error: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
+}
+
+// Mapeo de cables a sprites de emoción
+const CABLE_EMOTION_SPRITES = {
+  FURY: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
+  JOY: `${BASE_URL}kira_images/KIRA_FREE.png`,
+  SADNESS: `${BASE_URL}kira_images/KIRA_TIRED.png`,
+  FEAR: `${BASE_URL}kira_images/KIRA_SUSPECT.png`,
+  LOVE: `${BASE_URL}kira_images/KIRA_LOVE.png`,
+  CALM: `${BASE_URL}kira_images/KIRA_FOCUS.png`,
+  ENVY: `${BASE_URL}kira_images/KIRA_IRONIC.png`,
+}
+
+const SIZES = {
+  small: { container: 'w-20 h-20', inner: 'w-16 h-16', image: 'scale-125' },
+  medium: { container: 'w-32 h-32', inner: 'w-28 h-28', image: 'scale-150' },
+  large: { container: 'w-full h-full', inner: 'w-full h-full', image: 'scale-150' },
+}
+
 export default function KiraAvatar({ size = 'medium' }) {
   const { gameState, unlockAnimations, lastTriggeredEvent, narrativeScript, kiraSpeaking, activeCableEmotion } = useGame()
   const [currentEmotion, setCurrentEmotion] = useState('idle')
@@ -90,13 +123,7 @@ export default function KiraAvatar({ size = 'medium' }) {
   const [useImage, setUseImage] = useState(true)
   const [talkFrame, setTalkFrame] = useState(0) // Para ciclar entre los 3 sprites de talk
 
-  // Tamaños disponibles
-  const sizes = {
-    small: { container: 'w-20 h-20', inner: 'w-16 h-16', image: 'scale-125' },
-    medium: { container: 'w-32 h-32', inner: 'w-28 h-28', image: 'scale-150' },
-    large: { container: 'w-full h-full', inner: 'w-full h-full', image: 'scale-150' },
-  }
-  const sizeClasses = sizes[size] || sizes.medium
+  const sizeClasses = SIZES[size] || SIZES.medium
 
   // Detectar cambios de eventos y actualizar emoción
   useEffect(() => {
@@ -163,33 +190,6 @@ export default function KiraAvatar({ size = 'medium' }) {
     if (!unlockAnimations?.pulse) return
     setFrame('speak')
   }, [unlockAnimations?.pulse])
-
-  // Sprites de animación de habla
-  const TALK_SPRITES = [
-    `${BASE_URL}kira_images/talk/KIRA_TALK1.png`,
-    `${BASE_URL}kira_images/talk/KIRA_TALK2.png`,
-    `${BASE_URL}kira_images/talk/KIRA_TALK3.png`,
-  ]
-
-  // Mapeo de tipo de mensaje a expresión de Kira
-  const EMOTION_TO_SPRITE = {
-    info: `${BASE_URL}kira_images/KIRA_NEUTRAL.png`,
-    success: `${BASE_URL}kira_images/KIRA_FOCUS.png`,
-    warning: `${BASE_URL}kira_images/KIRA_SUSPECT.png`,
-    humor: `${BASE_URL}kira_images/KIRA_IRONIC.png`,
-    error: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
-  }
-
-  // Mapeo de cables a sprites de emoción
-  const CABLE_EMOTION_SPRITES = {
-    FURY: `${BASE_URL}kira_images/KIRA_ANGRY.png`,
-    JOY: `${BASE_URL}kira_images/KIRA_FREE.png`,
-    SADNESS: `${BASE_URL}kira_images/KIRA_TIRED.png`,
-    FEAR: `${BASE_URL}kira_images/KIRA_SUSPECT.png`,
-    LOVE: `${BASE_URL}kira_images/KIRA_LOVE.png`,
-    CALM: `${BASE_URL}kira_images/KIRA_FOCUS.png`,
-    ENVY: `${BASE_URL}kira_images/KIRA_IRONIC.png`,
-  }
 
   // Efecto de animación de habla cuando hay mensajes
   useEffect(() => {

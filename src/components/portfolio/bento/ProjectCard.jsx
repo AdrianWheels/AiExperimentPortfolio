@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const ProjectCard = ({ project, images, onSelect, autoSlideDelay }) => {
     const [isHovered, setIsHovered] = useState(false)
     const [isAutoSliding, setIsAutoSliding] = useState(false)
+    const isHoveredRef = useRef(false)
 
     const primaryImage = images?.[0] || null
     const hasImages = images && images.length > 0
@@ -12,7 +13,7 @@ const ProjectCard = ({ project, images, onSelect, autoSlideDelay }) => {
         if (!autoSlideDelay || !hasImages) return
 
         const triggerAutoSlide = () => {
-            if (!isHovered) {
+            if (!isHoveredRef.current) {
                 setIsAutoSliding(true)
                 // Reset after animation completes
                 setTimeout(() => {
@@ -35,7 +36,7 @@ const ProjectCard = ({ project, images, onSelect, autoSlideDelay }) => {
             clearTimeout(initialDelay)
             clearInterval(interval)
         }
-    }, [autoSlideDelay, isHovered, hasImages])
+    }, [autoSlideDelay, hasImages])
 
     const handleClick = () => {
         // Simple click handler - let modal handle its own animation
@@ -47,8 +48,8 @@ const ProjectCard = ({ project, images, onSelect, autoSlideDelay }) => {
     return (
         <div
             className="project-card-container group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => { setIsHovered(true); isHoveredRef.current = true }}
+            onMouseLeave={() => { setIsHovered(false); isHoveredRef.current = false }}
             onClick={handleClick}
         >
             {/* Default content: Project info (always visible as base) */}
