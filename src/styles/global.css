@@ -259,10 +259,10 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
-/* Subpage layout — uses same max-width as home (1600px via shared-layout-inner)
-   but aligns to top since content scrolls beyond viewport */
+/* Subpage layout — same centering system as home.
+   Content taller than viewport scrolls naturally. */
 .shared-layout-container.subpage {
-  align-items: flex-start;
+  align-items: center;
 }
 
 /* Full-width bento item — workaround for lg:col-span-4 JIT issue */
