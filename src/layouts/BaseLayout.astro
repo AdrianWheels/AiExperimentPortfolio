@@ -1,0 +1,60 @@
+---
+import { ViewTransitions } from 'astro:transitions'
+import BaseHead from '../components/layout/BaseHead.astro'
+import JsonLd from '../components/seo/JsonLd.astro'
+import KiraChatbot from '../components/kira/KiraChatbot'
+import StarryBackground from '../components/layout/StarryBackground'
+import { getLocaleFromUrl } from '../i18n'
+import '../styles/global.css'
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+  canonicalURL?: string
+  type?: 'website' | 'article'
+  schema?: Record<string, unknown>
+  currentPage?: string
+  projectSlug?: string
+}
+
+const { title, description, image, canonicalURL, type, schema, currentPage = 'home', projectSlug } = Astro.props
+const locale = getLocaleFromUrl(Astro.url)
+---
+
+<!doctype html>
+<html lang={locale} class="scroll-smooth">
+  <head>
+    <script is:inline>
+    (function(){
+      if(localStorage.getItem('lang-pref'))return;
+      if(location.pathname.startsWith('/en'))return;
+      if((navigator.language||'').startsWith('en')){
+        localStorage.setItem('lang-pref','en');
+        location.replace('/en'+location.pathname);
+      }else{localStorage.setItem('lang-pref','es')}
+    })();
+    </script>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      canonicalURL={canonicalURL}
+      type={type}
+    />
+    {schema && <JsonLd schema={schema} />}
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen bg-bgStart text-text font-sans antialiased overflow-x-hidden">
+    <!-- Starry background - canvas animated -->
+    <StarryBackground client:idle />
+
+    <main class="relative z-10">
+      <slot />
+    </main>
+
+    <!-- KIRA Chatbot -->
+    <KiraChatbot client:idle currentPage={currentPage} projectSlug={projectSlug} locale={locale} />
+
+  </body>
+</html>
