@@ -259,9 +259,13 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
-/* Subpage layout — align to top instead of center */
+/* Subpage layout — align to top, match home visual width */
 .shared-layout-container.subpage {
   align-items: flex-start;
+}
+
+.shared-layout-container.subpage .shared-layout-inner {
+  max-width: 1400px;
 }
 
 /* Full-width bento item — workaround for lg:col-span-4 JIT issue */
