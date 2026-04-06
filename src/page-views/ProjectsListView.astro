@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import SubpageNav from '../components/layout/SubpageNav.astro'
 import { getCollection } from 'astro:content'
 import { getLocaleFromUrl, t, getLocalizedUrl } from '../i18n'
 
@@ -15,71 +16,70 @@ const projectsUrl = getLocalizedUrl(locale, '/projects')
 <BaseLayout
   title={t(locale, 'seo.projects.title')}
   description={t(locale, 'seo.projects.description')}
+  currentPage="projects"
 >
-  <div class="max-w-[1600px] mx-auto px-4 lg:px-8 py-6 lg:py-8">
-  <section class="bg-[#13131f] rounded-3xl border border-white/5 p-6 md:p-10" transition:animate="slide">
-    <a href={getLocalizedUrl(locale, '/')} class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-8 group">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="group-hover:-translate-x-1 transition-transform">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      {t(locale, 'nav.portfolio')}
-    </a>
-    <header class="mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{t(locale, 'projects.page.title')}</h1>
-      <p class="text-lg text-gray-400 max-w-2xl">
-        {t(locale, 'projects.page.subtitle')}
-      </p>
-    </header>
+  <div class="shared-layout-container subpage">
+    <div class="shared-layout-inner">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sorted.map((project) => {
-        const slug = project.slug.replace(/-en$/, '')
-        return (
-          <a
-            href={`${projectsUrl}/${slug}`}
-            class="group block bg-[#13131f] rounded-2xl border border-white/5 hover:border-white/15 overflow-hidden transition-all duration-300 hover:shadow-bento-hover"
-          >
-            {/* Image */}
-            <div class="aspect-video overflow-hidden bg-black/20">
-              <img
-                src={project.data.heroImage}
-                alt={`${t(locale, 'project.screenshotAlt')} ${project.data.title}`}
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-            </div>
+      <SubpageNav locale={locale} />
 
-            {/* Content */}
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-[10px] font-mono text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded bg-purple-500/10">
-                  {project.data.year}
-                </span>
-                <span class="text-[10px] text-gray-500 uppercase tracking-wider">
-                  {project.data.role}
-                </span>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+
+        {/* Header card */}
+        <div class="md:col-span-2 bg-gradient-to-br from-[#7c3aed] to-[#4c1d95] rounded-3xl p-6 lg:p-8 border border-white/10 flex flex-col justify-end min-h-[160px] relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none" aria-hidden="true"></div>
+          <div class="relative z-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">{t(locale, 'projects.page.title')}</h1>
+            <p class="text-[15px] text-purple-100/80 leading-relaxed max-w-lg">
+              {t(locale, 'projects.page.subtitle')}
+            </p>
+          </div>
+        </div>
+
+        {/* Project cards */}
+        {sorted.map((project) => {
+          const slug = project.slug.replace(/-en$/, '')
+          return (
+            <a
+              href={`${projectsUrl}/${slug}`}
+              class="group block bg-[#13131f] rounded-3xl border border-white/5 hover:border-purple-500/30 overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]"
+            >
+              <div class="aspect-video overflow-hidden bg-black/20">
+                <img
+                  src={project.data.heroImage}
+                  alt={`${t(locale, 'project.screenshotAlt')} ${project.data.title}`}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
               </div>
-
-              <h2 class="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
-                {project.data.title}
-              </h2>
-
-              <p class="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
-                {project.data.description}
-              </p>
-
-              <div class="flex flex-wrap gap-1.5">
-                {project.data.tags.map((tag: string) => (
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/5">
-                    {tag}
+              <div class="p-5">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-[10px] font-mono text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded bg-purple-500/10">
+                    {project.data.year}
                   </span>
-                ))}
+                  <span class="text-[10px] text-gray-500 uppercase tracking-wider">
+                    {project.data.role}
+                  </span>
+                </div>
+                <h2 class="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                  {project.data.title}
+                </h2>
+                <p class="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
+                  {project.data.description}
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  {project.data.tags.map((tag: string) => (
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-300 border border-white/10">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          </a>
-        )
-      })}
+            </a>
+          )
+        })}
+
+      </div>
     </div>
-  </section>
   </div>
 </BaseLayout>
