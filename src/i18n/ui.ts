@@ -46,6 +46,10 @@ export const ui = {
     'project.prevImage': 'Imagen anterior',
     'project.nextImage': 'Siguiente imagen',
     'project.screenshotAlt': 'Captura de pantalla de',
+    'project.motivationLabel': 'Motivación',
+    'project.challengesLabel': 'Retos',
+    'project.learningsLabel': 'Aprendizajes',
+    'project.contextLabel': 'Contexto',
 
     // Contact
     'contact.title': 'Hablemos',
@@ -127,6 +131,10 @@ export const ui = {
     'project.prevImage': 'Previous image',
     'project.nextImage': 'Next image',
     'project.screenshotAlt': 'Screenshot of',
+    'project.motivationLabel': 'Motivation',
+    'project.challengesLabel': 'Challenges',
+    'project.learningsLabel': 'Learnings',
+    'project.contextLabel': 'Context',
 
     'contact.title': "Let's Talk",
     'contact.subtitle': "Have a project in mind? Need a creative developer? I'd love to hear more.",

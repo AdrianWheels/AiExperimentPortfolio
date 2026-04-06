@@ -15,12 +15,16 @@ interface Props {
   solution: string
   results: string[]
   links?: { live?: string; github?: string; video?: string }
+  motivation?: string
+  challenges?: string
+  learnings?: string
+  context?: string
   schema: Record<string, unknown>
   slug?: string
   locale: string
 }
 
-const { title, description, year, role, tags, heroImage, gallery, problem, solution, results, links, schema, slug } = Astro.props
+const { title, description, year, role, tags, heroImage, gallery, problem, solution, results, links, motivation, challenges, learnings, context, schema, slug } = Astro.props
 const locale = getLocaleFromUrl(Astro.url)
 const contactUrl = getContactUrl(locale)
 
@@ -157,6 +161,34 @@ const hasVideo = links?.video
           <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.solutionLabel')}</h2>
           <p class="text-sm text-gray-300 leading-relaxed">{solution}</p>
         </div>
+
+        {/* Row 4: Narrative — Motivation (2 cols) + Challenges (2 cols) */}
+        {motivation && (
+          <div class="md:col-span-2 bg-[#13131f] rounded-3xl p-5 border border-white/5">
+            <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.motivationLabel')}</h2>
+            <p class="text-sm text-gray-300 leading-relaxed">{motivation}</p>
+          </div>
+        )}
+        {challenges && (
+          <div class="md:col-span-2 bg-[#13131f] rounded-3xl p-5 border border-white/5">
+            <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.challengesLabel')}</h2>
+            <p class="text-sm text-gray-300 leading-relaxed">{challenges}</p>
+          </div>
+        )}
+
+        {/* Row 5: Learnings (2-3 cols) + Context (1-2 cols) */}
+        {learnings && (
+          <div class="md:col-span-2 lg:col-span-3 bg-[#13131f] rounded-3xl p-5 border border-white/5">
+            <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.learningsLabel')}</h2>
+            <p class="text-sm text-gray-300 leading-relaxed">{learnings}</p>
+          </div>
+        )}
+        {context && (
+          <div class="bg-[#13131f] rounded-3xl p-5 border border-white/5">
+            <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.contextLabel')}</h2>
+            <p class="text-sm text-gray-300 leading-relaxed">{context}</p>
+          </div>
+        )}
 
       </article>
     </div>
