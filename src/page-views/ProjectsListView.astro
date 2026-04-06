@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+import { getLocaleFromUrl, t, getLocalizedUrl } from '../i18n'
+
+const locale = getLocaleFromUrl(Astro.url)
+
+const allProjects = await getCollection('projects')
+const projects = allProjects.filter(p => p.data.locale === locale)
+const sorted = projects.sort((a, b) => a.data.order - b.data.order)
+
+const projectsUrl = getLocalizedUrl(locale, '/projects')
+---
+
+<BaseLayout
+  title={t(locale, 'seo.projects.title')}
+  description={t(locale, 'seo.projects.description')}
+>
+  <div class="max-w-[1600px] mx-auto px-4 lg:px-8 py-6 lg:py-8">
+  <section class="bg-[#13131f] rounded-3xl border border-white/5 p-6 md:p-10" transition:animate="slide">
+    <a href={getLocalizedUrl(locale, '/')} class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-8 group">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="group-hover:-translate-x-1 transition-transform">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      {t(locale, 'nav.portfolio')}
+    </a>
+    <header class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{t(locale, 'projects.page.title')}</h1>
+      <p class="text-lg text-gray-400 max-w-2xl">
+        {t(locale, 'projects.page.subtitle')}
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sorted.map((project) => {
+        const slug = project.slug.replace(/-en$/, '')
+        return (
+          <a
+            href={`${projectsUrl}/${slug}`}
+            class="group block bg-[#13131f] rounded-2xl border border-white/5 hover:border-white/15 overflow-hidden transition-all duration-300 hover:shadow-bento-hover"
+          >
+            {/* Image */}
+            <div class="aspect-video overflow-hidden bg-black/20">
+              <img
+                src={project.data.heroImage}
+                alt={`${t(locale, 'project.screenshotAlt')} ${project.data.title}`}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+
+            {/* Content */}
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-[10px] font-mono text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded bg-purple-500/10">
+                  {project.data.year}
+                </span>
+                <span class="text-[10px] text-gray-500 uppercase tracking-wider">
+                  {project.data.role}
+                </span>
+              </div>
+
+              <h2 class="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                {project.data.title}
+              </h2>
+
+              <p class="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
+                {project.data.description}
+              </p>
+
+              <div class="flex flex-wrap gap-1.5">
+                {project.data.tags.map((tag: string) => (
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/5">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </a>
+        )
+      })}
+    </div>
+  </section>
+  </div>
+</BaseLayout>

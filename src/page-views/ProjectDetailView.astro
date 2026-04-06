@@ -1,0 +1,46 @@
+---
+import ProjectLayout from '../layouts/ProjectLayout.astro'
+import { getLocalizedUrl, profileBase } from '../i18n'
+import type { Locale } from '../i18n'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  project: CollectionEntry<'projects'>
+  locale: Locale
+}
+
+const { project, locale } = Astro.props
+const baseSlug = project.slug.replace(/-en$/, '')
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": project.data.title,
+  "description": project.data.description,
+  "author": {
+    "@type": "Person",
+    "name": profileBase.name,
+    "url": "https://adrianrueda.dev",
+  },
+  "dateCreated": project.data.year,
+  "keywords": project.data.tags,
+  "url": `https://adrianrueda.dev${getLocalizedUrl(locale, `/projects/${baseSlug}`)}`,
+}
+---
+
+<ProjectLayout
+  title={project.data.title}
+  description={project.data.description}
+  year={project.data.year}
+  role={project.data.role}
+  tags={project.data.tags}
+  heroImage={project.data.heroImage}
+  gallery={project.data.gallery}
+  problem={project.data.problem}
+  solution={project.data.solution}
+  results={project.data.results}
+  links={project.data.links}
+  schema={schema}
+  slug={baseSlug}
+  locale={locale}
+/>

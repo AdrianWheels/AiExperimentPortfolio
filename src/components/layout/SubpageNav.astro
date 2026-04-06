@@ -1,0 +1,39 @@
+---
+import { t, getLocalizedUrl, getContactUrl } from '../../i18n'
+import type { Locale } from '../../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const contactUrl = getContactUrl(locale)
+---
+
+<nav class="flex items-center justify-between mb-4" role="navigation" aria-label={t(locale, 'nav.portfolio')}>
+  <a
+    href={getLocalizedUrl(locale, '/')}
+    class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors group focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg px-2 py-1 -ml-2"
+    aria-label={t(locale, 'project.backPortfolio')}
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="group-hover:-translate-x-1 transition-transform" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span class="font-medium">{t(locale, 'nav.portfolio')}</span>
+  </a>
+
+  <div class="flex items-center gap-1">
+    <a
+      href={getLocalizedUrl(locale, '/projects')}
+      class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-white/5 uppercase tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+    >
+      {t(locale, 'nav.projects')}
+    </a>
+    <a
+      href={contactUrl}
+      class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-white/5 uppercase tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+    >
+      {t(locale, 'nav.contact')}
+    </a>
+  </div>
+</nav>

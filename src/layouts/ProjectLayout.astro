@@ -1,0 +1,201 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import SubpageNav from '../components/layout/SubpageNav.astro'
+import { getLocaleFromUrl, t, getLocalizedUrl, getContactUrl } from '../i18n'
+
+interface Props {
+  title: string
+  description: string
+  year: string
+  role: string
+  tags: string[]
+  heroImage: string
+  gallery?: string[]
+  problem: string
+  solution: string
+  results: string[]
+  links?: { live?: string; github?: string; video?: string }
+  schema: Record<string, unknown>
+  slug?: string
+  locale: string
+}
+
+const { title, description, year, role, tags, heroImage, gallery, problem, solution, results, links, schema, slug } = Astro.props
+const locale = getLocaleFromUrl(Astro.url)
+const contactUrl = getContactUrl(locale)
+
+// Build carousel: images + video thumbnail if available
+const allImages = [heroImage, ...(gallery || [])]
+const hasVideo = links?.video
+---
+
+<BaseLayout
+  title={`${title} — ${t(locale, 'project.caseStudy')} | Adrián Rueda`}
+  description={description}
+  currentPage="projects"
+  projectSlug={slug}
+  image={heroImage}
+  type="article"
+  schema={schema}
+>
+  <div class="shared-layout-container bg-[#0a0a12] !items-start !pt-24 lg:!pt-8">
+    <div class="shared-layout-inner">
+
+      <SubpageNav locale={locale} />
+
+      <article class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+
+        {/* Row 1: Title (2 cols) + Carousel (2 cols) */}
+        <div class="md:col-span-2 bg-gradient-to-br from-[#7c3aed] to-[#4c1d95] rounded-3xl p-6 lg:p-8 border border-white/10 flex flex-col justify-end relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none" aria-hidden="true"></div>
+          <div class="relative z-10">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-[11px] font-mono text-white/90 border border-white/25 px-2.5 py-1 rounded-md bg-white/10 font-medium">{year}</span>
+              <span class="text-[11px] text-purple-200/80 uppercase tracking-widest font-medium">{role}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-[1.1] tracking-tight">{title}</h1>
+            <div class="flex flex-wrap gap-1.5" role="list" aria-label="Technologies">
+              {tags.map((tag) => (
+                <span role="listitem" class="text-[11px] px-2.5 py-1 rounded-full bg-white/15 text-white/90 font-medium">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Carousel - aspect-video, includes video as last slide */}
+        <div
+          class="md:col-span-2 bg-[#0e0e18] rounded-3xl border border-white/5 overflow-hidden relative group aspect-video"
+          data-carousel
+          role="region"
+          aria-label={t(locale, 'project.galleryLabel')}
+          tabindex="0"
+        >
+          <div class="carousel-track flex h-full transition-transform duration-500 ease-out">
+            {allImages.map((img, i) => (
+              <div class="carousel-slide flex-shrink-0 w-full h-full" aria-label={`${i + 1} / ${allImages.length + (hasVideo ? 1 : 0)}`}>
+                <img src={img} alt={`${title} — ${i + 1}`} class="w-full h-full object-cover object-center" loading={i === 0 ? 'eager' : 'lazy'} />
+              </div>
+            ))}
+            {/* Video slide */}
+            {hasVideo && (
+              <div class="carousel-slide flex-shrink-0 w-full h-full bg-black/80 flex items-center justify-center relative">
+                <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm" aria-hidden="true" />
+                <a
+                  href={links!.video}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="relative z-10 flex flex-col items-center gap-3 text-white hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-2xl p-4"
+                >
+                  <div class="w-16 h-16 rounded-full bg-purple-600/90 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold">{t(locale, 'project.viewDemo')}</span>
+                </a>
+              </div>
+            )}
+          </div>
+          {(allImages.length + (hasVideo ? 1 : 0)) > 1 && (
+            <>
+              <button class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-purple-500" aria-label={t(locale, 'project.prevImage')}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <button class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-purple-500" aria-label={t(locale, 'project.nextImage')}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+              <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5" role="tablist" aria-label="Slides">
+                {[...allImages, ...(hasVideo ? ['video'] : [])].map((_, i) => (
+                  <button
+                    class:list={["carousel-dot w-2 h-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-purple-500", i === 0 ? "bg-white" : "bg-white/40 hover:bg-white/60"]}
+                    role="tab" aria-selected={i === 0 ? "true" : "false"} aria-label={`Slide ${i + 1}`} data-index={i}
+                  ></button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Row 2: Description+links (2 cols) + El Reto (1 col) + Resultados (1 col) */}
+        <div class="md:col-span-2 bg-[#13131f] rounded-3xl p-5 border border-white/5 flex flex-col justify-between">
+          <p class="text-[15px] text-gray-200 leading-relaxed">{description}</p>
+          {links && (
+            <div class="flex flex-wrap gap-2.5 mt-4">
+              {links.live && links.live !== '#' && (
+                <a href={links.live} target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#13131f]">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  {t(locale, 'project.viewLive')}
+                </a>
+              )}
+              {links.github && (
+                <a href={links.github} target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gray-200 text-sm font-medium rounded-xl border border-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#13131f]">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+                  GitHub
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div class="bg-[#13131f] rounded-3xl p-5 border border-white/5">
+          <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.problemLabel')}</h2>
+          <p class="text-sm text-gray-300 leading-relaxed">{problem}</p>
+        </div>
+
+        <div class="bg-[#13131f] rounded-3xl p-5 border border-white/5">
+          <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.resultsLabel')}</h2>
+          <ul class="space-y-2">
+            {results.map((r) => (
+              <li class="flex items-start gap-2 text-sm text-gray-300 leading-relaxed">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-purple-400 mt-1 flex-shrink-0" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                {r}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Row 3: La Solución (full width, condensed) */}
+        <div class="md:col-span-2 bento-full bg-[#13131f] rounded-3xl p-5 border border-white/5">
+          <h2 class="text-[11px] font-bold tracking-widest text-purple-400 uppercase mb-3">{t(locale, 'project.solutionLabel')}</h2>
+          <p class="text-sm text-gray-300 leading-relaxed">{solution}</p>
+        </div>
+
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+document.querySelectorAll('[data-carousel]').forEach(function(carousel) {
+  var track = carousel.querySelector('.carousel-track');
+  var dots = carousel.querySelectorAll('.carousel-dot');
+  var prevBtn = carousel.querySelector('.carousel-prev');
+  var nextBtn = carousel.querySelector('.carousel-next');
+  var total = carousel.querySelectorAll('.carousel-slide').length;
+  var current = 0;
+
+  function goTo(index) {
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    current = index;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function(dot, i) {
+      if (i === current) {
+        dot.className = dot.className.replace('bg-white/40', 'bg-white').replace(' hover:bg-white/60', '');
+      } else {
+        dot.className = dot.className.replace(/\bbg-white\b/, 'bg-white/40');
+        if (dot.className.indexOf('hover:bg-white/60') === -1) dot.className += ' hover:bg-white/60';
+      }
+      dot.setAttribute('aria-selected', i === current ? 'true' : 'false');
+    });
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { goTo(current + 1); });
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() { goTo(parseInt(dot.dataset.index)); });
+  });
+  carousel.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') { goTo(current - 1); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { goTo(current + 1); e.preventDefault(); }
+  });
+});
+</script>
