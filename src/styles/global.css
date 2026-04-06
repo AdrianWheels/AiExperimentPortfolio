@@ -259,6 +259,11 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
+/* Subpage layout — align to top instead of center */
+.shared-layout-container.subpage {
+  align-items: flex-start;
+}
+
 /* Full-width bento item — workaround for lg:col-span-4 JIT issue */
 @media (min-width: 768px) {
   .bento-full { grid-column: 1 / -1 !important; }
