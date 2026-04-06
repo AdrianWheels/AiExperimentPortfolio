@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { getKiraMessages, getKiraSystemPrompt } from '../../i18n/kira'
+import { getKiraMessages, getKiraSystemPrompt, matchKiraResponse, getKiraFallback } from '../../i18n/kira'
 import type { Locale } from '../../i18n/utils'
 
 interface ChatMessage {
@@ -105,13 +105,11 @@ export default function KiraChatbot({ currentPage, projectSlug, locale }: KiraCh
 
     if (!GROQ_API_KEY) {
       setChatMode(true)
+      const matched = matchKiraResponse(trimmed, locale) || getKiraFallback(locale)
       setMessages(prev => [
         ...prev,
         { role: 'user', content: trimmed },
-        { role: 'assistant', content: locale === 'en'
-          ? "I'm in demo mode — no AI key configured. Contact Adrián directly!"
-          : 'Estoy en modo demo — no hay clave de IA configurada. ¡Contacta con Adrián directamente!'
-        },
+        { role: 'assistant', content: matched },
       ])
       setInput('')
       return
