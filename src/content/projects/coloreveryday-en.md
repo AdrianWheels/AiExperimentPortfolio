@@ -12,7 +12,7 @@ results:
   - "Interactive in-browser coloring interface"
   - "Visual calendar with creation history"
   - "Direct integration with the Gemini 2.5 Flash API"
-motivation: "I wanted to explore generative AI for images and thought combining coloring drawings with the web was a great idea. My wife is an artist and inspires me to create things related to art."
+motivation: "I wanted to explore generative AI for images and thought combining coloring drawings with the web was a great idea. The art world inspires me to build accessible creative experiences."
 challenges: "The biggest challenge was building the entire system without a database, though I eventually added one for monetization. Keeping everything free and functional was harder than expected."
 learnings: "I learned a lot about AI image generation and alternatives to conventional databases. Today I'd design it with the database and premium model in mind from day one."
 context: "Solo project, actively in development with 2-3 months of part-time work. 9 registered users; those who visit tend to stay for a long time."

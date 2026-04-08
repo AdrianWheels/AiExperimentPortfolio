@@ -11,7 +11,7 @@ results:
   - "Interfaz interactiva de coloreado en el navegador"
   - "Calendario visual con historial de creaciones"
   - "Integración directa con Gemini 2.5 Flash API"
-motivation: "Quería explorar la IA generativa de imágenes y me pareció buena idea combinar dibujos para colorear con la web. Mi mujer es artista y me inspira a crear cosas relacionadas con el arte."
+motivation: "Quería explorar la IA generativa de imágenes y me pareció buena idea combinar dibujos para colorear con la web. El mundo del arte me inspira a crear experiencias creativas accesibles."
 challenges: "El mayor reto fue construir todo el sistema sin base de datos, aunque al final la añadí para monetizar. Mantener todo gratuito y funcional fue más complejo de lo esperado."
 learnings: "Aprendí mucho sobre generación de imágenes con IA y alternativas a bases de datos convencionales. Hoy lo diseñaría pensando en la base de datos y el premium desde el principio."
 context: "Proyecto en solitario, en desarrollo activo con 2-3 meses de trabajo a tiempo parcial. 9 usuarios registrados; los que entran se quedan bastante tiempo."

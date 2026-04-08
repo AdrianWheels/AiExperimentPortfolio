@@ -11,9 +11,9 @@ results:
   - "Formulario de pedido integrado con FormSubmit"
   - "Rendimiento perfecto: sitio 100% estático"
   - "Diseño responsive mobile-first"
-motivation: "Es el negocio real de mi mujer, que ya genera ingresos aunque bajos. Elegí Astro por velocidad y porque quería probar un nuevo framework."
-challenges: "El mayor reto de diseño visual lo resolví con ayuda de mi mujer, que es artista. La catalogación de productos con fotos de calidad es algo que seguimos trabajando."
-learnings: "Aprendí que llegar a los clientes con producto físico es complicado. La dueña está contenta con la web pero el stock y las imágenes siguen siendo un reto logístico."
+motivation: "Colaboración con un negocio local de impresión 3D que ya genera ingresos. Elegí Astro por velocidad y porque quería probar un nuevo framework."
+challenges: "El mayor reto fue el diseño visual, resuelto colaborando con una artista que aportó la dirección estética. La catalogación de productos con fotos de calidad sigue siendo un trabajo en curso."
+learnings: "Aprendí que llegar a los clientes con producto físico es complicado. La clienta está contenta con la web, pero la gestión de stock e imágenes sigue siendo un reto logístico."
 context: "Online y operativa. Los pedidos llegan por otros canales de momento. Pendiente SEO y marketing."
 tags: ["Astro", "Tailwind", "TypeScript"]
 heroImage: "/projects/pepa-print3d/desktop.png"

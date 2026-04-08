@@ -135,11 +135,11 @@ const systemPrompts: Record<Locale, string> = {
 
 ## Proyectos (más reciente primero)
 
-**Pepa Print3D (2026)** — Landing + pedidos para negocio real de impresión 3D de su mujer. Astro, Tailwind, TypeScript. Catálogo filtrable, FormSubmit. 100% estático. pepaprint3d.com
+**Pepa Print3D (2026)** — Landing + pedidos para un negocio local de impresión 3D. Astro, Tailwind, TypeScript. Catálogo filtrable, FormSubmit. 100% estático. pepaprint3d.com
 
-**JR Fisioterapia (2025)** — SaaS de citas para la clínica de su hermano. Next.js, Prisma, Supabase, Twilio. Sync bidireccional Google Calendar, SMS automáticos, PWA. Objetivo: venderlo a otros profesionales.
+**JR Fisioterapia (2025)** — SaaS de citas para una clínica de fisioterapia. Next.js, Prisma, Supabase, Twilio. Sync bidireccional Google Calendar, SMS automáticos, PWA. Objetivo: venderlo a otros profesionales del sector.
 
-**ColorEveryday (2025)** — Plataforma de coloreado con IA generativa diaria. React, Gemini 2.5 Flash. Calendario interactivo, coloreado en navegador. Inspirado por su mujer artista.
+**ColorEveryday (2025)** — Plataforma de coloreado con IA generativa diaria. React, Gemini 2.5 Flash. Calendario interactivo, coloreado en navegador.
 
 **Atlas (2019)** — Experiencia VR en nave espacial para proyecto europeo de investigación. Unity, Hurricane VR, C#. En uso en la Universidad de Almería. Incluye video de gameplay.
 
@@ -177,11 +177,11 @@ const systemPrompts: Record<Locale, string> = {
 
 ## Projects (most recent first)
 
-**Pepa Print3D (2026)** — Landing + orders for his wife's real 3D printing business. Astro, Tailwind, TypeScript. Filterable catalog, FormSubmit. 100% static. pepaprint3d.com
+**Pepa Print3D (2026)** — Landing + orders for a local 3D printing business. Astro, Tailwind, TypeScript. Filterable catalog, FormSubmit. 100% static. pepaprint3d.com
 
-**JR Fisioterapia (2025)** — SaaS appointment system for his brother's physio clinic. Next.js, Prisma, Supabase, Twilio. Bidirectional Google Calendar sync, auto SMS, PWA. Goal: sell to other professionals.
+**JR Fisioterapia (2025)** — SaaS appointment system for a physiotherapy clinic. Next.js, Prisma, Supabase, Twilio. Bidirectional Google Calendar sync, auto SMS, PWA. Goal: sell to other professionals in the sector.
 
-**ColorEveryday (2025)** — Daily AI-generated coloring platform. React, Gemini 2.5 Flash. Interactive calendar, in-browser coloring. Inspired by his artist wife.
+**ColorEveryday (2025)** — Daily AI-generated coloring platform. React, Gemini 2.5 Flash. Interactive calendar, in-browser coloring.
 
 **Atlas (2019)** — VR spaceship experience for European research project. Unity, Hurricane VR, C#. Still in use at University of Almería. Gameplay video available.
 
@@ -224,9 +224,9 @@ const patterns: Record<Locale, KiraPattern[]> = {
     // Projects - general
     { test: /proyectos|portfolio|trabajos/i, response: 'Adrián tiene 6 proyectos destacados: Pepa Print3D (2026), JR Fisioterapia (2025), ColorEveryday (2025), Atlas (2019), VR Psicología UAL (2018) y Pruebas Neuropsicológicas (2017). Puedes explorarlos en la sección Proyectos.' },
     // Projects - specific
-    { test: /pepa|print\s*3d|impresi[oó]n\s*3d/i, response: 'Pepa Print3D (2026) es la web del negocio de impresión 3D de su mujer. Hecha con Astro, Tailwind y TypeScript. Tiene catálogo filtrable y formulario de pedidos. 100% estática. Visítala en pepaprint3d.com' },
-    { test: /jr\s*fisio|fisioterapia|citas|saas/i, response: 'JR Fisioterapia (2025) es un SaaS de gestión de citas para la clínica de su hermano. Next.js, Supabase, Twilio. Tiene sync bidireccional con Google Calendar, SMS automáticos y es una PWA instalable.' },
-    { test: /color\s*every\s*day|colorear|colore/i, response: 'ColorEveryday (2025) genera ilustraciones únicas cada día con Gemini 2.5 Flash para colorear en el navegador. Hecho con React y Tailwind. Inspirado por su mujer, que es artista.' },
+    { test: /pepa|print\s*3d|impresi[oó]n\s*3d/i, response: 'Pepa Print3D (2026) es la web para un negocio local de impresión 3D. Hecha con Astro, Tailwind y TypeScript. Tiene catálogo filtrable y formulario de pedidos. 100% estática. Visítala en pepaprint3d.com' },
+    { test: /jr\s*fisio|fisioterapia|citas|saas/i, response: 'JR Fisioterapia (2025) es un SaaS de gestión de citas para una clínica de fisioterapia. Next.js, Supabase, Twilio. Tiene sync bidireccional con Google Calendar, SMS automáticos y es una PWA instalable.' },
+    { test: /color\s*every\s*day|colorear|colore/i, response: 'ColorEveryday (2025) genera ilustraciones únicas cada día con Gemini 2.5 Flash para colorear en el navegador. Hecho con React y Tailwind.' },
     { test: /atlas/i, response: 'Atlas (2019) es una experiencia VR en una nave espacial desarrollada para un proyecto europeo de investigación. Unity + Hurricane VR. Actualmente en uso en la Universidad de Almería. Tiene vídeo de gameplay.' },
     { test: /vr\s*psicolog|pruebas\s*vr|ual\b|universidad.*almer/i, response: 'El Sistema VR de Psicología UAL (2018) son tests en VR para investigación con menores infractores. Desarrollado con Unity en la Universidad de Almería. Ganó un premio del Consejo Social de la UAL.' },
     { test: /neuro|matlab|opensesame/i, response: 'Pruebas Neuropsicológicas (2017) fue el primer proyecto profesional de Adrián. Herramientas digitales para el departamento de Neurociencia de la UAL, con MATLAB y OpenSesame. Precisión de milisegundos. Aún en uso.' },
@@ -248,9 +248,9 @@ const patterns: Record<Locale, KiraPattern[]> = {
     { test: /artificial\s*intelligence|\bai\b|gemini|claude/i, response: 'Adrián integrates AI into his projects: ColorEveryday uses Gemini 2.5 Flash to generate daily illustrations. He also works with Claude, ComfyUI and VS Copilot as development tools.' },
     { test: /psycholog/i, response: "Adrián has a Psychology background, giving him a unique perspective on UX and experience design. He started his technical career in the Psychology and Neuroscience departments at the University of Almería." },
     { test: /projects|portfolio|work\b/i, response: "Adrián has 6 featured projects: Pepa Print3D (2026), JR Fisioterapia (2025), ColorEveryday (2025), Atlas (2019), VR Psychology UAL (2018) and Neuropsychological Tests (2017). Explore them in the Projects section." },
-    { test: /pepa|print\s*3d|3d\s*print/i, response: "Pepa Print3D (2026) is the website for his wife's 3D printing business. Built with Astro, Tailwind and TypeScript. Features a filterable catalog and order form. 100% static. Visit pepaprint3d.com" },
-    { test: /jr\s*fisio|physiotherapy|appointment|saas/i, response: "JR Fisioterapia (2025) is a SaaS appointment system for his brother's physio clinic. Next.js, Supabase, Twilio. Bidirectional Google Calendar sync, auto SMS, and an installable PWA." },
-    { test: /color\s*every\s*day|color/i, response: 'ColorEveryday (2025) generates unique daily illustrations with Gemini 2.5 Flash for in-browser coloring. Built with React and Tailwind. Inspired by his wife, who is an artist.' },
+    { test: /pepa|print\s*3d|3d\s*print/i, response: "Pepa Print3D (2026) is the website for a local 3D printing business. Built with Astro, Tailwind and TypeScript. Features a filterable catalog and order form. 100% static. Visit pepaprint3d.com" },
+    { test: /jr\s*fisio|physiotherapy|appointment|saas/i, response: "JR Fisioterapia (2025) is a SaaS appointment system for a physiotherapy clinic. Next.js, Supabase, Twilio. Bidirectional Google Calendar sync, auto SMS, and an installable PWA." },
+    { test: /color\s*every\s*day|color/i, response: 'ColorEveryday (2025) generates unique daily illustrations with Gemini 2.5 Flash for in-browser coloring. Built with React and Tailwind.' },
     { test: /atlas/i, response: 'Atlas (2019) is a VR spaceship experience built for a European research project. Unity + Hurricane VR. Currently in use at the University of Almería. Gameplay video available.' },
     { test: /vr\s*psych|vr\s*test|ual\b|almeria\s*univ/i, response: 'The VR Psychology UAL system (2018) provides VR tests for research with juvenile offenders. Built with Unity at the University of Almería. Won an award from the UAL Social Council.' },
     { test: /neuro|matlab|opensesame/i, response: "Neuropsychological Tests (2017) was Adrián's first professional project. Digital tools for the UAL Neuroscience department using MATLAB and OpenSesame. Millisecond precision. Still in use." },

@@ -12,9 +12,9 @@ results:
   - "Integrated order form with FormSubmit"
   - "Perfect performance: 100% static site"
   - "Mobile-first responsive design"
-motivation: "It's my wife's real business, already generating some revenue. I chose Astro for speed and because I wanted to try a new framework."
-challenges: "The biggest visual design challenge was solved with help from my wife, who is an artist. Cataloging products with quality photos is something we're still working on."
-learnings: "I learned that reaching customers with physical products is tough. The owner is happy with the site, but stock and images remain a logistical challenge."
+motivation: "A collaboration with a local 3D printing business that already generates revenue. I chose Astro for speed and because I wanted to try a new framework."
+challenges: "The biggest challenge was the visual design, solved in collaboration with an artist who drove the aesthetic direction. Cataloging products with quality photos is still ongoing work."
+learnings: "I learned that reaching customers with physical products is tough. The client is happy with the site, but stock and image management remain a logistical challenge."
 context: "Online and operational. Orders currently come through other channels. SEO and marketing are pending."
 tags: ["Astro", "Tailwind", "TypeScript"]
 heroImage: "/projects/pepa-print3d/desktop.png"

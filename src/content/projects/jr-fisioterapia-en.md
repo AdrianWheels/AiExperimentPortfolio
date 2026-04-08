@@ -12,7 +12,7 @@ results:
   - "Automatic SMS notifications with Twilio"
   - "Installable PWA for mobile bookings"
   - "Admin panel with full patient management"
-motivation: "My brother is a physiotherapist and was the first client. My goal is to sell this system to other professionals and support local businesses with tech tools. I'm also looking for financial independence."
+motivation: "First iteration with a real client from a physiotherapy clinic. The goal is to sell the system to other professionals in the sector and support local businesses with tech tools."
 challenges: "The most complex part was Google Calendar integration: permissions, Google's ecosystem, and test environments. Bidirectional sync was really challenging. With Twilio I had issues with Spanish phone numbers — barely accessible and more expensive."
 learnings: "I learned that software for a real business needs far more testing than I can do alone. Also that platforms like Twilio and Supabase massively simplify the work."
 context: "In production with a small number of patients (testing phase). The client uses it daily."
