@@ -21,7 +21,7 @@ heroImage: "/projects/jr-fisioterapia/desktop.png"
 gallery:
   - "/projects/jr-fisioterapia/mobile.png"
 links:
-  live: "https://jorgerueda-fisio.vercel.app"
+  live: "https://jorgeruedafisio.com"
 order: 2
 ---
 
