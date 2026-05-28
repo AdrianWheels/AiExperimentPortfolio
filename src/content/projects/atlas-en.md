@@ -25,7 +25,8 @@ gallery:
   - "/projects/atlas/Atlasnotas.png"
 links:
   video: "https://youtu.be/-gQbGl9LBCc"
-order: 4
+order: 5
+tier: featured
 ---
 
 ## The Challenge

@@ -18,7 +18,8 @@ learnings: "I learned how rigid and slow everything is in an academic environmen
 context: "The system is still in use as far as I know. I participate in any related publications."
 tags: ["Software", "Neuroscience", "Research", "UX"]
 heroImage: "/projects/vrhat/vrhatintro.png"
-order: 6
+order: 10
+tier: more
 ---
 
 ## The Challenge

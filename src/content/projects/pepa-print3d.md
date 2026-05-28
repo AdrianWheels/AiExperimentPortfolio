@@ -21,7 +21,8 @@ gallery:
   - "/projects/pepa-print3d/mobile.png"
 links:
   live: "https://pepaprint3d.com"
-order: 1
+order: 4
+tier: featured
 ---
 
 ## El Reto

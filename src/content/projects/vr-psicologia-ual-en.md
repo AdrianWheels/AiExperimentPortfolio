@@ -20,7 +20,8 @@ tags: ["Unity", "VR", "Research", "Psychology"]
 heroImage: "/projects/vrhat/vrhatintro.png"
 gallery:
   - "/projects/vrhat/vrhatpiso.png"
-order: 5
+order: 9
+tier: more
 ---
 
 ## The Challenge

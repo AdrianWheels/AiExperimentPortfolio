@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content'
+import ProjectCardIsland from '../ui/ProjectCardIsland'
+import { t, getLocalizedUrl } from '../../i18n'
+import type { Locale } from '../../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+
+const allProjects = await getCollection('projects')
+const sorted = allProjects
+  .filter(p => p.data.locale === locale)
+  .sort((a, b) => a.data.order - b.data.order)
+
+// Project images mapping (matches original BentoProjects.jsx)
+const projectImages: Record<string, string[]> = {
+  'coloreveryday': [
+    '/projects/coloreverday/coloreveryday.png',
+    '/projects/coloreverday/coloreveryday-calendar.png',
+  ],
+  'atlas': [
+    '/projects/atlas/atlascentromando.png',
+    '/projects/atlas/atlasfuego.png',
+    '/projects/atlas/atlasinvernadero.png',
+    '/projects/atlas/atlasmanos.png',
+    '/projects/atlas/Atlasnotas.png',
+  ],
+  'vr-psicologia-ual': [
+    '/projects/vrhat/vrhatintro.png',
+    '/projects/vrhat/vrhatpiso.png',
+  ],
+  'jr-fisioterapia': [
+    '/projects/jr-fisioterapia/desktop.png',
+    '/projects/jr-fisioterapia/mobile.png',
+  ],
+  'pepa-print3d': [
+    '/projects/pepa-print3d/desktop.png',
+    '/projects/pepa-print3d/mobile.png',
+  ],
+  'picturam': [
+    '/projects/picturam/desktop.png',
+    '/projects/picturam/mobile.png',
+  ],
+  'brisca': [
+    '/projects/brisca/desktop.png',
+    '/projects/brisca/mobile.png',
+  ],
+  'mementic': [
+    '/projects/mementic/desktop.png',
+  ],
+  'almeriaah': [
+    '/projects/almeriaah/desktop.png',
+  ],
+}
+
+const projectsData = sorted.map((p) => {
+  const baseSlug = p.slug.replace(/-en$/, '')
+  return {
+    slug: baseSlug,
+    title: p.data.title,
+    year: p.data.year,
+    description: p.data.description,
+    tags: p.data.tags,
+    tier: p.data.tier,
+    images: projectImages[baseSlug] || [],
+  }
+})
+---
+
+<ProjectCardIsland
+  client:visible
+  projects={projectsData}
+  locale={locale}
+  headerTitle={t(locale, 'projects.title')}
+  activeLabel={t(locale, 'projects.active')}
+  ctaText={t(locale, 'projects.cta')}
+  projectsBasePath={getLocalizedUrl(locale, '/projects')}
+/>

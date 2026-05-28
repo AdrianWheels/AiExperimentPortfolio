@@ -23,6 +23,7 @@ const projects = defineCollection({
     learnings: z.string().optional(),
     context: z.string().optional(),
     order: z.number(),
+    tier: z.enum(['featured', 'more']).default('featured'),
     locale: z.enum(['es', 'en']).default('es'),
     baseSlug: z.string().optional(),
   }),

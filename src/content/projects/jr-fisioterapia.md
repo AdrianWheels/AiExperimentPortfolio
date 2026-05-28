@@ -21,7 +21,8 @@ gallery:
   - "/projects/jr-fisioterapia/mobile.png"
 links:
   live: "https://jorgeruedafisio.com"
-order: 2
+order: 1
+tier: featured
 ---
 
 ## El Reto

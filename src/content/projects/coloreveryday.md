@@ -19,7 +19,8 @@ tags: ["React", "Tailwind", "Gemini 2.5 Flash", "AI"]
 heroImage: "/projects/coloreverday/coloreveryday.png"
 gallery:
   - "/projects/coloreverday/coloreveryday-calendar.png"
-order: 3
+order: 6
+tier: featured
 ---
 
 ## El Reto

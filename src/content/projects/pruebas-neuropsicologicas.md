@@ -17,7 +17,8 @@ learnings: "Aprendí la rigidez y lo lento que va todo en un entorno académico,
 context: "El sistema se sigue usando según tengo entendido. Participo en las publicaciones que se hagan al respecto."
 tags: ["Software", "Neurociencia", "Investigación", "UX"]
 heroImage: "/projects/vrhat/vrhatintro.png"
-order: 6
+order: 10
+tier: more
 ---
 
 ## El Reto

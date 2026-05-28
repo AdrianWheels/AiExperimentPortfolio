@@ -8,7 +8,7 @@
           "level": "avanzado"
         },
         {
-          "label": "Python",
+          "label": "Next.js",
           "level": "avanzado"
         },
         {
@@ -16,11 +16,23 @@
           "level": "avanzado"
         },
         {
+          "label": "Node.js",
+          "level": "avanzado"
+        },
+        {
+          "label": "Python",
+          "level": "avanzado"
+        },
+        {
           "label": "Tailwind",
           "level": "avanzado"
         },
         {
-          "label": "Ignition Automotion",
+          "label": "Supabase",
+          "level": "avanzado"
+        },
+        {
+          "label": "Godot 4",
           "level": "avanzado"
         },
         {
@@ -29,6 +41,14 @@
         },
         {
           "label": "Unity",
+          "level": "avanzado"
+        },
+        {
+          "label": "FastAPI",
+          "level": "avanzado"
+        },
+        {
+          "label": "Ignition Automation",
           "level": "avanzado"
         },
         {
@@ -52,7 +72,19 @@
           "level": "avanzado"
         },
         {
+          "label": "Gemini AI",
+          "level": "avanzado"
+        },
+        {
           "label": "ComfyUI",
+          "level": "avanzado"
+        },
+        {
+          "label": "Whisper STT",
+          "level": "avanzado"
+        },
+        {
+          "label": "LightGBM",
           "level": "intermedio"
         },
         {
@@ -87,12 +119,26 @@
   ],
   "toolbelt": [
     {
-      "title": "Stack de Realidad Virtual",
+      "title": "Stack Web Moderno",
       "tools": [
+        "Next.js",
+        "Supabase",
+        "Prisma",
+        "Vercel"
+      ],
+      "commentary": {
+        "normal": "Desarrollo aplicaciones web full stack con arquitectura moderna, desde SaaS hasta landing pages con deploys automatizados.",
+        "hacked": "ARSENAL WEB COMPLETO: El sujeto despliega aplicaciones en la nube como quien lanza satélites. Bases de datos, APIs, autenticación... todo bajo su control."
+      }
+    },
+    {
+      "title": "Stack de Realidad Virtual & Gaming",
+      "tools": [
+        "Godot 4",
         "Unity",
         "C#",
-        "Blender",
-        "SteamVR"
+        "GDScript",
+        "Blender"
       ],
       "commentary": {
         "normal": "Desarrollo experiencias inmersivas completas, desde modelado 3D hasta programación de interacciones y publicación.",

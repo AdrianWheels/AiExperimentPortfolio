@@ -19,7 +19,8 @@ tags: ["Unity", "VR", "Investigación", "Psicología"]
 heroImage: "/projects/vrhat/vrhatintro.png"
 gallery:
   - "/projects/vrhat/vrhatpiso.png"
-order: 5
+order: 9
+tier: more
 ---
 
 ## El Reto
