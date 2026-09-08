@@ -1,17 +1,23 @@
 {
-  "name": "genio-atrapado",
-  "version": "0.1.0",
+  "name": "adrian-rueda-portfolio",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "dev:old": "vite",
+    "build:old": "vite build"
   },
   "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.18.1",
     "lucide-react": "^0.555.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

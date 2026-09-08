@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content'
+import ProjectDetailView from '../../../page-views/ProjectDetailView.astro'
+
+export async function getStaticPaths() {
+  const allProjects = await getCollection('projects')
+  const enProjects = allProjects.filter(p => p.data.locale === 'en')
+
+  return enProjects.map((project) => ({
+    params: { slug: project.slug.replace(/-en$/, '') },
+    props: { project },
+  }))
+}
+
+const { project } = Astro.props
+---
+
+<ProjectDetailView project={project} locale="en" />

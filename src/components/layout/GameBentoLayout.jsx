@@ -89,7 +89,7 @@ const GameBentoLayout = () => {
         <div className="shared-layout-inner lg:aspect-video flex flex-col lg:block relative p-4 lg:p-0">
           {/* Bento Grid Container */}
           <div className="w-full h-auto lg:h-full lg:aspect-video relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-4 gap-4 w-full h-auto lg:h-full pb-24 lg:pb-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-4 gap-4 w-full h-auto lg:h-full pb-20 lg:pb-0">
 
               {/* --- COLUMN 1 --- */}
 

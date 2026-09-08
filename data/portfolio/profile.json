@@ -13,7 +13,7 @@
   "availability": "Actualmente empleado en GRS",
   "contact": {
     "email": "drilan@gmail.com",
-    "portfolio": "https://placeholder.dev",
+    "portfolio": "https://adrianrueda.dev",
     "phone": "691664913",
     "timeZone": "UTC+1 (CET)"
   },
@@ -29,16 +29,16 @@
   ],
   "highlights": [
     {
-      "title": "Realidad Virtual & Gaming",
-      "description": "Desarrollo de experiencias inmersivas con Unity y C# para aplicaciones científicas y artísticas."
+      "title": "Game Dev & Realidad Virtual",
+      "description": "Desarrollo de videojuegos con Godot 4 y experiencias VR inmersivas con Unity y C# para aplicaciones científicas y artísticas."
     },
     {
-      "title": "Neurociencia Aplicada",
-      "description": "Creación de pruebas neuropsicológicas digitales y herramientas para investigación cognitiva."
+      "title": "Full Stack & SaaS",
+      "description": "Aplicaciones web completas con Next.js, React, Supabase y Prisma. Desde gestión de citas hasta plataformas de flotas."
     },
     {
-      "title": "Infraestructura Cloud",
-      "description": "Administración de sistemas en AWS y gestión de servidores para startups tecnológicas."
+      "title": "Neurociencia & IA Aplicada",
+      "description": "Integración de IA generativa (Gemini, Claude) en productos y herramientas de investigación cognitiva."
     }
   ],
   "hackedHighlights": [

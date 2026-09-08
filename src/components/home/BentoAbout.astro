@@ -1,0 +1,34 @@
+---
+import { t, getProfile } from '../../i18n'
+import type { Locale } from '../../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const profile = getProfile(locale)
+---
+
+<div class="h-full flex flex-col justify-between p-2">
+  <div>
+    <h3 class="text-xs font-bold tracking-widest text-gray-400 uppercase mb-3">{t(locale, 'about.title')}</h3>
+    <p class="text-sm text-gray-300 leading-relaxed">
+      {profile.summary}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <div class="bg-white/5 rounded-lg p-2 border border-white/5">
+      <span class="block text-[10px] text-gray-500 uppercase tracking-wider">{t(locale, 'about.location')}</span>
+      <span class="text-xs text-white">{profile.location}</span>
+    </div>
+    <div class="bg-white/5 rounded-lg p-2 border border-white/5">
+      <span class="block text-[10px] text-gray-500 uppercase tracking-wider">{t(locale, 'about.status')}</span>
+      <span class="text-xs text-orange-400 flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+        {t(locale, 'about.employed')}
+      </span>
+    </div>
+  </div>
+</div>

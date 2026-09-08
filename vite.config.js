@@ -7,4 +7,8 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'docs',
   },
+  // Strip console.log/warn/info/debug en production (mantiene console.error)
+  esbuild: {
+    pure: mode === 'production' ? ['console.log', 'console.info', 'console.debug', 'console.warn'] : [],
+  },
 }))

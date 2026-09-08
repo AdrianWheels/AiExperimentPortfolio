@@ -191,7 +191,7 @@ const EVENT_MESSAGES = {
 // Mensajes para el portfolio (vista normal)
 const PORTFOLIO_MESSAGES = [
     'Bienvenido al portfolio de Adrián Rueda',
-    'Full Stack Developer • React • Three.js',
+    'Full Stack Developer • React • Next.js',
     'Explora los proyectos a tu ritmo',
     '¿Tienes un proyecto en mente?',
     'K.I.R.A. supervisando... todo en orden',
@@ -383,7 +383,7 @@ const KiraMessageBoard = () => {
     }
 
     return (
-        <div className="kira-message-board w-full h-16 relative overflow-hidden flex items-center justify-center">
+        <div className="kira-message-board w-full h-10 md:h-12 lg:h-16 relative overflow-hidden flex items-center justify-center">
             {/* Fondo con gradiente sutil */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-xl" />
 
@@ -399,7 +399,7 @@ const KiraMessageBoard = () => {
             {/* Mensaje principal */}
             <div
                 className={`
-          text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide text-center px-20
+          text-sm md:text-xl lg:text-2xl xl:text-4xl font-bold tracking-wide text-center px-12 md:px-20
           transition-all duration-500 ease-out
           ${getMessageStyles()}
           ${getAnimationStyles()}

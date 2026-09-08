@@ -48,7 +48,7 @@ const ProjectModal = ({ project, onClose, projectImages = {} }) => {
       <div
         className={`
           bg-[#12121a] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row 
-          w-[90vw] max-w-5xl h-[70vh] shadow-2xl 
+          w-[95vw] md:w-[90vw] max-w-5xl max-h-[90vh] md:max-h-[80vh] shadow-2xl 
           transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] transform origin-right
           ${isVisible ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-95 translate-x-20'}
         `}
@@ -95,7 +95,7 @@ const ProjectModal = ({ project, onClose, projectImages = {} }) => {
             )}
           </div>
 
-          <div className="mt-auto pt-8 flex gap-4">
+          <div className="mt-6 pt-6 flex gap-4 border-t border-white/5">
             <button className="px-6 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition-colors text-sm">
               View Case Study
             </button>
@@ -103,7 +103,7 @@ const ProjectModal = ({ project, onClose, projectImages = {} }) => {
         </div>
 
         {/* Column 2: Images Container */}
-        <div className="hidden md:flex flex-col w-80 border-l border-white/5 overflow-y-auto bg-black/20">
+        <div className="flex flex-row md:flex-col w-full md:w-80 border-t md:border-t-0 md:border-l border-white/5 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden bg-black/20 max-h-40 md:max-h-none">
           {/* Video Section */}
           {project.links?.video && (
             <div className="w-full aspect-video border-b border-white/5 shrink-0">

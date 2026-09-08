@@ -1,0 +1,71 @@
+---
+import { getLocaleFromUrl, stripLocalePrefix, getLocalizedUrl } from '../../i18n'
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+  canonicalURL?: string
+  type?: 'website' | 'article'
+}
+
+const {
+  title,
+  description,
+  image = '/og-image.png',
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  type = 'website',
+} = Astro.props
+
+const locale = getLocaleFromUrl(Astro.url)
+const basePath = stripLocalePrefix(Astro.url.pathname)
+const esUrl = new URL(getLocalizedUrl('es', basePath), Astro.site).href
+const enUrl = new URL(getLocalizedUrl('en', basePath), Astro.site).href
+const siteName = 'Adrián Rueda — Creative Developer'
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/favicon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content="Adrián Rueda Fernández" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href={canonicalURL} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.site).href} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="es" href={esUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={esUrl} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(image, Astro.site).href} />

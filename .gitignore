@@ -10,3 +10,7 @@ coverage
 .superpowers/
 .astro/
 CUESTIONARIO_PROYECTOS.md
+
+# capturas de verificacion sueltas en la raiz (regenerables)
+/*.png
+.playwright-mcp/

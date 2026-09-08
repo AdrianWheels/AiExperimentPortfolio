@@ -1,0 +1,36 @@
+---
+import { t, getProfile, profileBase } from '../../i18n'
+import type { Locale } from '../../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const profile = getProfile(locale)
+---
+
+<div class="relative z-10 flex flex-col items-center h-full pt-6 lg:pt-8 pb-16 lg:pb-28 text-center">
+  <div class="flex items-center gap-2 mb-3 lg:mb-4 opacity-80">
+    <span class="text-yellow-300 animate-pulse">&#10024;</span>
+    <span class="text-xs font-medium tracking-[0.2em] text-purple-200">{t(locale, 'hero.badge')}</span>
+  </div>
+
+  <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 tracking-tight text-white">
+    {profileBase.name.split(' ')[0]}
+  </h1>
+  <p class="text-2xl md:text-3xl lg:text-5xl font-bold mb-3 lg:mb-4 tracking-tight text-purple-200">
+    {profileBase.name.split(' ').slice(1).join(' ')}
+  </p>
+
+  <p class="text-sm text-purple-100 max-w-[80%] leading-relaxed font-medium mb-2">
+    {profile.tagline}
+  </p>
+  <p class="text-xs text-purple-200/60 max-w-[85%] leading-relaxed font-light italic">
+    {t(locale, 'hero.quote')}
+  </p>
+
+  <!-- Decorative rings -->
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full pointer-events-none hidden lg:block"></div>
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[400px] h-[400px] border border-white/10 rounded-full pointer-events-none hidden lg:block"></div>
+</div>

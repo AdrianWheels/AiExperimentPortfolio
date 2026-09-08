@@ -9,10 +9,10 @@ const BentoHero = () => {
         <span className="text-xs font-medium tracking-[0.2em] text-purple-200">SYSTEM ARCHITECT</span>
       </div>
 
-      <h1 className="text-5xl font-bold mb-2 tracking-tight text-white">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 tracking-tight text-white">
         {profileData.name.split(' ')[0]}
       </h1>
-      <h1 className="text-5xl font-bold mb-4 tracking-tight text-purple-200">
+      <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold mb-4 tracking-tight text-purple-200">
         {profileData.name.split(' ').slice(1).join(' ')}
       </h1>
 

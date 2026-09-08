@@ -18,7 +18,7 @@ const PortfolioBentoLayout = () => {
       <StarryBackground />
 
       {/* MOBILE STICKY HEADER - Solo visible en móvil/tablet */}
-      <div className="mobile-sticky-header md:hidden">
+      <div className="mobile-sticky-header lg:hidden">
         {/* Avatar del usuario */}
         <div className="mobile-header-avatar">
           <img
@@ -41,7 +41,7 @@ const PortfolioBentoLayout = () => {
 
       {/* CSS for Mobile Mask Reset */}
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
           .mobile-mask-reset {
             -webkit-mask-image: none !important;
             mask-image: none !important;
@@ -50,20 +50,20 @@ const PortfolioBentoLayout = () => {
       `}</style>
 
       {/* Main Container - Aspect Video on Desktop, Auto on Mobile */}
-      <div className="shared-layout-inner md:aspect-video flex flex-col md:block relative">
+      <div className="shared-layout-inner lg:aspect-video flex flex-col lg:block relative">
 
         {/* Grid Container */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 w-full h-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-4 gap-4 w-full h-full">
 
           {/* --- COLUMN 1 --- */}
 
           {/* Top Left: Skills */}
-          <div className="md:col-start-1 md:row-start-1 md:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden group h-64 md:h-auto">
+          <div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden group h-64 md:h-72 lg:h-auto">
             <BentoSkills />
           </div>
 
           {/* Bottom Left: About */}
-          <div className="md:col-start-1 md:row-start-3 md:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden h-64 md:h-auto">
+          <div className="lg:col-start-1 lg:row-start-3 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden h-64 md:h-auto lg:h-auto">
             <BentoAbout />
           </div>
 
@@ -72,7 +72,7 @@ const PortfolioBentoLayout = () => {
 
           {/* Top Center: Hero */}
           <div
-            className="md:col-start-2 md:col-span-2 md:row-start-1 md:row-span-2 bg-[#5b21b6] rounded-3xl p-4 flex flex-col items-center text-center relative overflow-hidden border border-white/10 h-80 md:h-auto mobile-mask-reset"
+            className="md:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-1 lg:row-span-2 bg-[#5b21b6] rounded-3xl p-4 flex flex-col items-center text-center relative overflow-hidden border border-white/10 h-72 md:h-80 lg:h-auto mobile-mask-reset"
             style={{
               maskImage: `radial-gradient(circle at 50% calc(100% + 8px), transparent ${biteRadius}, black ${biteRadius})`,
               WebkitMaskImage: `radial-gradient(circle at 50% calc(100% + 8px), transparent ${biteRadius}, black ${biteRadius})`
@@ -85,7 +85,7 @@ const PortfolioBentoLayout = () => {
 
           {/* Bottom Center: Timeline (Merged) */}
           <div
-            className="md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative group overflow-hidden h-80 md:h-auto mobile-mask-reset"
+            className="md:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-3 lg:row-span-2 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative group overflow-hidden h-80 md:h-auto lg:h-auto mobile-mask-reset"
             style={{
               maskImage: `radial-gradient(circle at 50% -8px, transparent ${biteRadius}, black ${biteRadius})`,
               WebkitMaskImage: `radial-gradient(circle at 50% -8px, transparent ${biteRadius}, black ${biteRadius})`
@@ -98,14 +98,14 @@ const PortfolioBentoLayout = () => {
           {/* --- COLUMN 4 --- */}
 
           {/* Top Right: NavToggle + Socials - Oculto en móvil porque está en el header */}
-          <div className="hidden md:flex md:col-start-4 md:row-start-1 bg-[#13131f] rounded-3xl p-4 flex-col items-center justify-center gap-3 border border-white/5 h-32 md:h-auto">
+          <div className="hidden lg:flex lg:col-start-4 lg:row-start-1 bg-[#13131f] rounded-3xl p-4 flex-col items-center justify-center gap-3 border border-white/5 h-32 lg:h-auto">
             <NavToggle />
             <div className="w-12 h-px bg-white/10"></div>
             <BentoSocials />
           </div>
 
           {/* Right Column: Projects */}
-          <div className="md:col-start-4 md:row-start-2 md:row-span-3 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden h-96 md:h-auto">
+          <div className="md:col-span-2 lg:col-span-1 lg:col-start-4 lg:row-start-2 lg:row-span-3 bg-[#13131f] rounded-3xl p-4 flex flex-col border border-white/5 relative overflow-hidden h-96 md:h-auto lg:h-auto">
             <BentoProjects />
           </div>
 
@@ -114,8 +114,8 @@ const PortfolioBentoLayout = () => {
         {/* CENTRAL ORB - User Photo */}
         {/* Mobile: Oculto (foto en header sticky). Desktop: Centrado absolutamente */}
         <div className="
-            hidden md:flex
-            md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[200px] md:h-[200px] 
+            hidden lg:flex
+            lg:absolute lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:w-[200px] lg:h-[200px]
             pointer-events-none items-center justify-center
         ">
           {/* Outer Ring */}
@@ -141,7 +141,7 @@ const PortfolioBentoLayout = () => {
       </div>
 
       {/* KIRA Message Board - fijo en la parte inferior de la pantalla */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 max-w-[1600px] w-full px-8 z-30">
+      <div className="fixed bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 max-w-[1600px] w-full px-4 lg:px-8 z-30">
         <KiraMessageBoard />
       </div>
     </div>

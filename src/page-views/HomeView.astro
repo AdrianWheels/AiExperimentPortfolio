@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import BentoGrid from '../components/home/BentoGrid.astro'
+import { getLocaleFromUrl, t, getProfile, profileBase, coreSkills } from '../i18n'
+
+const locale = getLocaleFromUrl(Astro.url)
+const profile = getProfile(locale)
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": profileBase.name,
+  "alternateName": profileBase.alias,
+  "jobTitle": t(locale, 'schema.jobTitle'),
+  "description": profile.summary,
+  "url": "https://adrianrueda.dev",
+  "sameAs": profileBase.social.map(s => s.url),
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Almería",
+    "addressCountry": "ES",
+  },
+  "knowsAbout": coreSkills.flatMap(c => c.items),
+  "email": profileBase.contact.email,
+}
+---
+
+<BaseLayout
+  title={t(locale, 'seo.home.title')}
+  description={t(locale, 'seo.home.description')}
+  schema={personSchema}
+>
+  <BentoGrid locale={locale} />
+</BaseLayout>
