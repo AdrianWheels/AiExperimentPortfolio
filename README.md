@@ -1,87 +1,48 @@
-# Genio Atrapado — Demo
+# adrianrueda.dev
 
-Un prototipo interactivo del "Genio Atrapado" basado en las especificaciones de `agent.md`. Esta aplicación web demuestra la lógica de locks, leds y telemetría en un entorno React moderno.
+Portfolio personal de Adrián Rueda. Astro 5 con islas de React, Tailwind y
+contenido en Markdown. Bilingüe: español en la raíz, inglés bajo `/en`.
 
-## Características
-
-- Interfaz de usuario intuitiva con Tailwind CSS
-- Persistencia de estado en localStorage
-- Animaciones y accesibilidad mejoradas
-- Integración con datos locales via JSON
-
-## Tecnologías Utilizadas
-
-- **React 18**: Para la construcción de la interfaz
-- **Vite**: Herramienta de desarrollo rápida
-- **Tailwind CSS**: Framework de estilos utilitarios
-- **PostCSS**: Procesador de CSS
-
-## Requisitos
-
-- Node.js 16 o superior
-- npm
-
-## Instalación
-
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/AdrianWheels/AiExperimentPortfolio.git
-   cd AiExperimentPortfolio
-   ```
-
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-
-3. Inicia el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
-
-La aplicación estará disponible en `http://localhost:5173`.
-
-## Uso
-
-- Abre la aplicación en tu navegador.
-- Interactúa con los elementos de la interfaz.
-- El estado se guarda automáticamente en localStorage.
-
-## Estructura del Proyecto
-
-```
-src/
-  App.jsx          # Componente principal
-  main.jsx         # Punto de entrada
-  components.css   # Estilos adicionales
-  styles.css       # Estilos globales
-data/
-  assistant.json   # Datos del assistant
-public/
-  base.css        # Estilos base
-  tailwind.css    # Configuración Tailwind
-  VisorGreen.png  # Imágenes
-  VisorRed.png
-```
-
-## Construcción para Producción
+## Desarrollo
 
 ```bash
-npm run build
-npm run preview
+npm install
+npm run dev      # http://localhost:4321
 ```
 
-## Próximos Pasos
+## Despliegue — importante
 
-- Añadir tests unitarios
-- Mejorar animaciones y accesibilidad
-- Integrar telemetría
-- Integrar webGPU y webLLM para un modelo pequeño que responda preguntas sencillas sobre mí, almacenadas en un JSON
+El sitio se sirve con **GitHub Pages desde la carpeta `docs/` de la rama
+`main`**, con dominio propio (`docs/CNAME`). **No hay CI que construya nada**:
+`docs/` es un artefacto que se genera en local y se commitea a mano.
 
-## Contribuciones
+```bash
+npm run build    # escribe en docs/  (outDir en astro.config.mjs)
+git add docs
+git commit -m "..."
+git push origin main
+```
 
-¡Las contribuciones son bienvenidas! Por favor, abre un issue o envía un pull request.
+Un push sin `npm run build` previo no cambia la web publicada.
 
-## Licencia
+## Estructura
 
-Este proyecto está bajo la Licencia MIT.
+| Ruta | Qué es |
+|---|---|
+| `src/pages/` | routing por ficheros; son envoltorios de 3 líneas |
+| `src/page-views/` | el markup real, compartido entre ES e EN |
+| `src/layouts/BaseLayout.astro` | head, SEO, hreflang, fondo de estrellas y el chatbot Kira |
+| `src/content/projects/` | una ficha `.md` por proyecto e idioma (`brisca.md`, `brisca-en.md`) |
+| `src/i18n/` | textos y datos; nada de cadenas sueltas en las vistas |
+| `public/` | se copia tal cual a la raíz del sitio |
+| `docs/` | salida del build **y** lo que Pages publica |
+
+Añadir un proyecto es crear su `.md` en `src/content/projects/` siguiendo el
+esquema de `src/content/config.ts`, más su par `-en.md`.
+
+## Kira
+
+El chatbot del portfolio. Usa Groq con streaming y cae a respuestas por
+patrones si no hay clave. La variable es `PUBLIC_GROQ_API_KEY` y, por llevar
+el prefijo `PUBLIC_`, **acaba en el bundle del cliente y es visible**: no
+pongas ahí una clave que te importe.
