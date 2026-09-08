@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Felicidades María</title>
+<style>
+  :root{
+    --fondo:#0c0b0a;
+    --tinta:#f4efe8;
+    --tenue:#7d766d;
+    --pepa:#e0bd7c;
+    --pulga:#c9714f;
+    --alto-media:62vh;
+    --hueco:3.4vw;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{
+    margin:0;overflow-x:hidden;background:var(--fondo);color:var(--tinta);
+    font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- 1. portada (scroll vertical) ---------- */
+  .portada{
+    min-height:100svh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:clamp(26px,4.5vh,54px);padding:10vh 6vw;
+  }
+  .portada .fila{
+    display:flex;align-items:center;justify-content:center;
+    gap:clamp(24px,4.5vw,76px);
+  }
+  .retrato{
+    flex:0 0 auto;width:clamp(122px,15vw,232px);aspect-ratio:4/5;
+    overflow:hidden;border-radius:2px;background:#17140f;
+  }
+
+  /* el video de las perras cantando, debajo del titulo */
+  .clip{
+    position:relative;margin:0;flex:0 0 auto;
+    width:min(300px,66vw);max-height:38vh;
+    border-radius:3px;overflow:hidden;background:#17140f;
+    box-shadow:0 18px 50px rgba(0,0,0,.55);
+  }
+  .clip video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}
+  .sonido{
+    position:absolute;left:50%;bottom:12px;translate:-50% 0;
+    display:inline-flex;align-items:center;gap:.5em;
+    padding:.5em 1em;border:0;border-radius:999px;
+    background:rgba(12,11,10,.72);backdrop-filter:blur(6px);
+    color:var(--tinta);font:400 10px/1 var(--sans);
+    letter-spacing:.22em;text-transform:uppercase;cursor:pointer;
+    transition:background .25s ease,opacity .25s ease;
+  }
+  .sonido:hover{background:rgba(12,11,10,.9)}
+  .sonido.activo{opacity:.45}
+  .retrato img{
+    width:100%;height:100%;object-fit:cover;
+    filter:grayscale(1) contrast(1.06);   /* quitalo si las pones ya en color */
+  }
+  .saludo{text-align:center;flex:0 1 auto}
+  .saludo .pequeno{
+    display:block;font:400 clamp(11px,1.1vw,13px)/1 var(--sans);
+    letter-spacing:.42em;text-transform:uppercase;color:var(--tenue);
+    margin-bottom:clamp(14px,1.8vw,26px);
+  }
+  .saludo h1{margin:0;font:400 clamp(38px,7.4vw,110px)/.95 var(--serif);letter-spacing:-.02em}
+  .saludo h1 em{display:block;font-style:italic}
+  .saludo .firma{
+    margin:clamp(18px,2.2vw,30px) 0 0;font-size:12px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--tenue);
+  }
+  .saludo .firma b{font-weight:400}
+  .saludo .firma .a{color:var(--pulga)}
+  .saludo .firma .b{color:var(--pepa)}
+
+  /* ---------- 2. galeria: alto en px puesto por JS ----------
+     .pegado se queda anclado y el avance vertical se traduce en horizontal */
+  .carrusel{position:relative}
+  .pegado{
+    position:sticky;top:0;height:100svh;overflow:hidden;
+    display:flex;align-items:center;
+    /* 32 32 = el punto sensible va en el centro de la huella, no en la esquina */
+    cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%20%3Cdefs%3E%20%3Cg%20id%3D%22patita%22%3E%20%3Cellipse%20cx%3D%2222%22%20cy%3D%2248%22%20rx%3D%227.8%22%20ry%3D%2213.2%22%20transform%3D%22rotate%28-27%2022%2048%29%22%2F%3E%20%3Cellipse%20cx%3D%2239%22%20cy%3D%2229%22%20rx%3D%228.2%22%20ry%3D%2215.6%22%20transform%3D%22rotate%28-9%2039%2029%29%22%2F%3E%20%3Cellipse%20cx%3D%2261%22%20cy%3D%2229%22%20rx%3D%228.2%22%20ry%3D%2215.6%22%20transform%3D%22rotate%289%2061%2029%29%22%2F%3E%20%3Cellipse%20cx%3D%2278%22%20cy%3D%2248%22%20rx%3D%227.8%22%20ry%3D%2213.2%22%20transform%3D%22rotate%2827%2078%2048%29%22%2F%3E%20%3Cpath%20d%3D%22M50%2051%20C60%2051%2067%2060%2067%2071%20C67%2082%2059.5%2089.5%2050%2089.5%20C40.5%2089.5%2033%2082%2033%2071%20C33%2060%2040%2051%2050%2051%20Z%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fdefs%3E%20%3Cg%20id%3D%22grupo%22%3E%20%3Cuse%20href%3D%22%23patita%22%20fill%3D%22%230c0b0a%22%20stroke%3D%22%230c0b0a%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20opacity%3D%22.55%22%2F%3E%20%3Cuse%20href%3D%22%23patita%22%20fill%3D%22%23f4efe8%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fsvg%3E") 32 32, grab;
+  }
+  body.arrastrando, body.arrastrando .pegado{
+    cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%20%3Cdefs%3E%20%3Cg%20id%3D%22patita%22%3E%20%3Cellipse%20cx%3D%2222%22%20cy%3D%2248%22%20rx%3D%227.8%22%20ry%3D%2213.2%22%20transform%3D%22rotate%28-27%2022%2048%29%22%2F%3E%20%3Cellipse%20cx%3D%2239%22%20cy%3D%2229%22%20rx%3D%228.2%22%20ry%3D%2215.6%22%20transform%3D%22rotate%28-9%2039%2029%29%22%2F%3E%20%3Cellipse%20cx%3D%2261%22%20cy%3D%2229%22%20rx%3D%228.2%22%20ry%3D%2215.6%22%20transform%3D%22rotate%289%2061%2029%29%22%2F%3E%20%3Cellipse%20cx%3D%2278%22%20cy%3D%2248%22%20rx%3D%227.8%22%20ry%3D%2213.2%22%20transform%3D%22rotate%2827%2078%2048%29%22%2F%3E%20%3Cpath%20d%3D%22M50%2051%20C60%2051%2067%2060%2067%2071%20C67%2082%2059.5%2089.5%2050%2089.5%20C40.5%2089.5%2033%2082%2033%2071%20C33%2060%2040%2051%2050%2051%20Z%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fdefs%3E%20%3Cg%20id%3D%22grupo%22%20transform%3D%22rotate%28-16%2050%2050%29%22%3E%20%3Cuse%20href%3D%22%23patita%22%20fill%3D%22%230c0b0a%22%20stroke%3D%22%230c0b0a%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20opacity%3D%22.55%22%2F%3E%20%3Cuse%20href%3D%22%23patita%22%20fill%3D%22%23f4efe8%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fsvg%3E") 32 32, grabbing;
+  }
+  body.arrastrando .pegado *{ cursor:inherit }
+  .pegado img{ -webkit-user-drag:none; user-select:none }
+  .tira{display:flex;align-items:center;gap:var(--hueco);width:max-content;padding:0 8vw;will-change:transform}
+
+  .marca{
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    height:var(--alto-media);writing-mode:vertical-rl;user-select:none;
+  }
+  .marca.ano{font:400 clamp(46px,7vw,104px)/1 var(--serif);color:#2b2622;letter-spacing:.06em;padding:0 1.2vw}
+  .marca.llegada{font:400 12px/1 var(--sans);letter-spacing:.34em;text-transform:uppercase;padding:0 .7vw}
+  .marca.llegada[data-perra="Pulga"]{color:var(--pulga)}
+  .marca.llegada[data-perra="Pepa"]{color:var(--pepa)}
+
+  .pieza{position:relative;flex:0 0 auto}
+  .marco{position:relative;overflow:hidden;height:var(--alto-media);background:#17140f;border-radius:2px}
+  .marco img{
+    position:absolute;top:0;left:-12.5%;width:125%;height:100%;object-fit:cover;
+    will-change:transform;opacity:0;transition:opacity .6s ease;
+  }
+  .marco img.lista{opacity:1}
+  .pie{display:flex;align-items:baseline;gap:.7em;margin-top:13px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .pie b{font-weight:500}
+  .pie .n{color:var(--tenue);font-variant-numeric:tabular-nums}
+  .pieza[data-perra="Pepa"] .pie b{color:var(--pepa)}
+  .pieza[data-perra="Pulga"] .pie b{color:var(--pulga)}
+  .pieza[data-perra="Ambas"] .pie b{
+    background:linear-gradient(90deg,var(--pulga),var(--pepa));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* ---------- 3. cierre (scroll vertical otra vez) ---------- */
+  .cierre{
+    min-height:100svh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2.5rem;padding:12vh 6vw;
+  }
+  .cierre p{
+    margin:0;font:400 clamp(40px,8vw,120px)/1 var(--serif);font-style:italic;
+    letter-spacing:-.02em;text-align:center;
+  }
+  .foto-final{
+    margin:0;width:min(560px,80vw);border-radius:3px;overflow:hidden;
+    background:#17140f;box-shadow:0 18px 50px rgba(0,0,0,.5);
+  }
+  .foto-final img{display:block;width:100%;height:auto}
+  .cierre .clip{width:min(300px,66vw);max-height:46vh}
+  .cierre .firma{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--tenue)}
+  .cierre .firma .a{color:var(--pulga)}
+  .cierre .firma .b{color:var(--pepa)}
+
+  /* ---------- modo criba (oculto salvo con la tecla C o #criba) ---------- */
+  .marcas{display:none}
+  body.criba .marcas{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
+  body.criba .marcas button{
+    flex:1 1 auto;padding:.5em .2em;border:1px solid #2e2925;border-radius:2px;
+    background:transparent;color:var(--tenue);cursor:pointer;
+    font:400 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;
+    transition:background .15s ease,color .15s ease,border-color .15s ease;
+  }
+  body.criba .marcas button:hover{border-color:#584f47;color:var(--tinta)}
+  .pieza[data-marca="Pulga"] .marcas [data-v="Pulga"]{background:var(--pulga);border-color:var(--pulga);color:#160f0c}
+  .pieza[data-marca="Pepa"]  .marcas [data-v="Pepa"]{background:var(--pepa);border-color:var(--pepa);color:#160f0c}
+  .pieza[data-marca="Ambas"] .marcas [data-v="Ambas"]{background:linear-gradient(90deg,var(--pulga),var(--pepa));border-color:var(--pepa);color:#160f0c}
+  .pieza[data-marca="fuera"] .marcas [data-v="fuera"]{background:#8d3b2f;border-color:#8d3b2f;color:#fff}
+
+  body.criba .pieza[data-marca]:not([data-marca=""]) .marco{outline:2px solid var(--tinta);outline-offset:3px}
+  body.criba .pieza[data-marca="fuera"] .marco{outline-color:#8d3b2f}
+  body.criba .pieza[data-marca="fuera"] img{opacity:.22;filter:grayscale(1)}
+  /* la foto centrada es a la que apuntan los atajos de teclado */
+  body.criba .pieza.enfocada .marco{box-shadow:0 0 0 1px var(--tinta),0 0 34px rgba(244,239,232,.28)}
+
+  .panel{
+    display:none;position:fixed;left:16px;bottom:16px;z-index:9;
+    background:rgba(12,11,10,.92);backdrop-filter:blur(8px);
+    border:1px solid #2e2925;border-radius:3px;padding:12px 14px;max-width:min(340px,86vw);
+    font:400 11px/1.6 var(--sans);letter-spacing:.08em;color:var(--tenue);
+  }
+  body.criba .panel{display:block}
+  .panel b{color:var(--tinta);font-weight:500}
+  .panel .fila2{display:flex;gap:6px;margin-top:9px}
+  .panel button{
+    padding:.55em .9em;border:1px solid #3a342e;border-radius:2px;
+    background:transparent;color:var(--tinta);cursor:pointer;
+    font:400 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  }
+  .panel button:hover{background:#1c1815}
+  .panel kbd{border:1px solid #3a342e;border-radius:2px;padding:0 .35em;font:400 10px/1.4 var(--sans);color:var(--tinta)}
+
+  /* ---------- interfaz ---------- */
+  .progreso{position:fixed;left:0;bottom:0;z-index:5;width:100%;height:2px;background:#1e1a17}
+  .progreso i{display:block;height:100%;width:0;background:var(--tinta)}
+  .pista{
+    position:fixed;left:50%;bottom:30px;translate:-50% 0;z-index:5;
+    font-size:11px;letter-spacing:.3em;color:var(--tenue);text-transform:uppercase;
+    transition:opacity .5s ease;pointer-events:none;
+  }
+  .pista.oculta{opacity:0}
+
+  @media (max-width:760px){
+    :root{--alto-media:44vh;--hueco:8vw}
+    .portada{gap:22px;padding:8vh 7vw}
+    /* en estrecho la fila no cabe: el saludo pasa arriba a lo ancho y los dos
+       retratos debajo, uno al lado del otro */
+    .portada .fila{
+      display:grid;width:100%;gap:14px;
+      grid-template-columns:1fr 1fr;
+      grid-template-areas:"saludo saludo" "izq der";
+    }
+    .portada .fila .retrato:first-of-type{grid-area:izq}
+    .portada .fila .retrato:last-of-type{grid-area:der}
+    .portada .saludo{grid-area:saludo}
+    .retrato{width:100%}
+    .clip{width:min(240px,62vw)}
+    .tira{padding:0 12vw}
+  }
+  @media (prefers-reduced-motion:reduce){ .marco img{transition:none} }
+</style>
+</head>
+<body>
+
+<section class="portada">
+  <div class="fila">
+    <figure class="retrato"><img src="hero/pulga.jpg" alt="Pulga"></figure>
+    <div class="saludo">
+      <span class="pequeno">Pulga &amp; Pepa</span>
+      <h1>Felicidades<em>María</em></h1>
+      <p class="firma"><b class="a">Pulga</b> &nbsp;·&nbsp; <b class="b">Pepa</b></p>
+    </div>
+    <figure class="retrato"><img src="hero/pepa.jpg" alt="Pepa"></figure>
+  </div>
+
+  <figure class="clip">
+    <!-- arranca mudo porque los navegadores bloquean el autoplay con sonido -->
+    <video id="cantando" src="media/cantando.mp4" poster="media/cantando.jpg"
+           muted loop playsinline autoplay preload="auto"></video>
+    <button class="sonido" id="sonido" type="button" aria-pressed="false">
+      <span>Con sonido</span>
+    </button>
+  </figure>
+</section>
+
+<section class="carrusel" id="carrusel">
+  <div class="pegado"><div class="tira" id="tira"></div></div>
+</section>
+
+<section class="cierre">
+  <figure class="foto-final"><img src="media/final.webp" alt="Maria con Pulga"></figure>
+  <p>Te queremos</p>
+
+  <figure class="clip">
+    <video src="media/hablando.mp4" poster="media/hablando.jpg"
+           muted loop playsinline autoplay preload="auto"></video>
+    <button class="sonido" type="button" aria-pressed="false"><span>Con sonido</span></button>
+  </figure>
+
+  <span class="firma"><b class="a">Pulga</b> &nbsp;·&nbsp; <b class="b">Pepa</b></span>
+</section>
+
+<div class="panel" id="panel">
+  <div id="cuenta">&mdash;</div>
+  <div style="margin-top:6px">
+    <kbd>1</kbd> Pulga &nbsp; <kbd>2</kbd> Pepa &nbsp; <kbd>3</kbd> Ambas &nbsp; <kbd>0</kbd> quitar
+  </div>
+  <div class="fila2">
+    <button type="button" id="descargar">Descargar criba</button>
+    <button type="button" id="salir">Salir</button>
+  </div>
+</div>
+
+<div class="progreso"><i id="barra"></i></div>
+<div class="pista" id="pista">scroll</div>
+
+<script>
+const DATOS = {"fotos":[{"src":"img/000.webp","perra":"Pulga","fecha":"2019-11-15","año":2019,"w":825,"h":1100},{"src":"img/001.webp","perra":"Pulga","fecha":"2019-11-15","año":2019,"w":825,"h":1100},{"src":"img/002.webp","perra":"Pulga","fecha":"2019-11-19","año":2019,"w":1280,"h":1086},{"src":"img/003.webp","perra":"Pulga","fecha":"2019-12-10","año":2019,"w":1280,"h":960},{"src":"img/004.webp","perra":"Pulga","fecha":"2019-12-13","año":2019,"w":1280,"h":958},{"src":"img/005.webp","perra":"Pulga","fecha":"2019-12-22","año":2019,"w":1280,"h":958},{"src":"img/006.webp","perra":"Pulga","fecha":"2019-12-29","año":2019,"w":1280,"h":958},{"src":"img/007.webp","perra":"Pulga","fecha":"2020-02-02","año":2020,"w":825,"h":1100},{"src":"img/008.webp","perra":"Pulga","fecha":"2020-02-03","año":2020,"w":1280,"h":958},{"src":"img/009.webp","perra":"Pulga","fecha":"2020-03-05","año":2020,"w":1280,"h":958},{"src":"img/010.webp","perra":"Pulga","fecha":"2020-03-20","año":2020,"w":892,"h":1100},{"src":"img/011.webp","perra":"Pulga","fecha":"2020-03-30","año":2020,"w":1280,"h":895},{"src":"img/012.webp","perra":"Pulga","fecha":"2020-04-08","año":2020,"w":619,"h":1100},{"src":"img/013.webp","perra":"Pulga","fecha":"2020-07-08","año":2020,"w":619,"h":1100},{"src":"img/014.webp","perra":"Pulga","fecha":"2020-08-27","año":2020,"w":825,"h":1100},{"src":"img/015.webp","perra":"Pulga","fecha":"2020-08-31","año":2020,"w":825,"h":1100},{"src":"img/016.webp","perra":"Pulga","fecha":"2020-09-06","año":2020,"w":825,"h":1100},{"src":"img/017.webp","perra":"Pulga","fecha":"2020-10-30","año":2020,"w":556,"h":1100},{"src":"img/018.webp","perra":"Pulga","fecha":"2020-12-03","año":2020,"w":825,"h":1100},{"src":"img/019.webp","perra":"Pulga","fecha":"2021-02-23","año":2021,"w":825,"h":1100},{"src":"img/020.webp","perra":"Pulga","fecha":"2021-03-07","año":2021,"w":825,"h":1100},{"src":"img/021.webp","perra":"Pulga","fecha":"2021-06-25","año":2021,"w":1280,"h":720},{"src":"img/022.webp","perra":"Pulga","fecha":"2021-07-03","año":2021,"w":825,"h":1100},{"src":"img/023.webp","perra":"Pulga","fecha":"2021-07-31","año":2021,"w":619,"h":1100},{"src":"img/024.webp","perra":"Pulga","fecha":"2021-08-22","año":2021,"w":1280,"h":960},{"src":"img/026.webp","perra":"Pulga","fecha":"2021-11-24","año":2021,"w":825,"h":1100},{"src":"img/028.webp","perra":"Pulga","fecha":"2022-02-09","año":2022,"w":619,"h":1100},{"src":"img/029.webp","perra":"Pulga","fecha":"2022-05-20","año":2022,"w":619,"h":1100},{"src":"img/030.webp","perra":"Pulga","fecha":"2022-07-08","año":2022,"w":619,"h":1100},{"src":"img/031.webp","perra":"Pulga","fecha":"2022-07-08","año":2022,"w":619,"h":1100},{"src":"img/032.webp","perra":"Pulga","fecha":"2022-07-09","año":2022,"w":619,"h":1100},{"src":"img/033.webp","perra":"Pulga","fecha":"2022-08-10","año":2022,"w":825,"h":1100},{"src":"img/035.webp","perra":"Pulga","fecha":"2022-10-08","año":2022,"w":1280,"h":720},{"src":"img/037.webp","perra":"Pulga","fecha":"2023-01-29","año":2023,"w":619,"h":1100},{"src":"img/038.webp","perra":"Pulga","fecha":"2023-04-23","año":2023,"w":846,"h":724},{"src":"img/039.webp","perra":"Pulga","fecha":"2023-05-05","año":2023,"w":1280,"h":853},{"src":"img/040.webp","perra":"Pulga","fecha":"2023-07-07","año":2023,"w":619,"h":1100},{"src":"img/041.webp","perra":"Pulga","fecha":"2023-07-23","año":2023,"w":619,"h":1100},{"src":"img/043.webp","perra":"Pulga","fecha":"2023-08-01","año":2023,"w":619,"h":1100},{"src":"img/044.webp","perra":"Pepa","fecha":"2023-11-09","año":2023,"w":825,"h":1100},{"src":"img/045.webp","perra":"Pepa","fecha":"2023-11-09","año":2023,"w":825,"h":1100},{"src":"img/046.webp","perra":"Pepa","fecha":"2023-11-09","año":2023,"w":825,"h":1100},{"src":"img/048.webp","perra":"Ambas","fecha":"2023-11-14","año":2023,"w":825,"h":1100},{"src":"img/049.webp","perra":"Pulga","fecha":"2023-11-23","año":2023,"w":825,"h":1100},{"src":"img/050.webp","perra":"Ambas","fecha":"2023-11-29","año":2023,"w":1280,"h":960},{"src":"img/051.webp","perra":"Pepa","fecha":"2023-11-29","año":2023,"w":825,"h":1100},{"src":"img/052.webp","perra":"Ambas","fecha":"2023-11-29","año":2023,"w":825,"h":1100},{"src":"img/055.webp","perra":"Ambas","fecha":"2024-01-29","año":2024,"w":1280,"h":958},{"src":"img/056.webp","perra":"Pepa","fecha":"2024-02-06","año":2024,"w":825,"h":1100},{"src":"img/057.webp","perra":"Ambas","fecha":"2024-02-19","año":2024,"w":825,"h":1100},{"src":"img/058.webp","perra":"Pepa","fecha":"2024-03-17","año":2024,"w":619,"h":1100},{"src":"img/059.webp","perra":"Pepa","fecha":"2024-04-01","año":2024,"w":619,"h":1100},{"src":"img/060.webp","perra":"Pepa","fecha":"2024-04-02","año":2024,"w":825,"h":1100},{"src":"img/061.webp","perra":"Pepa","fecha":"2024-04-08","año":2024,"w":825,"h":1100},{"src":"img/062.webp","perra":"Pepa","fecha":"2024-05-19","año":2024,"w":825,"h":1100},{"src":"img/063.webp","perra":"Pepa","fecha":"2024-05-30","año":2024,"w":825,"h":1100},{"src":"img/064.webp","perra":"Pulga","fecha":"2024-07-04","año":2024,"w":825,"h":1100},{"src":"img/065.webp","perra":"Pepa","fecha":"2024-08-01","año":2024,"w":825,"h":1100},{"src":"img/066.webp","perra":"Ambas","fecha":"2024-08-14","año":2024,"w":825,"h":1100},{"src":"img/067.webp","perra":"Ambas","fecha":"2024-08-16","año":2024,"w":825,"h":1100},{"src":"img/068.webp","perra":"Ambas","fecha":"2024-10-11","año":2024,"w":825,"h":1100},{"src":"img/069.webp","perra":"Ambas","fecha":"2024-11-07","año":2024,"w":1050,"h":590},{"src":"img/073.webp","perra":"Ambas","fecha":"2025-03-24","año":2025,"w":828,"h":1100},{"src":"img/074.webp","perra":"Ambas","fecha":"2025-04-20","año":2025,"w":828,"h":1100},{"src":"img/075.webp","perra":"Pulga","fecha":"2025-05-21","año":2025,"w":828,"h":1100},{"src":"img/076.webp","perra":"Ambas","fecha":"2025-06-05","año":2025,"w":619,"h":1100},{"src":"img/077.webp","perra":"Pepa","fecha":"2025-06-14","año":2025,"w":825,"h":1100},{"src":"img/078.webp","perra":"Ambas","fecha":"2025-06-17","año":2025,"w":1280,"h":960},{"src":"img/080.webp","perra":"Pulga","fecha":"2025-07-04","año":2025,"w":1178,"h":641},{"src":"img/081.webp","perra":"Pulga","fecha":"2025-07-24","año":2025,"w":825,"h":1100},{"src":"img/082.webp","perra":"Pulga","fecha":"2025-08-08","año":2025,"w":825,"h":1100},{"src":"img/083.webp","perra":"Pepa","fecha":"2025-08-26","año":2025,"w":825,"h":1100},{"src":"img/084.webp","perra":"Pepa","fecha":"2025-09-01","año":2025,"w":825,"h":1100},{"src":"img/085.webp","perra":"Ambas","fecha":"2025-09-24","año":2025,"w":825,"h":1100},{"src":"img/086.webp","perra":"Pepa","fecha":"2025-10-27","año":2025,"w":845,"h":1100},{"src":"img/088.webp","perra":"Pulga","fecha":"2025-11-13","año":2025,"w":868,"h":1100},{"src":"img/089.webp","perra":"Pulga","fecha":"2025-12-02","año":2025,"w":619,"h":1100},{"src":"img/090.webp","perra":"Pepa","fecha":"2026-02-03","año":2026,"w":619,"h":1100},{"src":"img/091.webp","perra":"Ambas","fecha":"2026-03-15","año":2026,"w":590,"h":1099},{"src":"img/092.webp","perra":"Ambas","fecha":"2026-03-24","año":2026,"w":828,"h":1100},{"src":"img/093.webp","perra":"Ambas","fecha":"2026-04-13","año":2026,"w":619,"h":1100},{"src":"img/094.webp","perra":"Pepa","fecha":"2026-04-23","año":2026,"w":700,"h":1100},{"src":"img/095.webp","perra":"Pepa","fecha":"2026-05-29","año":2026,"w":1280,"h":960},{"src":"img/096.webp","perra":"Pepa","fecha":"2026-06-01","año":2026,"w":716,"h":1100},{"src":"img/097.webp","perra":"Pepa","fecha":"2026-06-25","año":2026,"w":828,"h":1100},{"src":"img/099.webp","perra":"Ambas","fecha":"2026-07-01","año":2026,"w":619,"h":1100},{"src":"img/101.webp","perra":"Ambas","fecha":"2026-07-12","año":2026,"w":619,"h":1100},{"src":"img/103.webp","perra":"Pulga","fecha":"2026-07-31","año":2026,"w":825,"h":1100},{"src":"img/104.webp","perra":"Ambas","fecha":"2026-08-04","año":2026,"w":825,"h":1100}],"marcas":[{"i":0,"tipo":"año","texto":"2019"},{"i":0,"tipo":"llegada","texto":"La llegada de Pulga","perra":"Pulga"},{"i":7,"tipo":"año","texto":"2020"},{"i":19,"tipo":"año","texto":"2021"},{"i":26,"tipo":"año","texto":"2022"},{"i":33,"tipo":"año","texto":"2023"},{"i":39,"tipo":"llegada","texto":"La llegada de Pepa","perra":"Pepa"},{"i":47,"tipo":"año","texto":"2024"},{"i":62,"tipo":"año","texto":"2025"},{"i":77,"tipo":"año","texto":"2026"}]};
+
+const EASE = 0.12;        // suavizado del desplazamiento horizontal
+const RITMO = 1;          // px horizontales por cada px de scroll vertical.
+                          // 1 = natural pero largo; 2 = la mitad de scroll, va mas rapido
+const DESPL_MAX = 10;     // % del ancho de la imagen; es justo el margen del 125%/-12.5%
+
+const OPCIONES = [['Pulga','Pulga'], ['Pepa','Pepa'], ['Ambas','Ambas'], ['fuera','Quitar']];
+const LLAVE = 'criba-pepa-pulga';
+const CRIBA = false;   // false en la build publica: desactiva la herramienta de autor
+
+const carrusel = document.getElementById('carrusel');
+const tira = document.getElementById('tira');
+const barra = document.getElementById('barra');
+const pista = document.getElementById('pista');
+
+const piezas = [];
+let recorrido = 0;        // px horizontales que hay que recorrer
+let actual = 0;           // posicion suavizada
+
+const lerp = (a,b,t) => a + (b-a)*t;
+const tope = (v,min,max) => Math.max(min, Math.min(max, v));
+
+montar(DATOS);
+
+function marca(m){
+  const el = document.createElement('div');
+  el.className = 'marca ' + (m.tipo === 'año' ? 'ano' : 'llegada');
+  if (m.perra) el.dataset.perra = m.perra;
+  el.textContent = m.texto;
+  return el;
+}
+
+function montar({fotos, marcas}){
+  const frag = document.createDocumentFragment();
+  const porIndice = {};
+  for (const m of marcas) (porIndice[m.i] ||= []).push(m);
+
+  fotos.forEach((f, i) => {
+    for (const m of (porIndice[i] || [])) frag.appendChild(marca(m));
+
+    const pieza = document.createElement('article');
+    pieza.className = 'pieza';
+    pieza.dataset.perra = f.perra;
+
+    const marco = document.createElement('div');
+    marco.className = 'marco';
+    marco.style.width = `calc(var(--alto-media) * ${(f.w/f.h).toFixed(4)})`;
+
+    const img = document.createElement('img');
+    img.alt = `${f.perra}, ${f.fecha}`;
+    img.decoding = 'async';
+    img.draggable = false;
+    // el listener antes del src: con cache caliente el load ya habria pasado
+    img.addEventListener('load', () => { img.classList.add('lista'); medir(); }, {once:true});
+    img.src = f.src;
+    if (img.complete) img.classList.add('lista');
+    marco.appendChild(img);
+
+    const pie = document.createElement('div');
+    pie.className = 'pie';
+    const quien = f.perra === 'Ambas' ? 'Pulga &amp; Pepa' : f.perra;
+    pie.innerHTML = `<b>${quien}</b><span class="n">${f.fecha}</span>`;
+
+    const marcas = document.createElement('div');
+    marcas.className = 'marcas';
+    marcas.innerHTML = OPCIONES.map(([v, etq]) =>
+      `<button type="button" data-v="${v}">${etq}</button>`).join('');
+    marcas.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (b) marcar(i, b.dataset.v);
+    });
+
+    pieza.append(marco, pie, marcas);
+    frag.appendChild(pieza);
+    piezas.push({img, marco, pieza, foto: f});
+  });
+
+  tira.appendChild(frag);
+  medir();
+  requestAnimationFrame(bucle);
+}
+
+// La seccion se hace tan alta como ancho tiene la tira: asi 1px de scroll
+// vertical equivale a 1px de avance horizontal, y al acabar se despega sola.
+function medir(){
+  recorrido = Math.max(0, tira.scrollWidth - window.innerWidth);
+  carrusel.style.height = (recorrido / RITMO + window.innerHeight) + 'px';
+}
+
+function bucle(){
+  const objetivo = tope(-carrusel.getBoundingClientRect().top * RITMO, 0, recorrido);
+  actual = lerp(actual, objetivo, EASE);
+  if (Math.abs(objetivo - actual) < 0.05) actual = objetivo;
+  tira.style.transform = `translate3d(${-actual}px,0,0)`;
+
+  const centroVista = window.innerWidth / 2;
+  for (const {img, marco} of piezas){
+    const r = marco.getBoundingClientRect();
+    if (r.right < -300 || r.left > window.innerWidth + 300) continue;
+    // acotado a -1..1: mas alla el desplazamiento se saldria del margen y asomaria el borde
+    const t = tope((r.left + r.width/2 - centroVista) / centroVista, -1, 1);
+    img.style.transform = `translate3d(${(-t*DESPL_MAX).toFixed(3)}%,0,0)`;
+  }
+
+  if (document.body.classList.contains('criba')){
+    const foco = enfocada();
+    piezas.forEach(({pieza}, i) => pieza.classList.toggle('enfocada', i === foco));
+  }
+
+  const alto = document.documentElement.scrollHeight - window.innerHeight;
+  barra.style.width = alto > 0 ? `${(window.scrollY / alto) * 100}%` : '0%';
+  pista.classList.toggle('oculta', window.scrollY > 80);
+  requestAnimationFrame(bucle);
+}
+
+// Arrastre con raton sobre la galeria. Como el scroll ya es vertical y nativo,
+// arrastrar en horizontal se traduce a scroll de la pagina dividido por RITMO.
+// Solo raton: en tactil se deja el gesto nativo, que ya funciona.
+const pegado = document.querySelector('.pegado');
+let arrastre = null;
+
+pegado.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse' || e.button !== 0) return;
+  arrastre = {x: e.clientX, y: window.scrollY};
+  try { pegado.setPointerCapture(e.pointerId); } catch (err) {}
+  document.body.classList.add('arrastrando');
+  e.preventDefault();
+});
+
+pegado.addEventListener('pointermove', e => {
+  if (!arrastre) return;
+  window.scrollTo(0, arrastre.y + (arrastre.x - e.clientX) / RITMO);
+});
+
+// pointerleave NO va aqui: con setPointerCapture el elemento sigue recibiendo los
+// eventos aunque el raton salga, y escucharlo cortaba el arrastre a media pasada.
+for (const ev of ['pointerup','pointercancel']){
+  pegado.addEventListener(ev, () => {
+    if (!arrastre) return;
+    arrastre = null;
+    document.body.classList.remove('arrastrando');
+  });
+}
+
+// El video arranca mudo (los navegadores no dejan autoplay con sonido).
+// El boton, o un clic en el propio video, lo enciende y lo reinicia.
+function refrescarSonido(){
+  for (const c of document.querySelectorAll('.clip')){
+    const v = c.querySelector('video'), b = c.querySelector('.sonido');
+    if (!v || !b) continue;
+    b.classList.toggle('activo', !v.muted);
+    b.setAttribute('aria-pressed', String(!v.muted));
+    b.querySelector('span').textContent = v.muted ? 'Con sonido' : 'Silenciar';
+  }
+}
+
+for (const clip of document.querySelectorAll('.clip')){
+  const video = clip.querySelector('video');
+  const boton = clip.querySelector('.sonido');
+  if (!video || !boton) continue;
+  const alternar = () => {
+    const encender = video.muted;
+    // solo puede sonar uno a la vez: silencio el resto
+    if (encender) for (const otro of document.querySelectorAll('.clip video')) otro.muted = true;
+    video.muted = !encender;
+    refrescarSonido();
+    if (!video.muted) video.currentTime = 0;
+    video.play().catch(() => {});
+  };
+  boton.addEventListener('click', alternar);
+  video.addEventListener('click', alternar);
+}
+
+// ---------------------------------------------------------------- modo criba
+// Oculto por defecto para no ensuciar el regalo: se abre con la tecla C o con
+// #criba en la URL. Lo marcado se guarda solo en el navegador.
+let criba = {};
+try { criba = JSON.parse(localStorage.getItem(LLAVE) || '{}'); } catch (e) { criba = {}; }
+
+const cuenta = document.getElementById('cuenta');
+
+function marcar(i, valor){
+  const clave = piezas[i].foto.src;
+  if (criba[clave] === valor) delete criba[clave];   // volver a pulsar lo mismo lo quita
+  else criba[clave] = valor;
+  pintar(i);
+  guardar();
+}
+
+function pintar(i){
+  piezas[i].pieza.dataset.marca = criba[piezas[i].foto.src] || '';
+}
+
+function guardar(){
+  try { localStorage.setItem(LLAVE, JSON.stringify(criba)); } catch (e) {}
+  const n = {};
+  for (const v of Object.values(criba)) n[v] = (n[v] || 0) + 1;
+  cuenta.innerHTML = `<b>${Object.keys(criba).length}</b> de ${piezas.length} marcadas &middot; ` +
+    OPCIONES.map(([v, e]) => `${e} <b>${n[v] || 0}</b>`).join(' &middot; ');
+}
+
+function alternarCriba(activo){
+  document.body.classList.toggle('criba', activo);
+  medir();                    // los botones cambian el alto, y el ancho de la tira
+}
+
+// los atajos actuan sobre la foto mas centrada, que es la que estas mirando
+function enfocada(){
+  // En pantalla ancha la primera foto nunca llega a cruzar el centro (empieza ya a su
+  // izquierda por el padding de la tira), asi que la segunda siempre quedaba mas cerca
+  // y se llevaba el foco. Igual con la ultima. En los extremos se fuerzan.
+  if (actual <= 1) return 0;
+  if (actual >= recorrido - 1) return piezas.length - 1;
+  const c = window.innerWidth / 2;
+  let mejor = -1, dist = Infinity;
+  piezas.forEach(({marco}, i) => {
+    const r = marco.getBoundingClientRect();
+    const d = Math.abs(r.left + r.width/2 - c);
+    if (d < dist){ dist = d; mejor = i; }
+  });
+  return mejor;
+}
+
+addEventListener('keydown', e => {
+  if (CRIBA && (e.key === 'c' || e.key === 'C')){
+    alternarCriba(!document.body.classList.contains('criba'));
+    return;
+  }
+  if (!document.body.classList.contains('criba')) return;
+  const mapa = {'1':'Pulga', '2':'Pepa', '3':'Ambas', '0':'fuera'};
+  if (mapa[e.key]){
+    const i = enfocada();
+    if (i >= 0) marcar(i, mapa[e.key]);
+  }
+});
+
+document.getElementById('salir').addEventListener('click', () => alternarCriba(false));
+
+document.getElementById('descargar').addEventListener('click', () => {
+  const filas = piezas
+    .map(({foto}) => ({foto, marca: criba[foto.src] || ''}))
+    .filter(x => x.marca)
+    .map(({foto, marca}) => ({origen: foto.origen, src: foto.src,
+                              perra_actual: foto.perra, fecha: foto.fecha, marca}));
+  const blob = new Blob([JSON.stringify(filas, null, 1)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'criba.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+});
+
+piezas.forEach((_, i) => pintar(i));
+guardar();
+if (CRIBA && location.hash === '#criba') alternarCriba(true);
+
+addEventListener('resize', medir);
+addEventListener('load', medir);      // las fuentes pueden cambiar anchos al cargar
+</script>
+</body>
+</html>
