@@ -200,7 +200,9 @@
     .portada .fila .retrato:first-of-type{grid-area:izq}
     .portada .fila .retrato:last-of-type{grid-area:der}
     .portada .saludo{grid-area:saludo}
-    .retrato{width:100%}
+    /* figure trae margin:1em 40px del navegador; en la rejilla esos 40px
+       corrian los dos retratos a la derecha y sacaban el segundo de pantalla */
+    .retrato{width:100%;margin:0}
     .clip{width:min(240px,62vw)}
     .tira{padding:0 12vw}
   }
