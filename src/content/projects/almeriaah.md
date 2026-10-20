@@ -2,7 +2,7 @@
 title: "Almeria AH"
 locale: es
 year: "2026"
-role: "ML Engineer / Data Scientist"
+role: "Machine learning y datos"
 description: "Pipeline cuantitativo para decidir si existe edge predictivo real en los precios de hortalizas almerienses. Scrapers diarios, 26 series temporales, 6 modelos en competencia y walk-forward expanding window con criterio binario PASS/FAIL."
 problem: "Almería es el huerto de Europa pero los precios de hortalizas en alhóndiga se mueven en niebla informativa. Antes de invertir en un producto de predicción, había que responder una pregunta binaria: ¿se puede batir el baseline naive con datos públicos?"
 solution: "Construí un pipeline de investigación end-to-end: cuatro scrapers diarios (fhalmeria, ASAJA, AEMET, hortoinfo), normalización idempotente en SQLite, features de lags + meteo + noticias, seis modelos en competencia (Naive, SeasonalNaive, ARIMA, LGBM, LGBMMeteo, LGBMRich) y walk-forward expanding window con métricas punto e intervalos. El criterio go/no-go es explícito: batir baseline en MAE ≥15%."

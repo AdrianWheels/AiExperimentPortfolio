@@ -2,7 +2,7 @@
 title: "JR Fisioterapia"
 locale: es
 year: "2025"
-role: "Full Stack Developer"
+role: "Desarrollo full stack"
 description: "Sistema SaaS de gestión de citas para clínicas de fisioterapia. Integrado con Google Calendar, notificaciones SMS vía Twilio y soporte PWA para reservas móviles."
 problem: "Las clínicas de fisioterapia pequeñas gestionan citas por teléfono o WhatsApp, generando dobles reservas, olvidos de pacientes y pérdida de tiempo administrativo."
 solution: "Desarrollé un sistema SaaS completo que automatiza la gestión de citas con sincronización bidireccional con Google Calendar, recordatorios SMS automáticos y una PWA que permite a los pacientes reservar desde el móvil."

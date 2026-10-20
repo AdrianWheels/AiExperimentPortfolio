@@ -2,7 +2,7 @@
 title: "Picturam"
 locale: es
 year: "2026"
-role: "Full Stack & AI Engineer"
+role: "Full stack e IA"
 description: "PWA que traduce voz en imágenes semánticas al instante para asistir la comunicación con personas mayores con sordera, analfabetismo o dificultades verbales. Pipeline dual-mode (GPU local o cloud) con caché de dos capas."
 problem: "Las personas mayores con sordera, analfabetismo o problemas de comprensión verbal pierden gran parte de lo que les dicen cuidadores, terapeutas o familiares. El lenguaje hablado es un canal frágil que no siempre llega."
 solution: "Construí una PWA que captura la voz, la transcribe con Whisper, extrae el concepto clave con un LLM y genera una imagen semántica que acompaña a la frase. El servidor orquesta dos modos intercambiables — GPU local (faster-whisper + Ollama + ComfyUI) o cloud (Deepgram + Gemini + fal.ai) — y un caché de dos capas elimina trabajo redundante."

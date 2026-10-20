@@ -1,0 +1,25 @@
+---
+// Tarjeta de un trabajo de cliente o proyecto propio: captura en marco oscuro, año, rol, nombre y una línea.
+import type { Project } from '../../lib/projects'
+interface Props { work: Project }
+const { work } = Astro.props
+const d = work.data
+---
+<a class="tile work" href={work.url ?? undefined}>
+  <div class="frame"><img src={d.heroImage} alt="" loading="lazy" /></div>
+  <div class="txt">
+    <span class="mono">{d.year} · {d.role}</span>
+    <h3>{d.title}</h3>
+    <p>{d.description}</p>
+  </div>
+</a>
+
+<style>
+  .work { display: flex; flex-direction: column; }
+  .frame { margin: 10px 10px 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line2); background: #0c0c0f; aspect-ratio: 16 / 10; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform 0.8s cubic-bezier(.2,.7,.2,1); }
+  .work:hover .frame img { transform: scale(1.03); }
+  .txt { padding: 18px 20px 22px; }
+  h3 { font-weight: 400; font-size: 19px; margin: 8px 0 6px; }
+  p { color: var(--dim); font-size: 14px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

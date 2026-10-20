@@ -2,7 +2,7 @@
 title: "Pepa Print3D"
 locale: es
 year: "2026"
-role: "Full Stack Developer"
+role: "Desarrollo full stack"
 description: "Landing page y plataforma de pedidos para un negocio de impresión 3D. Diseño vibrante con catálogo filtrable y formulario de pedido integrado. Sitio estático ultrarrápido con Astro."
 problem: "Un negocio de impresión 3D necesitaba presencia online profesional con catálogo de productos y sistema de pedidos, pero sin la complejidad de un e-commerce completo."
 solution: "Creé un sitio estático con Astro que combina una landing page vibrante inspirada en filamentos multicolor con un catálogo filtrable por categorías y formulario de pedido directo vía FormSubmit."

@@ -2,7 +2,7 @@
 title: "ColorEveryday"
 locale: es
 year: "2025"
-role: "Full Stack Developer"
+role: "Desarrollo full stack"
 description: "Plataforma web interactiva que genera diariamente ilustraciones únicas mediante IA (Gemini 2.5 Flash) para colorear. Un calendario digital creativo desarrollado con React y Tailwind."
 problem: "Los usuarios buscan actividades creativas diarias pero carecen de inspiración constante. Las apps de coloreado existentes ofrecen diseños estáticos y repetitivos."
 solution: "Desarrollé una plataforma que usa Gemini 2.5 Flash para generar ilustraciones únicas cada día, presentadas en un calendario interactivo. El usuario puede colorear directamente en el navegador con una interfaz intuitiva construida en React."

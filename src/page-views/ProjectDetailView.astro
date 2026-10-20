@@ -1,50 +1,129 @@
 ---
-import ProjectLayout from '../layouts/ProjectLayout.astro'
-import { getLocalizedUrl, profileBase } from '../i18n'
+// Ficha de proyecto. Dos plantillas:
+// - game: escaparate (imagen o vídeo, frase, género, plataforma, botón, galería). Sin cómo está hecho.
+// - client / own: caso completo (reto, solución, resultados, contexto).
+import BaseLayout from '../layouts/BaseLayout.astro'
+import GameCta from '../components/projects/GameCta.astro'
+import { getLocalizedUrl, getContactUrl, profileBase, t } from '../i18n'
 import type { Locale } from '../i18n'
 import type { CollectionEntry } from 'astro:content'
 
-interface Props {
-  project: CollectionEntry<'projects'>
-  locale: Locale
-}
-
+interface Props { project: CollectionEntry<'projects'>; locale: Locale }
 const { project, locale } = Astro.props
-const baseSlug = project.slug.replace(/-en$/, '')
+const d = project.data
+const base = project.slug.replace(/-en$/, '')
+const isGame = d.kind === 'game'
+const gallery = d.gallery ?? []
 
 const schema = {
-  "@context": "https://schema.org",
-  "@type": "CreativeWork",
-  "name": project.data.title,
-  "description": project.data.description,
-  "author": {
-    "@type": "Person",
-    "name": profileBase.name,
-    "url": "https://adrianrueda.dev",
-  },
-  "dateCreated": project.data.year,
-  "keywords": project.data.tags,
-  "url": `https://adrianrueda.dev${getLocalizedUrl(locale, `/projects/${baseSlug}`)}`,
+  '@context': 'https://schema.org',
+  '@type': isGame ? 'VideoGame' : 'CreativeWork',
+  name: d.title,
+  description: d.description,
+  author: { '@type': 'Person', name: profileBase.name, url: 'https://adrianrueda.dev' },
+  dateCreated: d.year,
+  url: `https://adrianrueda.dev${getLocalizedUrl(locale, `/projects/${base}`)}`,
 }
+const extras = [
+  ['project.motivationLabel', d.motivation],
+  ['project.challengesLabel', d.challenges],
+  ['project.learningsLabel', d.learnings],
+  ['project.contextLabel', d.context],
+] as const
 ---
 
-<ProjectLayout
-  title={project.data.title}
-  description={project.data.description}
-  year={project.data.year}
-  role={project.data.role}
-  tags={project.data.tags}
-  heroImage={project.data.heroImage}
-  gallery={project.data.gallery}
-  problem={project.data.problem}
-  solution={project.data.solution}
-  results={project.data.results}
-  links={project.data.links}
-  motivation={project.data.motivation}
-  challenges={project.data.challenges}
-  learnings={project.data.learnings}
-  context={project.data.context}
-  schema={schema}
-  slug={baseSlug}
-  locale={locale}
-/>
+<BaseLayout title={`${d.title} · Adrián Rueda`} description={d.description} image={d.heroImage.endsWith('.webp') ? undefined : d.heroImage} schema={schema} type="article">
+  <article class="page detail">
+    <a class="back mono" href={getLocalizedUrl(locale, '/projects')}>← {t(locale, 'project.back')}</a>
+
+    {isGame ? (
+      <>
+        <div class="tile stage">
+          {d.loop
+            ? <video src={d.loop} poster={d.heroImage} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+            : <img src={d.heroImage} alt={`${t(locale, 'project.screenshotAlt')} ${d.title}`} />}
+        </div>
+        <header class="game-head">
+          <span class="mono">{d.genre} · {d.platform} · {d.year}</span>
+          <h1>{d.title}</h1>
+          {d.hook && <p class="hook">{d.hook}</p>}
+          {d.credit && <p class="credit mono">{d.credit}</p>}
+          {d.cta && <div class="cta"><GameCta cta={d.cta} /></div>}
+        </header>
+        {gallery.length > 0 && (
+          <div class="shots">
+            {gallery.map((src) => <div class="tile shot"><img src={src} alt={`${t(locale, 'project.screenshotAlt')} ${d.title}`} loading="lazy" /></div>)}
+          </div>
+        )}
+      </>
+    ) : (
+      <>
+        <header class="case-head">
+          <span class="mono">{d.year} · {d.role}</span>
+          <h1>{d.title}</h1>
+          <p class="lead">{d.description}</p>
+          <div class="cta">
+            {d.cta?.url && <GameCta cta={d.cta} />}
+            {!d.cta?.url && d.links?.live && <a class="btn" href={d.links.live} target="_blank" rel="noopener">{t(locale, 'project.viewLive')} <span aria-hidden="true">↗</span></a>}
+            {d.links?.video && <a class="btn" href={d.links.video} target="_blank" rel="noopener">{t(locale, 'project.viewDemo')} <span aria-hidden="true">↗</span></a>}
+          </div>
+        </header>
+        <div class="tile frame"><img src={d.heroImage} alt={`${t(locale, 'project.screenshotAlt')} ${d.title}`} /></div>
+        <div class="case">
+          <div class="prose-aw">
+            {d.problem && <><h2>{t(locale, 'project.problemLabel')}</h2><p>{d.problem}</p></>}
+            {d.solution && <><h2>{t(locale, 'project.solutionLabel')}</h2><p>{d.solution}</p></>}
+            {d.results.length > 0 && <><h2>{t(locale, 'project.resultsLabel')}</h2><ul>{d.results.map((r) => <li>{r}</li>)}</ul></>}
+            {extras.map(([k, v]) => v && <><h3>{t(locale, k)}</h3><p>{v}</p></>)}
+          </div>
+          {d.tags.length > 0 && <ul class="tech mono" aria-label="Tecnologías">{d.tags.map((tag) => <li>{tag}</li>)}</ul>}
+        </div>
+        {gallery.length > 0 && (
+          <div class="shots">
+            {gallery.map((src) => <div class="tile shot"><img src={src} alt={`${t(locale, 'project.screenshotAlt')} ${d.title}`} loading="lazy" /></div>)}
+          </div>
+        )}
+      </>
+    )}
+
+    <a class="tile talk" href={getContactUrl(locale)}>
+      <span>{t(locale, 'project.talkCta')}</span><span aria-hidden="true">↗</span>
+    </a>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail { padding-top: 28px; padding-bottom: 32px; }
+  .back { display: inline-block; margin-bottom: 22px; }
+  .back:hover { color: var(--ink); }
+
+  .stage { aspect-ratio: 16 / 8; }
+  .stage video, .stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .game-head { margin: 34px 0 10px; max-width: 680px; }
+  h1 { font-weight: 200; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.025em; line-height: 1.04; margin: 10px 0 12px; }
+  .hook { font-size: 21px; color: #d6d7dc; line-height: 1.45; }
+  .credit { margin-top: 14px; text-transform: none; letter-spacing: .02em; font-size: 12px; }
+  .cta { margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .case-head { max-width: 760px; margin-bottom: 34px; }
+  .lead { font-size: 19px; color: #c9cad0; line-height: 1.55; }
+  .frame { padding: 10px; background: #0c0c0f; border-color: var(--line2); }
+  .frame img { width: 100%; display: block; border-radius: 10px; }
+  .case { display: grid; grid-template-columns: minmax(0, 680px) 1fr; gap: 60px; margin-top: 30px; }
+  .tech { list-style: none; padding: 0; margin: 2.6em 0 0; display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+  .tech li { border: 1px solid var(--line); border-radius: 999px; padding: 6px 11px; color: #c9cad0; }
+
+  .shots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+  .shots { align-items: start; }
+  .shot img { width: 100%; display: block; }
+
+  .talk { display: flex; justify-content: space-between; align-items: center; margin-top: 64px; padding: 30px 32px; background: #fff; color: #000; font-size: 22px; font-weight: 300; border: 0; }
+  .talk:hover { background: #e6e6e8; }
+
+  @media (max-width: 900px) {
+    .stage { aspect-ratio: 4 / 3; }
+    .case { grid-template-columns: 1fr; gap: 0; }
+    .shots { grid-template-columns: 1fr; }
+    .talk { font-size: 18px; padding: 24px; }
+  }
+</style>

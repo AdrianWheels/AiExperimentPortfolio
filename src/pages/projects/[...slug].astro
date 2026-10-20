@@ -4,7 +4,7 @@ import ProjectDetailView from '../../page-views/ProjectDetailView.astro'
 
 export async function getStaticPaths() {
   const allProjects = await getCollection('projects')
-  const esProjects = allProjects.filter(p => p.data.locale === 'es')
+  const esProjects = allProjects.filter(p => p.data.locale === 'es' && p.data.detail)
 
   return esProjects.map((project) => ({
     params: { slug: project.slug },
