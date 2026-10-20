@@ -47,7 +47,7 @@ const schema = {
     {mainGame && (
       <section class="tile games" data-tile>
         {mainGame.data.loop
-          ? <video class="art" src={mainGame.data.loop} poster={mainGame.data.heroImage} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+          ? <video class="art" src={mainGame.data.loop} poster={mainGame.data.heroImage} data-autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
           : <img class="art" src={mainGame.data.heroImage} alt="" />}
         <div class="in">
           <span class="mono">{t(locale, 'home.gamesLabel')}</span>

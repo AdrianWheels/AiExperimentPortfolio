@@ -29,7 +29,8 @@ const locale = getLocaleFromUrl(Astro.url)
       if(location.pathname.startsWith('/en'))return;
       if((navigator.language||'').startsWith('en')){
         localStorage.setItem('lang-pref','en');
-        location.replace('/en'+location.pathname);
+        var R={'/contacto':'/contact','/sobre-mi':'/about'},p=location.pathname,b=p.replace(/\/$/,''),t=R[b]?R[b]+(p.length>b.length?'/':''):p;
+        location.replace('/en'+t);
       }else{localStorage.setItem('lang-pref','es')}
     })();
     </script>
@@ -51,6 +52,14 @@ const locale = getLocaleFromUrl(Astro.url)
       <slot />
     </main>
     <SiteFooter />
+    <script>
+      // Vídeos en bucle (juegos): arrancan solo si no se pide reducir movimiento; si no, se queda el póster.
+      const playLoops = () => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach((v) => v.play().catch(() => {}))
+      }
+      document.addEventListener('astro:page-load', playLoops)
+    </script>
 
   </body>
 </html>

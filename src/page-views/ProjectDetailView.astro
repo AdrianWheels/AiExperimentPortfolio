@@ -40,7 +40,7 @@ const extras = [
       <>
         <div class="tile stage">
           {d.loop
-            ? <video src={d.loop} poster={d.heroImage} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+            ? <video src={d.loop} poster={d.heroImage} data-autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
             : <img src={d.heroImage} alt={`${t(locale, 'project.screenshotAlt')} ${d.title}`} />}
         </div>
         <header class="game-head">

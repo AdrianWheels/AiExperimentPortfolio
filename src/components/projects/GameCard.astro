@@ -9,7 +9,7 @@ const d = game.data
 ---
 <article class:list={['tile', 'game-card', { big, 'is-link': !!game.url }]}>
   {d.loop
-    ? <video class="art" src={d.loop} poster={d.heroImage} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    ? <video class="art" src={d.loop} poster={d.heroImage} data-autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
     : <img class="art" src={d.heroImage} alt="" loading="lazy" />}
   <div class="info">
     <span class="mono">{d.genre} · {d.platform}</span>

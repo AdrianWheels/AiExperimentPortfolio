@@ -73,6 +73,21 @@ for (const g of GAMES) {
 }
 check('las fichas de juego no cuentan cómo están hechos', leaks.length === 0, leaks.slice(0, 6).join(' | '))
 
+// La redirección de idioma del primer acceso tiene que traducir las rutas que cambian de nombre.
+check('la redirección de idioma traduce /sobre-mi y /contacto', /['"]\/sobre-mi['"]\s*:\s*['"]\/about['"]/.test(home) && /['"]\/contacto['"]\s*:\s*['"]\/contact['"]/.test(home))
+
+// Vídeos: nada de autoplay en el HTML; arrancan por script solo si no se pide reducir movimiento.
+const autoplay = []
+for (const f of htmls) {
+  for (const m of readFileSync(f, 'utf8').matchAll(/<video\b[^>]*>/g)) {
+    if (/\sautoplay\b/.test(m[0]) || !/data-autoplay/.test(m[0])) autoplay.push(relative(dir, f))
+  }
+}
+check('los vídeos respetan «reducir movimiento»', autoplay.length === 0, [...new Set(autoplay)].slice(0, 5).join(', '))
+
+const kiraFiles = files.filter((f) => /kira/i.test(relative(dir, f)) || (/\.(json|js|css|txt)$/.test(f) && /K\.?I\.?R\.?A/.test(readFileSync(f, 'utf8'))))
+check('ningún fichero de Kira en la build', kiraFiles.length === 0, kiraFiles.slice(0, 3).map((f) => relative(dir, f)).join(', '))
+
 const undef = htmls.filter((f) => /href=["']undefined["']/.test(readFileSync(f, 'utf8'))).map((f) => relative(dir, f))
 check('ningún enlace a «undefined»', undef.length === 0, undef.join(', '))
 
