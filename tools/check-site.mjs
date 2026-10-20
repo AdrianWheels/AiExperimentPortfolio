@@ -44,7 +44,7 @@ check('sin rastro de Kira', kira.length === 0, kira.slice(0, 5).join(', '))
 check('sin la página de María', !existsSync(join(dir, 'para-maria')))
 check('sin las imágenes de Kira', !existsSync(join(dir, 'kira_images')))
 
-const ALLOWED = /(favicon-\d+\.png|apple-touch-icon\.png|icon-512\.png)$/
+const ALLOWED = /(favicon-\d+\.png|apple-touch-icon\.png|icon-512\.png|og-image\.png)$/
 const raster = []
 for (const f of htmls) {
   const html = readFileSync(f, 'utf8')
