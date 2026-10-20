@@ -46,6 +46,8 @@ const locale = getLocaleFromUrl(Astro.url)
     <ViewTransitions />
   </head>
   <body class="min-h-screen bg-bgStart text-text font-sans antialiased overflow-x-hidden">
+    <!-- Intro de marca: síncrona para tapar la página desde el primer fotograma; una vez por sesión -->
+    <script is:inline src="/intro/aw-intro.js"></script>
     <!-- Starry background - canvas animated -->
     <StarryBackground client:idle />
 
