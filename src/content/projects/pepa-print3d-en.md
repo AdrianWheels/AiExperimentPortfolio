@@ -17,9 +17,9 @@ challenges: "The biggest challenge was the visual design, solved in collaboratio
 learnings: "I learned that reaching customers with physical products is tough. The client is happy with the site, but stock and image management remain a logistical challenge."
 context: "Online and operational. Orders currently come through other channels. SEO and marketing are pending."
 tags: ["Astro", "Tailwind", "TypeScript"]
-heroImage: "/projects/pepa-print3d/desktop.png"
+heroImage: "/projects/pepa-print3d/desktop.webp"
 gallery:
-  - "/projects/pepa-print3d/mobile.png"
+  - "/projects/pepa-print3d/mobile.webp"
 links:
   live: "https://pepaprint3d.com"
 order: 4

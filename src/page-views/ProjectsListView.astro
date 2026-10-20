@@ -1,78 +1,69 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import SubpageNav from '../components/layout/SubpageNav.astro'
-import { getCollection } from 'astro:content'
-import { getLocaleFromUrl, t, getLocalizedUrl } from '../i18n'
+import WorkCard from '../components/projects/WorkCard.astro'
+import { getLocaleFromUrl, t } from '../i18n'
+import { getProjects, byKind } from '../lib/projects'
 
 const locale = getLocaleFromUrl(Astro.url)
-
-const allProjects = await getCollection('projects')
-const projects = allProjects.filter(p => p.data.locale === locale)
-const sorted = projects.sort((a, b) => a.data.order - b.data.order)
-
-const projectsUrl = getLocalizedUrl(locale, '/projects')
+const projects = await getProjects(locale)
+const featured = projects.filter((p) => p.data.tier === 'featured')
+const clients = byKind(featured, 'client')
+const own = byKind(featured, 'own')
+const more = projects.filter((p) => p.data.tier === 'more' && p.url && p.data.kind !== 'game')
 ---
 
-<BaseLayout
-  title={t(locale, 'seo.projects.title')}
-  description={t(locale, 'seo.projects.description')}
-  currentPage="projects"
->
-  <div class="shared-layout-container subpage">
-    <div class="shared-layout-inner">
+<BaseLayout title={t(locale, 'seo.projects.title')} description={t(locale, 'seo.projects.description')}>
+  <div class="page list">
+    <header class="intro">
+      <h1>{t(locale, 'projects.title')}</h1>
+      <p>{t(locale, 'projects.intro')}</p>
+    </header>
 
-      <div class="flex items-center justify-between mb-4">
-        <SubpageNav locale={locale} />
-      </div>
 
-      <h1 class="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">{t(locale, 'projects.page.title')}</h1>
+    <section id="trabajos" aria-labelledby="h-trabajos">
+      <div class="head"><h2 id="h-trabajos">{t(locale, 'projects.clients')}</h2><span class="mono">{t(locale, 'projects.clientsNote')}</span></div>
+      <div class="grid">{clients.map((w) => <WorkCard work={w} />)}</div>
+    </section>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+    {own.length > 0 && (
+      <section id="propios" aria-labelledby="h-propios">
+        <div class="head"><h2 id="h-propios">{t(locale, 'projects.own')}</h2></div>
+        <div class="grid">{own.map((w) => <WorkCard work={w} />)}</div>
+      </section>
+    )}
 
-        {/* Project cards */}
-        {sorted.map((project) => {
-          const slug = project.slug.replace(/-en$/, '')
-          return (
-            <a
-              href={`${projectsUrl}/${slug}`}
-              class="group block bg-[#13131f] rounded-3xl border border-white/5 hover:border-purple-500/30 overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]"
-            >
-              <div class="aspect-video overflow-hidden bg-black/20">
-                <img
-                  src={project.data.heroImage}
-                  alt={`${t(locale, 'project.screenshotAlt')} ${project.data.title}`}
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div class="p-5">
-                <div class="flex items-center gap-2 mb-2">
-                  <span class="text-[10px] font-mono text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded bg-purple-500/10">
-                    {project.data.year}
-                  </span>
-                  <span class="text-[10px] text-gray-500 uppercase tracking-wider">
-                    {project.data.role}
-                  </span>
-                </div>
-                <h2 class="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
-                  {project.data.title}
-                </h2>
-                <p class="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
-                  {project.data.description}
-                </p>
-                <div class="flex flex-wrap gap-1.5">
-                  {project.data.tags.map((tag: string) => (
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-300 border border-white/10">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </a>
-          )
-        })}
-
-      </div>
-    </div>
+    {more.length > 0 && (
+      <section aria-labelledby="h-more">
+        <div class="head"><h2 id="h-more">{t(locale, 'projects.more')}</h2></div>
+        <ul class="more">
+          {more.map((p) => (
+            <li><a href={p.url!}><span class="mono">{p.data.year}</span><b>{p.data.title}</b><span class="d">{p.data.role}</span><span class="arr" aria-hidden="true">→</span></a></li>
+          ))}
+        </ul>
+      </section>
+    )}
   </div>
 </BaseLayout>
+
+<style>
+  .list { padding-top: 48px; padding-bottom: 40px; }
+  .intro h1 { font-weight: 200; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.025em; }
+  .intro p { color: var(--dim); font-size: 17px; margin-top: 10px; max-width: 560px; }
+  section { margin-top: 72px; scroll-margin-top: 90px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .head h2 { font-weight: 300; font-size: 26px; letter-spacing: -0.01em; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .more { list-style: none; padding: 0; margin: 0; }
+  .more a { display: grid; grid-template-columns: 70px 220px 1fr 20px; gap: 16px; align-items: baseline; padding: 16px 4px; border-bottom: 1px solid var(--line); transition: background-color .2s; }
+  .more a:hover { background: rgba(255,255,255,.02); }
+  .more b { font-weight: 400; font-size: 16px; }
+  .more .d { color: var(--dim); font-size: 14px; }
+  .more .arr { color: var(--faint); }
+  @media (max-width: 900px) {
+    .list { padding-top: 28px; }
+    .grid { grid-template-columns: 1fr; }
+    .more a { grid-template-columns: 1fr 20px; gap: 4px 12px; }
+    .more .mono { grid-column: 1 / -1; }
+    .more .d { grid-column: 1; }
+  }
+</style>

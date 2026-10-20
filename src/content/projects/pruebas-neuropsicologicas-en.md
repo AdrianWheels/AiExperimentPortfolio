@@ -17,7 +17,7 @@ challenges: "Measuring reaction times with precision was a huge challenge. I use
 learnings: "I learned how rigid and slow everything is in an academic environment, but they let me develop and learn at my own pace. I was very demanding of myself, and that positively shaped my career."
 context: "The system is still in use as far as I know. I participate in any related publications."
 tags: ["Software", "Neuroscience", "Research", "UX"]
-heroImage: "/projects/vrhat/vrhatintro.png"
+heroImage: "/projects/vrhat/vrhatintro.webp"
 order: 10
 tier: more
 ---

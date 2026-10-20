@@ -2,7 +2,7 @@
 title: "JR Fisioterapia"
 locale: es
 year: "2025"
-role: "Full Stack Developer"
+role: "Desarrollo full stack"
 description: "Sistema SaaS de gestión de citas para clínicas de fisioterapia. Integrado con Google Calendar, notificaciones SMS vía Twilio y soporte PWA para reservas móviles."
 problem: "Las clínicas de fisioterapia pequeñas gestionan citas por teléfono o WhatsApp, generando dobles reservas, olvidos de pacientes y pérdida de tiempo administrativo."
 solution: "Desarrollé un sistema SaaS completo que automatiza la gestión de citas con sincronización bidireccional con Google Calendar, recordatorios SMS automáticos y una PWA que permite a los pacientes reservar desde el móvil."
@@ -16,9 +16,9 @@ challenges: "Lo más complejo fue la integración con Google Calendar: permisos,
 learnings: "Aprendí que el software para un negocio real necesita muchísimo testing, más del que puedo hacer solo. También que usar plataformas como Twilio y Supabase simplifica enormemente el trabajo."
 context: "En producción con pocos pacientes (fase de pruebas). El cliente lo usa a diario."
 tags: ["Next.js", "Prisma", "Supabase", "Twilio", "PWA"]
-heroImage: "/projects/jr-fisioterapia/desktop.png"
+heroImage: "/projects/jr-fisioterapia/desktop.webp"
 gallery:
-  - "/projects/jr-fisioterapia/mobile.png"
+  - "/projects/jr-fisioterapia/mobile.webp"
 links:
   live: "https://jorgeruedafisio.com"
 order: 1

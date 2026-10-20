@@ -17,9 +17,9 @@ challenges: "The hardest part was keeping usable latency on a pipeline with thre
 learnings: "I learned to design provider abstractions (STT/LLM/image) that can be swapped without coupling to a specific SDK, and that in real scenarios (a care home with flaky wifi) offline-first stops being optional."
 context: "Most active project in my portfolio in 2026 (44 commits in 60 days). Technically solid MVP, pending a commercial milestone: open demo, care-home pilot, or third-party API."
 tags: ["React", "Node.js", "Whisper", "ComfyUI", "AI"]
-heroImage: "/projects/picturam/desktop.png"
+heroImage: "/projects/picturam/desktop.webp"
 gallery:
-  - "/projects/picturam/mobile.png"
+  - "/projects/picturam/mobile.webp"
 order: 2
 tier: featured
 ---

@@ -1,112 +1,74 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import SubpageNav from '../components/layout/SubpageNav.astro'
-import BentoSocials from '../components/home/BentoSocials.astro'
-import { getLocaleFromUrl, t, getProfile, profileBase, getLocalizedUrl, getContactUrl } from '../i18n'
+import { getLocaleFromUrl, getContactUrl, getProfile, profileBase, t } from '../i18n'
 
 const locale = getLocaleFromUrl(Astro.url)
 const profile = getProfile(locale)
 const redirectUrl = `https://adrianrueda.dev${getContactUrl(locale)}`
+const linkedin = profileBase.social.find((s) => s.label === 'LinkedIn')
 ---
 
-<BaseLayout
-  title={t(locale, 'seo.contact.title')}
-  description={t(locale, 'seo.contact.description')}
-  currentPage="contacto"
->
-  <div class="shared-layout-container subpage">
-    <div class="shared-layout-inner">
+<BaseLayout title={t(locale, 'seo.contact.title')} description={t(locale, 'seo.contact.description')}>
+  <div class="page contact">
+    <header class="intro">
+      <span class="mono"><span class="dot-live"></span>{profile.availability}</span>
+      <h1>{t(locale, 'contact.title')}</h1>
+      <p>{t(locale, 'contact.subtitle')}</p>
+    </header>
 
-      {/* Navigation - OUTSIDE the bento grid */}
-      <SubpageNav locale={locale} />
+    <div class="layout">
+      <form class="tile form" action={`https://formsubmit.co/${profileBase.contact.formSubmitId}`} method="POST">
+        <input type="hidden" name="_subject" value="Nuevo contacto desde adrianrueda.dev" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value={redirectUrl} />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
 
-      {/* Bento Grid - content only */}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+        <label><span class="mono">{t(locale, 'contact.name')}</span><input type="text" name="name" required autocomplete="name" placeholder={t(locale, 'contact.namePlaceholder')} /></label>
+        <label><span class="mono">{t(locale, 'contact.email')}</span><input type="email" name="email" required autocomplete="email" placeholder={t(locale, 'contact.emailPlaceholder')} /></label>
+        <label class="wide"><span class="mono">{t(locale, 'contact.subject')}</span><input type="text" name="subject" placeholder={t(locale, 'contact.subjectPlaceholder')} /></label>
+        <label class="wide"><span class="mono">{t(locale, 'contact.message')}</span><textarea name="message" rows="6" required placeholder={t(locale, 'contact.messagePlaceholder')}></textarea></label>
+        <div class="wide send"><button type="submit" class="btn btn-solid">{t(locale, 'contact.submit')}</button></div>
+      </form>
 
-        {/* Title hero (2 cols) */}
-        <div class="md:col-span-2 bg-gradient-to-br from-[#7c3aed] to-[#4c1d95] rounded-3xl p-6 lg:p-8 border border-white/10 flex flex-col justify-end min-h-[180px] relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none" aria-hidden="true"></div>
-          <div class="relative z-10">
-            <h1 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-white mb-2 tracking-tight">{t(locale, 'contact.title')}</h1>
-            <p class="text-[15px] text-purple-100/80 leading-relaxed max-w-lg">
-              {t(locale, 'contact.subtitle')}
-            </p>
-          </div>
-        </div>
-
-        {/* Info card (1 col) */}
-        <div class="bg-[#13131f] rounded-3xl p-5 border border-white/5 flex flex-col justify-center gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-purple-400" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            </div>
-            <div>
-              <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-medium">{t(locale, 'contact.locationLabel')}</span>
-              <span class="text-sm text-gray-200 font-medium">{profile.location}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-purple-400" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <div>
-              <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-medium">{t(locale, 'contact.timezone')}</span>
-              <span class="text-sm text-gray-200 font-medium">{profileBase.contact.timeZone}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            </div>
-            <div>
-              <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-medium">{t(locale, 'contact.availability')}</span>
-              <span class="text-sm text-green-400 font-medium">{t(locale, 'contact.availabilityText')}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Socials card (1 col) - reuses BentoSocials */}
-        <div class="bg-[#13131f] rounded-3xl p-3 flex items-center justify-center border border-white/5">
-          <BentoSocials locale={locale} />
-        </div>
-
-        {/* Contact Form (full width) */}
-        <div class="md:col-span-2 bento-full bg-[#13131f] rounded-3xl border border-white/5 p-5 lg:p-6">
-          <form
-            action={`https://formsubmit.co/${profileBase.contact.formSubmitId}`}
-            method="POST"
-            class="grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            <input type="hidden" name="_subject" value={`Nuevo contacto desde adrianrueda.dev`} />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value={redirectUrl} />
-            <input type="text" name="_honey" style="display:none" />
-
-            <div>
-              <label for="name" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{t(locale, 'contact.name')}</label>
-              <input type="text" name="name" id="name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none transition-all" placeholder={t(locale, 'contact.namePlaceholder')} />
-            </div>
-            <div>
-              <label for="email" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{t(locale, 'contact.email')}</label>
-              <input type="email" name="email" id="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none transition-all" placeholder={t(locale, 'contact.emailPlaceholder')} />
-            </div>
-            <div class="md:col-span-2">
-              <label for="subject" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{t(locale, 'contact.subject')}</label>
-              <input type="text" name="subject" id="subject" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none transition-all" placeholder={t(locale, 'contact.subjectPlaceholder')} />
-            </div>
-            <div class="md:col-span-2">
-              <label for="message" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{t(locale, 'contact.message')}</label>
-              <textarea name="message" id="message" rows="5" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none transition-all resize-none" placeholder={t(locale, 'contact.messagePlaceholder')}></textarea>
-            </div>
-            <div class="md:col-span-2 flex justify-end pt-2 pr-1">
-              <button type="submit" class="px-12 py-3 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl transition-colors text-sm uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#13131f]">
-                {t(locale, 'contact.submit')}
-              </button>
-            </div>
-          </form>
-        </div>
-
-      </div>
+      <aside class="side">
+        <a class="tile direct" href={`mailto:${profileBase.contact.email}`}>
+          <span class="mono">{t(locale, 'contact.direct')}</span>
+          <b>{profileBase.contact.email}</b>
+        </a>
+        {linkedin && (
+          <a class="tile direct" href={linkedin.url} target="_blank" rel="noopener">
+            <span class="mono">LinkedIn</span><b>adrian-rueda ↗</b>
+          </a>
+        )}
+        <dl class="facts">
+          <div><dt class="mono">{t(locale, 'contact.locationLabel')}</dt><dd>{profile.location}</dd></div>
+          <div><dt class="mono">{t(locale, 'contact.timezone')}</dt><dd>{profileBase.contact.timeZone}</dd></div>
+        </dl>
+      </aside>
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .contact { padding-top: 48px; padding-bottom: 32px; }
+  h1 { font-weight: 200; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.025em; margin: 10px 0 12px; }
+  .intro p { color: #c9cad0; font-size: 19px; max-width: 600px; line-height: 1.55; }
+  .layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-top: 40px; align-items: start; }
+  .form { padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .wide { grid-column: 1 / -1; }
+  label { display: flex; flex-direction: column; gap: 8px; }
+  input, textarea { background: rgba(255,255,255,.03); border: 1px solid var(--line2); border-radius: 10px; padding: 12px 14px; color: var(--ink); font: inherit; font-size: 15px; font-weight: 300; resize: vertical; transition: border-color .2s; }
+  input::placeholder, textarea::placeholder { color: var(--faint); }
+  input:focus, textarea:focus { outline: none; border-color: rgba(255,255,255,.5); }
+  .send { display: flex; justify-content: flex-end; }
+  button.btn { cursor: pointer; padding: 12px 24px; }
+  .side { display: flex; flex-direction: column; gap: 16px; }
+  .direct { padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .direct b { font-weight: 400; font-size: 17px; word-break: break-all; }
+  .facts { margin: 8px 0 0; display: grid; gap: 14px; padding: 0 4px; }
+  .facts dd { margin: 4px 0 0; color: #c9cad0; }
+  @media (max-width: 900px) {
+    .contact { padding-top: 28px; }
+    .layout, .form { grid-template-columns: 1fr; }
+  }
+</style>

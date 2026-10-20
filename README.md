@@ -31,18 +31,35 @@ Un push sin `npm run build` previo no cambia la web publicada.
 |---|---|
 | `src/pages/` | routing por ficheros; son envoltorios de 3 líneas |
 | `src/page-views/` | el markup real, compartido entre ES e EN |
-| `src/layouts/BaseLayout.astro` | head, SEO, hreflang, fondo de estrellas y el chatbot Kira |
+| `src/layouts/BaseLayout.astro` | head, SEO, hreflang, intro de marca, cabecera y pie comunes |
+| `src/lib/projects.ts` | lee las fichas por idioma y las separa por tipo |
+| `public/intro/aw-intro.js` | la intro animada AW (una vez por sesión; `?intro=1` la fuerza) |
+| `design/` | especificación, plan y boceto del rediseño de octubre de 2026 |
+| `tools/` | `check-site.mjs` (comprobación de la build) y `to-webp.mjs` (imágenes a WebP) |
 | `src/content/projects/` | una ficha `.md` por proyecto e idioma (`brisca.md`, `brisca-en.md`) |
 | `src/i18n/` | textos y datos; nada de cadenas sueltas en las vistas |
 | `public/` | se copia tal cual a la raíz del sitio |
 | `docs/` | salida del build **y** lo que Pages publica |
 
 Añadir un proyecto es crear su `.md` en `src/content/projects/` siguiendo el
-esquema de `src/content/config.ts`, más su par `-en.md`.
+esquema de `src/content/config.ts`, más su par `-en.md`. El campo `kind` decide
+la plantilla:
 
-## Kira
+- `game`: escaparate. Imagen o vídeo (`loop`), `hook`, `genre`, `platform` y
+  `cta`. **No** se cuenta cómo está hecho el juego. `detail: false` lo deja sin
+  ficha (Arcanist hasta que tenga página de Steam).
+- `client`: caso de cliente con reto, solución y resultados.
+- `own`: proyecto propio con la misma plantilla que un cliente.
 
-El chatbot del portfolio. Usa Groq con streaming y cae a respuestas por
-patrones si no hay clave. La variable es `PUBLIC_GROQ_API_KEY` y, por llevar
-el prefijo `PUBLIC_`, **acaba en el bundle del cliente y es visible**: no
-pongas ahí una clave que te importe.
+Las imágenes van en WebP: suelta los PNG o JPG en `public/` y ejecuta
+`node tools/to-webp.mjs`, que los convierte y reescribe las rutas.
+
+## Comprobar antes de publicar
+
+```bash
+npx astro build --outDir .check-dist
+node tools/check-site.mjs
+```
+
+Comprueba que están todas las páginas, que las imágenes son WebP, que las fichas
+de juego no enseñan cómo están hechos y que la portada tiene sus cuatro cajas.

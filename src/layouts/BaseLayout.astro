@@ -2,8 +2,8 @@
 import { ViewTransitions } from 'astro:transitions'
 import BaseHead from '../components/layout/BaseHead.astro'
 import JsonLd from '../components/seo/JsonLd.astro'
-import KiraChatbot from '../components/kira/KiraChatbot'
-import StarryBackground from '../components/layout/StarryBackground'
+import SiteHeader from '../components/layout/SiteHeader.astro'
+import SiteFooter from '../components/layout/SiteFooter.astro'
 import { getLocaleFromUrl } from '../i18n'
 import '../styles/global.css'
 
@@ -14,11 +14,9 @@ interface Props {
   canonicalURL?: string
   type?: 'website' | 'article'
   schema?: Record<string, unknown>
-  currentPage?: string
-  projectSlug?: string
 }
 
-const { title, description, image, canonicalURL, type, schema, currentPage = 'home', projectSlug } = Astro.props
+const { title, description, image, canonicalURL, type, schema } = Astro.props
 const locale = getLocaleFromUrl(Astro.url)
 ---
 
@@ -31,7 +29,8 @@ const locale = getLocaleFromUrl(Astro.url)
       if(location.pathname.startsWith('/en'))return;
       if((navigator.language||'').startsWith('en')){
         localStorage.setItem('lang-pref','en');
-        location.replace('/en'+location.pathname);
+        var R={'/contacto':'/contact','/sobre-mi':'/about','/juegos':'/games'},p=location.pathname,b=p.replace(/\/$/,''),t=R[b]?R[b]+(p.length>b.length?'/':''):p;
+        location.replace('/en'+t);
       }else{localStorage.setItem('lang-pref','es')}
     })();
     </script>
@@ -45,16 +44,22 @@ const locale = getLocaleFromUrl(Astro.url)
     {schema && <JsonLd schema={schema} />}
     <ViewTransitions />
   </head>
-  <body class="min-h-screen bg-bgStart text-text font-sans antialiased overflow-x-hidden">
-    <!-- Starry background - canvas animated -->
-    <StarryBackground client:idle />
-
-    <main class="relative z-10">
+  <body class="min-h-screen overflow-x-hidden flex flex-col">
+    <!-- Intro de marca: síncrona para tapar la página desde el primer fotograma; una vez por sesión -->
+    <script is:inline src="/intro/aw-intro.js"></script>
+    <SiteHeader />
+    <main class="flex-1 flex flex-col">
       <slot />
     </main>
-
-    <!-- KIRA Chatbot -->
-    <KiraChatbot client:idle currentPage={currentPage} projectSlug={projectSlug} locale={locale} />
+    <SiteFooter />
+    <script>
+      // Vídeos en bucle (juegos): arrancan solo si no se pide reducir movimiento; si no, se queda el póster.
+      const playLoops = () => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach((v) => v.play().catch(() => {}))
+      }
+      document.addEventListener('astro:page-load', playLoops)
+    </script>
 
   </body>
 </html>

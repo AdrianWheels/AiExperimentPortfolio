@@ -14,15 +14,16 @@ export const profileBase = {
   social: [
     { label: "LinkedIn", url: "https://www.linkedin.com/in/adrian-rueda/" },
     { label: "GitHub", url: "https://github.com/AdrianWheels" },
+    { label: "YouTube · Skipping Rules", url: "https://www.youtube.com/@SkippingRules" },
   ],
 } as const
 
 const i18n = {
   es: {
     tagline: "Desarrollador multiplataforma creativo",
-    summary: "Buscando nuevos retos y experimentos locos. Especializado en crear experiencias digitales únicas que rompen la norma.",
+    summary: "Desarrollador independiente en Almería. Hago mis propios juegos y, para negocios y estudios, webs, apps y juegos a medida, del prototipo a producción.",
     location: "Almería, España",
-    availability: "Empleado en GRS — Abierto a proyectos freelance",
+    availability: "Disponible para proyectos freelance",
     highlights: [
       { title: "Game Dev & Realidad Virtual", description: "Desarrollo de videojuegos con Godot 4 y experiencias VR inmersivas con Unity y C# para aplicaciones científicas y artísticas." },
       { title: "Full Stack & SaaS", description: "Aplicaciones web completas con Next.js, React, Supabase y Prisma. Desde gestión de citas hasta plataformas de flotas." },
@@ -31,9 +32,9 @@ const i18n = {
   },
   en: {
     tagline: "Creative multiplatform developer",
-    summary: "Seeking new challenges and wild experiments. Specialized in crafting unique digital experiences that break the mold.",
+    summary: "Independent developer based in Almería. I make my own games and, for businesses and studios, build websites, apps and games, from prototype to production.",
     location: "Almería, Spain",
-    availability: "Employed at GRS — Open to freelance projects",
+    availability: "Available for freelance projects",
     highlights: [
       { title: "Game Dev & Virtual Reality", description: "Video game development with Godot 4 and immersive VR experiences with Unity and C# for scientific and artistic applications." },
       { title: "Full Stack & SaaS", description: "Complete web applications with Next.js, React, Supabase, and Prisma. From appointment management to fleet platforms." },

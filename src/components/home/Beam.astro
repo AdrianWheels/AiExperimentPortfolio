@@ -1,0 +1,78 @@
+---
+// Fondo de la caja protagonista: suelo de líneas en perspectiva y la onda de la W como un haz de luz.
+// Con «reducir movimiento» se pinta una vez y queda quieto.
+---
+<canvas class="beam" data-beam aria-hidden="true"></canvas>
+
+<style>
+  .beam { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+</style>
+
+<script>
+  type Beam = { raf: number; stop: () => void }
+  const w = window as unknown as { __awBeam?: Beam }
+
+  function mount() {
+    w.__awBeam?.stop()
+    const cv = document.querySelector<HTMLCanvasElement>('canvas[data-beam]')
+    if (!cv) return
+    const cx = cv.getContext('2d')
+    if (!cx) return
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+    let mx = 0.5, my = 0.5, alive = true
+
+    const size = () => {
+      const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2)
+      cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d)
+      cx.setTransform(d, 0, 0, d, 0, 0)
+    }
+    const onMove = (e: PointerEvent) => { mx = e.clientX / innerWidth; my = e.clientY / innerHeight }
+
+    const draw = (t: number) => {
+      const W = cv.clientWidth, H = cv.clientHeight
+      cx.clearRect(0, 0, W, H)
+      const hz = H * 0.5, vx = W * (0.78 + (mx - 0.5) * 0.04)
+      cx.lineWidth = 1
+      for (let i = -18; i <= 18; i++) {
+        cx.strokeStyle = `rgba(255,255,255,${0.025 + 0.025 * (1 - Math.abs(i) / 18)})`
+        cx.beginPath(); cx.moveTo(vx + i * 5, hz); cx.lineTo(vx + i * 100, H + 30); cx.stroke()
+      }
+      for (let j = 0; j < 12; j++) {
+        const z = (j + ((t * 0.25) % 1)) / 12, y = hz + Math.pow(z, 2.2) * (H - hz + 30)
+        cx.strokeStyle = `rgba(255,255,255,${0.015 + z * 0.045})`
+        cx.beginPath(); cx.moveTo(W * 0.35, y); cx.lineTo(W, y); cx.stroke()
+      }
+      const ox = W * 0.42, oy = H * 0.28, A = H * 0.09, L = W * 0.6
+      for (let k = 0; k < 3; k++) {
+        cx.beginPath()
+        for (let x = 0; x <= L; x += 4) {
+          const u = x / L
+          const y = oy - Math.sin(u * Math.PI * 2.5 + t * 0.5 + k * 0.15) * A * (0.55 + 0.45 * Math.sin(u * Math.PI)) + (my - 0.5) * 20 * u
+          x ? cx.lineTo(ox + x, y) : cx.moveTo(ox + x, y)
+        }
+        const g = cx.createLinearGradient(ox, 0, ox + L, 0)
+        g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.45, 'rgba(255,255,255,.9)'); g.addColorStop(1, 'rgba(255,255,255,0)')
+        cx.strokeStyle = g; cx.lineWidth = [20, 7, 1.8][k]; cx.globalAlpha = [0.05, 0.14, 0.85][k]
+        cx.shadowColor = 'rgba(200,210,255,.9)'; cx.shadowBlur = [32, 16, 9][k]
+        cx.stroke()
+      }
+      cx.globalAlpha = 1; cx.shadowBlur = 0
+    }
+
+    const beam: Beam = {
+      raf: 0,
+      stop() { alive = false; cancelAnimationFrame(beam.raf); removeEventListener('resize', onResize); removeEventListener('pointermove', onMove) },
+    }
+    const onResize = () => { size(); if (still) draw(0) }
+    const loop = (ts: number) => { if (!alive) return; draw(ts / 1000); beam.raf = requestAnimationFrame(loop) }
+
+    size()
+    addEventListener('resize', onResize)
+    if (still) draw(0)
+    else { addEventListener('pointermove', onMove, { passive: true }); beam.raf = requestAnimationFrame(loop) }
+    w.__awBeam = beam
+  }
+
+  document.addEventListener('astro:page-load', mount)
+  document.addEventListener('astro:before-swap', () => { w.__awBeam?.stop(); w.__awBeam = undefined })
+</script>

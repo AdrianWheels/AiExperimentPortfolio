@@ -7,10 +7,21 @@ const projects = defineCollection({
     year: z.string(),
     role: z.string(),
     description: z.string(),
-    problem: z.string(),
-    solution: z.string(),
-    results: z.array(z.string()),
-    tags: z.array(z.string()),
+    problem: z.string().optional(),
+    solution: z.string().optional(),
+    results: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    // game = escaparate (sin contar cómo está hecho); client = caso de cliente; own = proyecto propio.
+    kind: z.enum(['game', 'client', 'own']).default('client'),
+    hook: z.string().optional(),
+    genre: z.string().optional(),
+    platform: z.string().optional(),
+    cta: z.object({ label: z.string(), url: z.string().optional() }).optional(),
+    credit: z.string().optional(),
+    // Vídeo corto en bucle, sin audio (WebM), para la tarjeta del juego.
+    loop: z.string().optional(),
+    // false = sin página de detalle (p. ej. Arcanist hasta que tenga arte y Steam).
+    detail: z.boolean().default(true),
     heroImage: z.string(),
     gallery: z.array(z.string()).optional(),
     links: z.object({

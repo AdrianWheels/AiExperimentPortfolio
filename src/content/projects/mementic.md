@@ -2,7 +2,7 @@
 title: "Mementic"
 locale: es
 year: "2026"
-role: "Backend Developer"
+role: "Desarrollo backend"
 description: "Indexador y buscador de frases en vídeos de YouTube. Ingesta playlists o keywords, transcribe con Whisper cuando no hay subtítulos, y devuelve el clip exacto (start/end) que contiene la frase buscada con búsqueda fuzzy por trigramas."
 problem: "Recordar exactamente en qué vídeo y minuto se dijo una frase es prácticamente imposible. Las búsquedas de YouTube son por título y descripción, no por contenido hablado, y los memes/citas se pierden entre miles de horas de vídeo."
 solution: "Construí un servicio FastAPI que ingiere playlists o keywords de YouTube, descarga subtítulos cuando existen y, si no, los genera con Whisper. Cada segmento se indexa en PostgreSQL con timestamps. Una búsqueda combinada exacta + fuzzy (trigramas) devuelve el vídeo, el clip y los segundos exactos donde alguien lo dijo."
@@ -16,7 +16,7 @@ challenges: "La ingesta idempotente fue el reto principal: una playlist puede te
 learnings: "Aprendí a diseñar un pipeline de ingestión que se puede ejecutar mil veces sin duplicar nada, y a usar PostgreSQL más allá del CRUD básico (extensiones como pg_trgm cambian completamente lo que se puede hacer)."
 context: "MVP funcional con frontend embed de YouTube y endpoint de descarga de clips. Pendiente acceso LAN, ingesta de la primera playlist real y dashboard de duplicados."
 tags: ["Python", "FastAPI", "Whisper", "PostgreSQL"]
-heroImage: "/projects/mementic/desktop.png"
+heroImage: "/projects/mementic/desktop.webp"
 order: 7
 tier: more
 ---

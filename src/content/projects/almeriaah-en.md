@@ -17,7 +17,7 @@ challenges: "The trickiest part was avoiding leakage in walk-forward: each windo
 learnings: "I learned that a well-measured naive baseline is the best intellectual-honesty tool for an ML project: if you can't beat it consistently in walk-forward, you don't have a product. And that writing a binary PASS/FAIL criterion before the experiment saves months of self-deception."
 context: "Research in its final phase. Go/no-go verdict pending before 2026-09-30. Not a product in 2026; the output is a public verdict document."
 tags: ["Python", "LightGBM", "Darts", "ML"]
-heroImage: "/projects/almeriaah/desktop.png"
+heroImage: "/projects/almeriaah/desktop.webp"
 order: 8
 tier: more
 ---

@@ -1,0 +1,33 @@
+---
+import { getLocaleFromUrl, getTimeline, profileBase } from '../../i18n'
+
+const locale = getLocaleFromUrl(Astro.url)
+// Trayectoria resumida: los cuatro tramos más recientes, en una línea.
+const short = (s: string) => s.replace(/ — /g, '–').replace(/(\d{2})(\d{2})–(\d{2})(\d{2})/, '$1$2–$4')
+const company = (c: string) => c.replace(/ - .*$/, '').replace(/^StartUP /, '').replace('Universidad de Almería', 'Univ. Almería').replace('University of Almería', 'Univ. Almería')
+const timeline = getTimeline(locale).slice(0, 4)
+---
+<footer class="page site-footer">
+  <ol class="tl mono" aria-label="Trayectoria">
+    {timeline.map((e) => (
+      <li><b>{short(e.period)}</b> {e.id === 'exp-new' ? e.role : company(e.company)}</li>
+    ))}
+  </ol>
+  <ul class="social mono">
+    {profileBase.social.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+    <li><a href={`mailto:${profileBase.contact.email}`}>Email</a></li>
+  </ul>
+</footer>
+
+<style>
+  .site-footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 28px; padding-bottom: 40px; color: var(--faint); }
+  .tl, .social { display: flex; flex-wrap: wrap; gap: 8px 26px; list-style: none; margin: 0; padding: 0; }
+  .tl b { color: var(--dim); font-weight: 400; margin-right: 4px; }
+  .tl { color: var(--faint); }
+  .social a { color: var(--dim); transition: color 0.2s; }
+  .social a:hover { color: var(--ink); }
+  @media (max-width: 900px) {
+    .site-footer { flex-direction: column; align-items: flex-start; }
+    .tl, .social { gap: 10px 20px; }
+  }
+</style>

@@ -21,22 +21,25 @@ const locale = getLocaleFromUrl(Astro.url)
 const basePath = stripLocalePrefix(Astro.url.pathname)
 const esUrl = new URL(getLocalizedUrl('es', basePath), Astro.site).href
 const enUrl = new URL(getLocalizedUrl('en', basePath), Astro.site).href
-const siteName = 'Adrián Rueda — Creative Developer'
+const siteName = 'Adrián Rueda · Adrián Wheels'
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#050506" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
   rel="stylesheet"
 />
 

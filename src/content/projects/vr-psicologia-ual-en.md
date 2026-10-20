@@ -17,9 +17,9 @@ challenges: "Adapting psychological tests to VR required validating that results
 learnings: "I learned that timelines in academic research are very different from software development, and that working with humans — scheduling them, testing and verifying — involves much more work than it seems."
 context: "Together with a colleague, we won an award from the Social Council of the University of Almeria. I collaborated for 1 year with the department (with Atlas it was 2 more years)."
 tags: ["Unity", "VR", "Research", "Psychology"]
-heroImage: "/projects/vrhat/vrhatintro.png"
+heroImage: "/projects/vrhat/vrhatintro.webp"
 gallery:
-  - "/projects/vrhat/vrhatpiso.png"
+  - "/projects/vrhat/vrhatpiso.webp"
 order: 9
 tier: more
 ---

@@ -2,7 +2,7 @@
 title: "Picturam"
 locale: es
 year: "2026"
-role: "Full Stack & AI Engineer"
+role: "Full stack e IA"
 description: "PWA que traduce voz en imágenes semánticas al instante para asistir la comunicación con personas mayores con sordera, analfabetismo o dificultades verbales. Pipeline dual-mode (GPU local o cloud) con caché de dos capas."
 problem: "Las personas mayores con sordera, analfabetismo o problemas de comprensión verbal pierden gran parte de lo que les dicen cuidadores, terapeutas o familiares. El lenguaje hablado es un canal frágil que no siempre llega."
 solution: "Construí una PWA que captura la voz, la transcribe con Whisper, extrae el concepto clave con un LLM y genera una imagen semántica que acompaña a la frase. El servidor orquesta dos modos intercambiables — GPU local (faster-whisper + Ollama + ComfyUI) o cloud (Deepgram + Gemini + fal.ai) — y un caché de dos capas elimina trabajo redundante."
@@ -16,9 +16,9 @@ challenges: "Lo más difícil fue mantener latencias usables en un pipeline con 
 learnings: "Aprendí a diseñar abstracciones de proveedor (STT/LLM/image) intercambiables sin acoplarse al SDK concreto, y que en escenarios reales (residencia con wifi inestable) el offline-first deja de ser opcional."
 context: "Proyecto más activo del portfolio en 2026 (44 commits en 60 días). MVP técnico sólido pendiente de elegir hito comercial: demo abierta, piloto en residencia, o API para terceros."
 tags: ["React", "Node.js", "Whisper", "ComfyUI", "AI"]
-heroImage: "/projects/picturam/desktop.png"
+heroImage: "/projects/picturam/desktop.webp"
 gallery:
-  - "/projects/picturam/mobile.png"
+  - "/projects/picturam/mobile.webp"
 order: 2
 tier: featured
 ---
