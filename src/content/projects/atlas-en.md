@@ -17,12 +17,12 @@ challenges: "The hardest part was my limited experience in game programming and 
 learnings: "I learned a great deal about motion sickness, VR immersion issues, and how users with no gaming experience significantly constrain design decisions. I also discovered the key differences between VR for research vs entertainment: precise time measurement and correct test data capture."
 context: "The project is operational at the University of Almeria, where it's still being used. Includes gameplay video on YouTube."
 tags: ["Unity", "Hurricane VR", "C#", "VR"]
-heroImage: "/projects/atlas/atlascentromando.png"
+heroImage: "/projects/atlas/atlascentromando.webp"
 gallery:
-  - "/projects/atlas/atlasfuego.png"
-  - "/projects/atlas/atlasinvernadero.png"
-  - "/projects/atlas/atlasmanos.png"
-  - "/projects/atlas/Atlasnotas.png"
+  - "/projects/atlas/atlasfuego.webp"
+  - "/projects/atlas/atlasinvernadero.webp"
+  - "/projects/atlas/atlasmanos.webp"
+  - "/projects/atlas/Atlasnotas.webp"
 links:
   video: "https://youtu.be/-gQbGl9LBCc"
 order: 5

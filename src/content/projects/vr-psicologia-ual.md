@@ -16,9 +16,9 @@ challenges: "Adaptar los tests psicológicos a VR requería validar que los resu
 learnings: "Aprendí que los tiempos en investigación académica son muy diferentes al desarrollo de software, y que trabajar con humanos — citarlos, probar y verificar — tiene mucho más trabajo del que parece."
 context: "Junto a un compañero ganamos un premio del Consejo Social de la Universidad de Almería. Colaboré 1 año con el departamento (con Atlas fueron 2 años más)."
 tags: ["Unity", "VR", "Investigación", "Psicología"]
-heroImage: "/projects/vrhat/vrhatintro.png"
+heroImage: "/projects/vrhat/vrhatintro.webp"
 gallery:
-  - "/projects/vrhat/vrhatpiso.png"
+  - "/projects/vrhat/vrhatpiso.webp"
 order: 9
 tier: more
 ---

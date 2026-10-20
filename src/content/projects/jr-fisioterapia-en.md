@@ -17,9 +17,9 @@ challenges: "The most complex part was Google Calendar integration: permissions,
 learnings: "I learned that software for a real business needs far more testing than I can do alone. Also that platforms like Twilio and Supabase massively simplify the work."
 context: "In production with a small number of patients (testing phase). The client uses it daily."
 tags: ["Next.js", "Prisma", "Supabase", "Twilio", "PWA"]
-heroImage: "/projects/jr-fisioterapia/desktop.png"
+heroImage: "/projects/jr-fisioterapia/desktop.webp"
 gallery:
-  - "/projects/jr-fisioterapia/mobile.png"
+  - "/projects/jr-fisioterapia/mobile.webp"
 links:
   live: "https://jorgeruedafisio.com"
 order: 1

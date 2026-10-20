@@ -72,9 +72,6 @@ export const ui = {
     'contact.connectLabel': 'Conecta',
     'contact.viewProjects': 'Echa un vistazo a mis proyectos',
 
-    // KIRA
-    'kira.subtitle': 'Asistente de portfolio',
-    'kira.close': 'Cerrar chat',
 
     // SEO
     'seo.home.title': 'Adrián Rueda | Desarrollador Creativo — Web, VR, IA',
@@ -156,8 +153,6 @@ export const ui = {
     'contact.connectLabel': 'Connect',
     'contact.viewProjects': 'Check out my projects',
 
-    'kira.subtitle': 'Portfolio assistant',
-    'kira.close': 'Close chat',
 
     'seo.home.title': 'Adrián Rueda | Creative Developer — Web, VR, AI',
     'seo.home.description': 'Portfolio of Adrián Rueda Fernández. Creative multiplatform developer specializing in React, Next.js, Unity VR, and innovative digital experiences. Almería, Spain.',

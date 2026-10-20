@@ -16,7 +16,7 @@ challenges: "Medir tiempos de reacción con precisión fue un reto enorme. Usé 
 learnings: "Aprendí la rigidez y lo lento que va todo en un entorno académico, pero me dejaron desarrollarme y aprender a mi ritmo. Fui muy exigente conmigo mismo en ese aprendizaje, y eso influyó positivamente en mi carrera."
 context: "El sistema se sigue usando según tengo entendido. Participo en las publicaciones que se hagan al respecto."
 tags: ["Software", "Neurociencia", "Investigación", "UX"]
-heroImage: "/projects/vrhat/vrhatintro.png"
+heroImage: "/projects/vrhat/vrhatintro.webp"
 order: 10
 tier: more
 ---

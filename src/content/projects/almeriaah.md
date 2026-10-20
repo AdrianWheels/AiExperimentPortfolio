@@ -16,7 +16,7 @@ challenges: "La parte más delicada fue evitar leakage en el walk-forward: cada 
 learnings: "Aprendí que un baseline naive bien medido es la mejor herramienta de honestidad intelectual de un proyecto ML: si no lo bates de forma consistente en walk-forward, no tienes producto. Y que tener un criterio binario PASS/FAIL escrito antes del experimento te ahorra meses de auto-engaño."
 context: "Investigación en fase final. Veredicto go/no-go pendiente antes del 2026-09-30. No es producto en 2026; el output es un documento de veredicto público."
 tags: ["Python", "LightGBM", "Darts", "ML"]
-heroImage: "/projects/almeriaah/desktop.png"
+heroImage: "/projects/almeriaah/desktop.webp"
 order: 8
 tier: more
 ---

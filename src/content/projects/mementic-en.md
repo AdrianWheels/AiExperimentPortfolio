@@ -17,7 +17,7 @@ challenges: "Idempotent ingestion was the main challenge: a playlist may contain
 learnings: "I learned to design ingestion pipelines that can run a thousand times without duplicating anything, and to use PostgreSQL beyond basic CRUD (extensions like pg_trgm completely change what's possible)."
 context: "Functional MVP with a YouTube-embed frontend and a clip download endpoint. Pending: LAN access, ingestion of the first real playlist, and a duplicates dashboard."
 tags: ["Python", "FastAPI", "Whisper", "PostgreSQL"]
-heroImage: "/projects/mementic/desktop.png"
+heroImage: "/projects/mementic/desktop.webp"
 order: 7
 tier: more
 ---

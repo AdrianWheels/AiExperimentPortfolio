@@ -2,7 +2,6 @@
 import { ViewTransitions } from 'astro:transitions'
 import BaseHead from '../components/layout/BaseHead.astro'
 import JsonLd from '../components/seo/JsonLd.astro'
-import KiraChatbot from '../components/kira/KiraChatbot'
 import StarryBackground from '../components/layout/StarryBackground'
 import { getLocaleFromUrl } from '../i18n'
 import '../styles/global.css'
@@ -54,9 +53,6 @@ const locale = getLocaleFromUrl(Astro.url)
     <main class="relative z-10">
       <slot />
     </main>
-
-    <!-- KIRA Chatbot -->
-    <KiraChatbot client:idle currentPage={currentPage} projectSlug={projectSlug} locale={locale} />
 
   </body>
 </html>

@@ -16,9 +16,9 @@ challenges: "El mayor reto fue el diseño visual, resuelto colaborando con una a
 learnings: "Aprendí que llegar a los clientes con producto físico es complicado. La clienta está contenta con la web, pero la gestión de stock e imágenes sigue siendo un reto logístico."
 context: "Online y operativa. Los pedidos llegan por otros canales de momento. Pendiente SEO y marketing."
 tags: ["Astro", "Tailwind", "TypeScript"]
-heroImage: "/projects/pepa-print3d/desktop.png"
+heroImage: "/projects/pepa-print3d/desktop.webp"
 gallery:
-  - "/projects/pepa-print3d/mobile.png"
+  - "/projects/pepa-print3d/mobile.webp"
 links:
   live: "https://pepaprint3d.com"
 order: 4

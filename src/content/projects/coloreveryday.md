@@ -16,9 +16,9 @@ challenges: "El mayor reto fue construir todo el sistema sin base de datos, aunq
 learnings: "Aprendí mucho sobre generación de imágenes con IA y alternativas a bases de datos convencionales. Hoy lo diseñaría pensando en la base de datos y el premium desde el principio."
 context: "Proyecto en solitario, en desarrollo activo con 2-3 meses de trabajo a tiempo parcial. 9 usuarios registrados; los que entran se quedan bastante tiempo."
 tags: ["React", "Tailwind", "Gemini 2.5 Flash", "AI"]
-heroImage: "/projects/coloreverday/coloreveryday.png"
+heroImage: "/projects/coloreverday/coloreveryday.webp"
 gallery:
-  - "/projects/coloreverday/coloreveryday-calendar.png"
+  - "/projects/coloreverday/coloreveryday-calendar.webp"
 order: 6
 tier: featured
 ---

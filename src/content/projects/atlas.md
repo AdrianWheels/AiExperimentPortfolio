@@ -16,12 +16,12 @@ challenges: "Lo más difícil fue mi poca experiencia en programación de videoj
 learnings: "Aprendí muchísimo sobre motion sickness, los problemas de inmersión en VR y cómo los usuarios sin experiencia en videojuegos limitan bastante el diseño. También descubrí las diferencias entre VR para investigación y entretenimiento: la medición precisa de tiempos y la captura correcta de las pruebas."
 context: "El proyecto está funcionando en la Universidad de Almería, donde lo siguen utilizando. Incluye vídeo de gameplay en YouTube."
 tags: ["Unity", "Hurricane VR", "C#", "VR"]
-heroImage: "/projects/atlas/atlascentromando.png"
+heroImage: "/projects/atlas/atlascentromando.webp"
 gallery:
-  - "/projects/atlas/atlasfuego.png"
-  - "/projects/atlas/atlasinvernadero.png"
-  - "/projects/atlas/atlasmanos.png"
-  - "/projects/atlas/Atlasnotas.png"
+  - "/projects/atlas/atlasfuego.webp"
+  - "/projects/atlas/atlasinvernadero.webp"
+  - "/projects/atlas/atlasmanos.webp"
+  - "/projects/atlas/Atlasnotas.webp"
 links:
   video: "https://youtu.be/-gQbGl9LBCc"
 order: 5

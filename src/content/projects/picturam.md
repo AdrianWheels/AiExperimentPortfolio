@@ -16,9 +16,9 @@ challenges: "Lo más difícil fue mantener latencias usables en un pipeline con 
 learnings: "Aprendí a diseñar abstracciones de proveedor (STT/LLM/image) intercambiables sin acoplarse al SDK concreto, y que en escenarios reales (residencia con wifi inestable) el offline-first deja de ser opcional."
 context: "Proyecto más activo del portfolio en 2026 (44 commits en 60 días). MVP técnico sólido pendiente de elegir hito comercial: demo abierta, piloto en residencia, o API para terceros."
 tags: ["React", "Node.js", "Whisper", "ComfyUI", "AI"]
-heroImage: "/projects/picturam/desktop.png"
+heroImage: "/projects/picturam/desktop.webp"
 gallery:
-  - "/projects/picturam/mobile.png"
+  - "/projects/picturam/mobile.webp"
 order: 2
 tier: featured
 ---

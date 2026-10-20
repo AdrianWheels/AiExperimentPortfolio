@@ -17,9 +17,9 @@ challenges: "The hardest part was separating the pure engine from the render lay
 learnings: "I learned that a sim harness is the best game design tool you can have: it turns debatable intuitions ('this talisman is OP') into quantitative facts ('synergy 452 vs baseline 310'). And that the cost of keeping the reducer pure pays itself off the moment you need to test it at scale."
 context: "Playable end-to-end: 12 matches, rewards, shop, 3 bosses with traps, 30 talismans with curated traditional art. Meta-progression and final balance pass pending after sim reports."
 tags: ["Astro", "React Three Fiber", "TypeScript", "Zustand"]
-heroImage: "/projects/brisca/desktop.png"
+heroImage: "/projects/brisca/desktop.webp"
 gallery:
-  - "/projects/brisca/mobile.png"
+  - "/projects/brisca/mobile.webp"
 order: 3
 tier: featured
 ---

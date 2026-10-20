@@ -16,9 +16,9 @@ challenges: "Lo más complejo fue separar el motor puro de la capa de render par
 learnings: "Aprendí que un sim harness es la mejor herramienta de game design que puedes tener: convierte intuiciones discutibles ('este talismán es OP') en hechos cuantitativos ('synergy 452 vs baseline 310'). Y que el coste de mantener pureza en el reducer se paga en cuanto necesitas testarlo a escala."
 context: "Jugable de extremo a extremo: 12 matches, recompensas, tienda, 3 jefes con trampas, 30 talismanes con arte castizo curado. Pendiente meta-progresión y rebalance final tras los reportes del sim."
 tags: ["Astro", "React Three Fiber", "TypeScript", "Zustand"]
-heroImage: "/projects/brisca/desktop.png"
+heroImage: "/projects/brisca/desktop.webp"
 gallery:
-  - "/projects/brisca/mobile.png"
+  - "/projects/brisca/mobile.webp"
 order: 3
 tier: featured
 ---

@@ -17,9 +17,9 @@ challenges: "The biggest challenge was building the entire system without a data
 learnings: "I learned a lot about AI image generation and alternatives to conventional databases. Today I'd design it with the database and premium model in mind from day one."
 context: "Solo project, actively in development with 2-3 months of part-time work. 9 registered users; those who visit tend to stay for a long time."
 tags: ["React", "Tailwind", "Gemini 2.5 Flash", "AI"]
-heroImage: "/projects/coloreverday/coloreveryday.png"
+heroImage: "/projects/coloreverday/coloreveryday.webp"
 gallery:
-  - "/projects/coloreverday/coloreveryday-calendar.png"
+  - "/projects/coloreverday/coloreveryday-calendar.webp"
 order: 6
 tier: featured
 ---

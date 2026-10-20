@@ -16,7 +16,7 @@ challenges: "La ingesta idempotente fue el reto principal: una playlist puede te
 learnings: "Aprendí a diseñar un pipeline de ingestión que se puede ejecutar mil veces sin duplicar nada, y a usar PostgreSQL más allá del CRUD básico (extensiones como pg_trgm cambian completamente lo que se puede hacer)."
 context: "MVP funcional con frontend embed de YouTube y endpoint de descarga de clips. Pendiente acceso LAN, ingesta de la primera playlist real y dashboard de duplicados."
 tags: ["Python", "FastAPI", "Whisper", "PostgreSQL"]
-heroImage: "/projects/mementic/desktop.png"
+heroImage: "/projects/mementic/desktop.webp"
 order: 7
 tier: more
 ---
