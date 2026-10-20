@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getLocaleFromUrl, getContactUrl, getProfile, getTimeline, getEducation, getSkillGroups, t } from '../i18n'
+
+const locale = getLocaleFromUrl(Astro.url)
+const profile = getProfile(locale)
+const timeline = getTimeline(locale)
+const education = getEducation(locale)
+const skills = getSkillGroups(locale)
+---
+
+<BaseLayout title={t(locale, 'seo.about.title')} description={t(locale, 'seo.about.description')}>
+  <div class="page about">
+    <header class="intro">
+      <img src="/me.webp" alt="Adrián Rueda" width="88" height="88" />
+      <div>
+        <span class="mono"><span class="dot-live"></span>{profile.availability}</span>
+        <h1>{t(locale, 'about.title')}</h1>
+        <p>{profile.summary}</p>
+        <div class="actions"><a class="btn btn-solid" href={getContactUrl(locale)}>{t(locale, 'nav.cta')}</a></div>
+      </div>
+    </header>
+
+    <section aria-labelledby="h-tl">
+      <div class="head"><h2 id="h-tl">{t(locale, 'about.timeline')}</h2></div>
+      <ol class="tl">
+        {timeline.map((e) => (
+          <li>
+            <span class="mono when">{e.period}</span>
+            <div><b>{e.role}</b><span class="where">{e.company}</span><p>{e.summary}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="h-skills">
+      <div class="head"><h2 id="h-skills">{t(locale, 'about.skills')}</h2></div>
+      <div class="skills">
+        {skills.map((g) => (
+          <div class="tile group">
+            <span class="mono">{g.title}</span>
+            <ul>{g.items.map((i) => <li>{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="h-edu">
+      <div class="head"><h2 id="h-edu">{t(locale, 'about.education')}</h2></div>
+      <ol class="tl">
+        {education.map((e) => (
+          <li><span class="mono when">{e.period}</span><div><b>{e.title}</b><span class="where">{e.institution}</span></div></li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about { padding-top: 48px; padding-bottom: 32px; }
+  .intro { display: flex; gap: 28px; align-items: flex-start; max-width: 760px; }
+  .intro img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; filter: grayscale(1); border: 1px solid var(--line2); flex: none; }
+  h1 { font-weight: 200; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.025em; margin: 10px 0 14px; line-height: 1.04; }
+  .intro p { font-size: 19px; line-height: 1.55; color: #c9cad0; }
+  .actions { margin-top: 24px; }
+  section { margin-top: 72px; }
+  .head { margin-bottom: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .head h2 { font-weight: 300; font-size: 26px; letter-spacing: -0.01em; }
+  .tl { list-style: none; padding: 0; margin: 0; }
+  .tl li { display: grid; grid-template-columns: 140px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .when { padding-top: 4px; }
+  .tl b { font-weight: 400; font-size: 18px; }
+  .where { display: block; color: var(--dim); font-size: 14.5px; margin-top: 2px; }
+  .tl p { color: #b9bac1; font-size: 15.5px; line-height: 1.6; margin-top: 10px; max-width: 640px; }
+  .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .group { padding: 22px; }
+  .group ul { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .group li { font-size: 13.5px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; color: #c9cad0; }
+  @media (max-width: 900px) {
+    .about { padding-top: 28px; }
+    .intro { flex-direction: column; gap: 18px; }
+    .tl li { grid-template-columns: 1fr; gap: 6px; }
+    .skills { grid-template-columns: 1fr; }
+  }
+</style>

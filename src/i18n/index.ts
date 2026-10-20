@@ -2,4 +2,4 @@ export { type Locale, defaultLocale, locales, getLocaleFromUrl, t, getLocalizedU
 export { type UIKey } from './ui'
 export { profileBase, getProfile } from './profile'
 export { getTimeline, getEducation } from './experience'
-export { coreSkills, getSoftSkills, getCategoryName } from './skills'
+export { getSkillGroups } from './skills'
