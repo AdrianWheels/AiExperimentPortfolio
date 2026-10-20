@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio · una pantalla v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#050506; --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.14); --txt:#f2f2f3; --dim:#85868e; --dim2:#55565e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:var(--bg); color:var(--txt); font-family:Outfit, system-ui, sans-serif; font-weight:300; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  .mono { font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+
+  .page { min-height:100vh; display:flex; flex-direction:column; max-width:1180px; margin:0 auto; padding:28px 48px 40px; }
+  nav { display:flex; align-items:center; gap:28px; height:44px; }
+  nav .brand { display:flex; align-items:center; gap:10px; font-weight:400; font-size:15px; }
+  nav .links { margin-left:auto; display:flex; gap:26px; font-size:14px; color:var(--dim); }
+  nav .cta { font-size:13px; font-weight:500; border:1px solid var(--line2); border-radius:999px; padding:7px 15px; }
+
+  .grid { flex:1; display:grid; gap:16px; margin:auto 0; padding:40px 0 0;
+    grid-template-columns: 1.15fr 1fr .9fr; grid-template-rows: 430px 210px; }
+  .tile { position:relative; border-radius:18px; border:1px solid var(--line); overflow:hidden; isolation:isolate; background:rgba(255,255,255,.018); padding:26px; display:flex; flex-direction:column; transition:border-color .3s, background .3s; }
+  a.tile:hover, .tile.link:hover { border-color:var(--line2); background:rgba(255,255,255,.03); }
+  .more { font-size:13px; color:var(--dim); transition:color .2s; }
+  .tile:hover .more { color:var(--txt); }
+
+  /* el protagonista */
+  .hero { grid-column:1 / 3; grid-row:1; padding:40px; justify-content:flex-end; border-color:var(--line2);
+    background:radial-gradient(90% 80% at 75% 10%, rgba(255,255,255,.05), transparent 60%), rgba(255,255,255,.02); }
+  .hero canvas { position:absolute; inset:0; width:100%; height:100%; z-index:-1; }
+  .hero .me { display:flex; align-items:center; gap:14px; }
+  .hero .me img { width:52px; height:52px; border-radius:50%; object-fit:cover; filter:grayscale(1); border:1px solid var(--line2); }
+  .hero .me .n { font-size:17px; font-weight:400; }
+  .hero h1 { font-weight:200; font-size:46px; line-height:1.06; letter-spacing:-.025em; margin:26px 0 30px; max-width:620px; }
+  .hero h1 b { font-weight:400; }
+  .actions { display:flex; gap:10px; align-items:center; }
+  .btn { display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:11px 20px; font-size:14px; border:1px solid var(--line2); }
+  .btn.solid { background:#fff; color:#000; border-color:#fff; font-weight:500; }
+  .avail { margin-left:14px; }
+  .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:#3ddc84; box-shadow:0 0 8px #3ddc84; margin-right:7px; vertical-align:1px; }
+
+  /* juegos: alto, una sola imagen */
+  .games { grid-column:3; grid-row:1 / 3; padding:0; }
+  .games .art { position:absolute; inset:0; z-index:-1;
+    background: radial-gradient(70% 45% at 60% 30%, rgba(190,200,255,.18), transparent 70%), radial-gradient(50% 30% at 30% 75%, rgba(255,255,255,.05), transparent 70%), linear-gradient(180deg, #121318, #060608); }
+  .games::after { content:''; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, transparent 50%, rgba(0,0,0,.75)); }
+  .games .in { padding:26px; display:flex; flex-direction:column; height:100%; }
+  .games h3 { font-weight:300; font-size:30px; letter-spacing:-.01em; margin:8px 0 6px; }
+  .games p { color:#b9bac1; font-size:14.5px; line-height:1.45; }
+  .games .bottom { margin-top:auto; }
+  .games .others { display:flex; gap:18px; margin-top:22px; padding-top:16px; border-top:1px solid var(--line); font-size:14px; color:var(--dim); }
+  .games .others a:hover { color:var(--txt); }
+
+  /* qué hago: dos ofertas, cada una con su prueba */
+  .offer { grid-row:2; }
+  .offer h3 { font-weight:400; font-size:17px; margin:10px 0 6px; }
+  .offer p { color:var(--dim); font-size:14px; line-height:1.45; }
+  .offer .proof { margin-top:auto; display:flex; align-items:center; gap:10px; font-size:13px; color:var(--dim); }
+  .offer .proof img { width:54px; height:34px; object-fit:cover; object-position:top; border-radius:4px; border:1px solid var(--line2); }
+  .offer .proof b { color:var(--txt); font-weight:400; }
+
+  .foot { display:flex; justify-content:space-between; align-items:center; margin-top:28px; color:var(--dim2); font-size:13px; }
+  .foot .tl { display:flex; gap:26px; }
+  .foot .tl span b { color:var(--dim); font-weight:400; }
+
+  .note { position:fixed; left:50%; transform:translateX(-50%); bottom:8px; z-index:20; background:#111; border:1px solid var(--line2); border-radius:8px; padding:7px 12px; font-size:12px; color:var(--dim); }
+  .note b { color:var(--txt); font-weight:500; }
+
+  @media (max-width:900px) {
+    .page { padding:20px; } nav .links { display:none; }
+    .grid { display:flex; flex-direction:column; padding-top:20px; }
+    .hero { min-height:72vh; padding:28px; } .hero h1 { font-size:36px; }
+    .actions { flex-wrap:wrap; } .avail { margin:10px 0 0; width:100%; }
+    .games { min-height:440px; }
+    .foot { flex-direction:column; align-items:flex-start; gap:14px; } .foot .tl { flex-wrap:wrap; gap:10px 20px; }
+    .note { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <nav>
+    <a class="brand"><svg width="28" height="15" viewBox="83 150 296 146"><g fill="none" stroke="#fff" clip-path="url(#nc)"><path d="M 91.6 310 L 130.5 192 Q 147.4 140.9 164.3 192 L 203.2 310" stroke-width="29"/><path d="M 100 254 L 190 254" stroke-width="24"/><path d="M 199.7 310 L 218 234.6 C 223.2 213.3, 227.9 203.2, 242 203.2 C 279.3 203.2, 254.3 283.7, 312 283.7 C 335.5 283.7, 344.9 264.7, 354 232.2 L 372.8 165" stroke-width="24"/></g><defs><clipPath id="nc"><path d="M0 0 H340 V189.5 H460 V293.5 H0 Z"/></clipPath></defs></svg>Adrián Wheels</a>
+    <div class="links"><a>Juegos</a><a>Proyectos</a><a>Sobre mí</a></div>
+    <a class="cta">Hablemos</a>
+  </nav>
+
+  <main class="grid">
+    <section class="tile hero">
+      <canvas id="beam"></canvas>
+      <div class="me"><img src="../../public/me.jpg" alt=""><div><div class="n">Adrián Rueda</div><div class="mono">Desarrollador independiente · Almería</div></div></div>
+      <h1>Hago <b>juegos</b>. Y webs y apps que tu negocio usa cada día.</h1>
+      <div class="actions"><a class="btn solid">Contratar</a><a class="btn">Ver proyectos</a><span class="mono avail"><span class="dot"></span>Disponible</span></div>
+    </section>
+
+    <section class="tile games link">
+      <div class="art"></div>
+      <div class="in">
+        <span class="mono">Mis juegos</span>
+        <div class="bottom">
+          <span class="mono">Próximamente en Steam</span>
+          <h3>Arcanist Bastion</h3>
+          <p>Una frase de gancho y nada más.</p>
+          <div class="actions" style="margin-top:18px"><a class="btn">Añadir a deseados ↗</a></div>
+          <div class="others"><a>Brisca ↗</a><a>Atlas VR</a><span style="margin-left:auto">Todos →</span></div>
+        </div>
+      </div>
+    </section>
+
+    <a class="tile offer">
+      <span class="mono">01</span>
+      <h3>Webs y apps para negocios</h3>
+      <p>Reservas, pedidos y avisos que se usan cada día.</p>
+      <div class="proof"><img src="../../public/projects/jr-fisioterapia/desktop.png" alt=""><span>En uso: <b>JR Fisioterapia</b>, <b>Pepa Print3D</b></span></div>
+    </a>
+    <a class="tile offer">
+      <span class="mono">02</span>
+      <h3>Juegos a medida</h3>
+      <p>Prototipos, juegos completos o refuerzo para tu estudio.</p>
+      <div class="proof"><img src="../../public/projects/atlas/atlascentromando.png" alt=""><span>Godot, Unity, web y <b>realidad virtual</b></span></div>
+    </a>
+  </main>
+
+  <footer class="foot">
+    <div class="tl mono"><span><b>2026 →</b> Independiente</span><span><b>2023–26</b> GRS</span><span><b>2021–23</b> Univ. Almería</span><span><b>2020–21</b> CognitivART VR</span></div>
+    <div class="mono">in · gh · @ · EN</div>
+  </footer>
+</div>
+<div class="note"><b>v3 · más aire.</b> 4 cajas en vez de 7. Manda la tuya; los juegos, segundo. Trayectoria al pie, tecnologías a «Sobre mí».</div>
+
+<script>
+const cv = document.getElementById('beam'), cx = cv.getContext('2d');
+function size() { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; cx.setTransform(d, 0, 0, d, 0, 0); }
+addEventListener('resize', size); size();
+let mx = .5, my = .5;
+addEventListener('pointermove', e => { mx = e.clientX / innerWidth; my = e.clientY / innerHeight; });
+function frame(ts) {
+  const t = ts / 1000, w = cv.clientWidth, h = cv.clientHeight;
+  cx.clearRect(0, 0, w, h);
+  const hz = h * 0.5, vx = w * (0.78 + (mx - .5) * .04);
+  cx.lineWidth = 1;
+  for (let i = -18; i <= 18; i++) { cx.strokeStyle = `rgba(255,255,255,${.025 + .025 * (1 - Math.abs(i) / 18)})`; cx.beginPath(); cx.moveTo(vx + i * 5, hz); cx.lineTo(vx + i * 100, h + 30); cx.stroke(); }
+  for (let j = 0; j < 12; j++) { const z = (j + (t * .25) % 1) / 12, y = hz + Math.pow(z, 2.2) * (h - hz + 30); cx.strokeStyle = `rgba(255,255,255,${.015 + z * .045})`; cx.beginPath(); cx.moveTo(w * .35, y); cx.lineTo(w, y); cx.stroke(); }
+  const ox = w * .42, oy = h * .28, A = h * .09, L = w * .6;
+  for (let k = 0; k < 3; k++) {
+    cx.beginPath();
+    for (let x = 0; x <= L; x += 4) { const u = x / L, y = oy - Math.sin(u * Math.PI * 2.5 + t * .5 + k * .15) * A * (.55 + .45 * Math.sin(u * Math.PI)) + (my - .5) * 20 * u; x ? cx.lineTo(ox + x, y) : cx.moveTo(ox + x, y); }
+    const g = cx.createLinearGradient(ox, 0, ox + L, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.45, 'rgba(255,255,255,.9)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    cx.strokeStyle = g; cx.lineWidth = [20, 7, 1.8][k]; cx.globalAlpha = [.05, .14, .85][k]; cx.shadowColor = 'rgba(200,210,255,.9)'; cx.shadowBlur = [32, 16, 9][k]; cx.stroke();
+  }
+  cx.globalAlpha = 1; cx.shadowBlur = 0;
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
