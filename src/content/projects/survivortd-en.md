@@ -11,6 +11,9 @@ genre: "Tower defense · survival"
 platform: "Web"
 credit: "A tribute to Tower Survivors, by Nethalythic"
 heroImage: "/projects/survivortd/hero.webp"
+gallery:
+  - "/projects/survivortd/partida.webp"
+  - "/projects/survivortd/oleada.webp"
 order: 2
 tier: featured
 ---

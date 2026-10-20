@@ -12,6 +12,10 @@ genre: "Tower defense"
 platform: "PC"
 cta: { label: "Coming soon to Steam" }
 heroImage: "/projects/arcanist-bastion/hero.webp"
+loop: "/projects/arcanist-bastion/loop.webm"
+gallery:
+  - "/projects/arcanist-bastion/torre.webp"
+  - "/projects/arcanist-bastion/bosque.webp"
 order: 0
 tier: featured
 ---

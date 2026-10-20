@@ -18,6 +18,8 @@ const projects = defineCollection({
     platform: z.string().optional(),
     cta: z.object({ label: z.string(), url: z.string().optional() }).optional(),
     credit: z.string().optional(),
+    // Vídeo corto en bucle, sin audio (WebM), para la tarjeta del juego.
+    loop: z.string().optional(),
     // false = sin página de detalle (p. ej. Arcanist hasta que tenga arte y Steam).
     detail: z.boolean().default(true),
     heroImage: z.string(),
