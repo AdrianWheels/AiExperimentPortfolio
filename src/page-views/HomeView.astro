@@ -58,7 +58,7 @@ const schema = {
             <div class="cta"><GameCta cta={mainGame.data.cta} /></div>
             <nav class="others">
               {otherGames.filter((g) => g.data.tier === 'featured').slice(0, 2).map((g) => g.url && <a href={g.url}>{g.data.title}</a>)}
-              <a class="all" href={`${L('/projects')}#juegos`}>{t(locale, 'home.gamesAll')} →</a>
+              <a class="all" href={L('/juegos')}>{t(locale, 'home.gamesAll')} →</a>
             </nav>
           </div>
         </div>
@@ -74,7 +74,7 @@ const schema = {
         <span>{t(locale, 'home.offer1Proof')} {proofClients.map((p, i) => <>{i > 0 && ', '}<b>{p.data.title}</b></>)}</span>
       </div>
     </a>
-    <a class="tile offer" data-tile href={`${L('/projects')}#juegos`}>
+    <a class="tile offer" data-tile href={L('/juegos')}>
       <span class="mono">02</span>
       <h3>{t(locale, 'home.offer2Title')}</h3>
       <p>{t(locale, 'home.offer2Text')}</p>

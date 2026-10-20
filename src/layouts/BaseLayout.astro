@@ -29,7 +29,7 @@ const locale = getLocaleFromUrl(Astro.url)
       if(location.pathname.startsWith('/en'))return;
       if((navigator.language||'').startsWith('en')){
         localStorage.setItem('lang-pref','en');
-        var R={'/contacto':'/contact','/sobre-mi':'/about'},p=location.pathname,b=p.replace(/\/$/,''),t=R[b]?R[b]+(p.length>b.length?'/':''):p;
+        var R={'/contacto':'/contact','/sobre-mi':'/about','/juegos':'/games'},p=location.pathname,b=p.replace(/\/$/,''),t=R[b]?R[b]+(p.length>b.length?'/':''):p;
         location.replace('/en'+t);
       }else{localStorage.setItem('lang-pref','es')}
     })();

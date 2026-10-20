@@ -15,7 +15,7 @@ export function t(locale: Locale, key: UIKey): string {
 }
 
 // Rutas que cambian de nombre según el idioma (la clave es la ruta española).
-const ROUTES_EN: Record<string, string> = { '/contacto': '/contact', '/sobre-mi': '/about' }
+const ROUTES_EN: Record<string, string> = { '/contacto': '/contact', '/sobre-mi': '/about', '/juegos': '/games' }
 const ROUTES_ES: Record<string, string> = Object.fromEntries(Object.entries(ROUTES_EN).map(([es, en]) => [en, es]))
 
 function translatePath(path: string, table: Record<string, string>): string {

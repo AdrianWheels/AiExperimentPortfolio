@@ -6,7 +6,7 @@ const locale = getLocaleFromUrl(Astro.url)
 const path = Astro.url.pathname
 const L = (p: string) => getLocalizedUrl(locale, p)
 const links = [
-  { href: `${L('/projects')}#juegos`, label: t(locale, 'nav.games') },
+  { href: L('/juegos'), label: t(locale, 'nav.games'), match: locale === 'es' ? '/juegos' : '/games' },
   { href: L('/projects'), label: t(locale, 'nav.projects'), match: '/projects' },
   { href: L('/sobre-mi'), label: t(locale, 'nav.about'), match: locale === 'es' ? '/sobre-mi' : '/about' },
 ]
@@ -40,7 +40,7 @@ const links = [
   @media (max-width: 720px) {
     .bar { gap: 14px; height: 60px; }
     nav { gap: 14px; font-size: 13px; }
-    nav a:first-child { display: none; }
+    nav a:last-child { display: none; }
     .brand span { display: none; }
     .cta { display: none; }
   }

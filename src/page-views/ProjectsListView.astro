@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import GameCard from '../components/projects/GameCard.astro'
 import WorkCard from '../components/projects/WorkCard.astro'
 import { getLocaleFromUrl, t } from '../i18n'
 import { getProjects, byKind } from '../lib/projects'
@@ -8,10 +7,9 @@ import { getProjects, byKind } from '../lib/projects'
 const locale = getLocaleFromUrl(Astro.url)
 const projects = await getProjects(locale)
 const featured = projects.filter((p) => p.data.tier === 'featured')
-const [mainGame, ...games] = byKind(featured, 'game')
 const clients = byKind(featured, 'client')
 const own = byKind(featured, 'own')
-const more = projects.filter((p) => p.data.tier === 'more' && p.url)
+const more = projects.filter((p) => p.data.tier === 'more' && p.url && p.data.kind !== 'game')
 ---
 
 <BaseLayout title={t(locale, 'seo.projects.title')} description={t(locale, 'seo.projects.description')}>
@@ -21,13 +19,6 @@ const more = projects.filter((p) => p.data.tier === 'more' && p.url)
       <p>{t(locale, 'projects.intro')}</p>
     </header>
 
-    <section id="juegos" aria-labelledby="h-juegos">
-      <div class="head"><h2 id="h-juegos">{t(locale, 'projects.games')}</h2><span class="mono">{t(locale, 'projects.gamesNote')}</span></div>
-      <div class="games">
-        {mainGame && <div class="main"><GameCard game={mainGame} big /></div>}
-        {games.map((g) => <GameCard game={g} />)}
-      </div>
-    </section>
 
     <section id="trabajos" aria-labelledby="h-trabajos">
       <div class="head"><h2 id="h-trabajos">{t(locale, 'projects.clients')}</h2><span class="mono">{t(locale, 'projects.clientsNote')}</span></div>
@@ -46,7 +37,7 @@ const more = projects.filter((p) => p.data.tier === 'more' && p.url)
         <div class="head"><h2 id="h-more">{t(locale, 'projects.more')}</h2></div>
         <ul class="more">
           {more.map((p) => (
-            <li><a href={p.url!}><span class="mono">{p.data.year}</span><b>{p.data.title}</b><span class="d">{p.data.kind === 'game' ? p.data.hook : p.data.role}</span><span class="arr" aria-hidden="true">→</span></a></li>
+            <li><a href={p.url!}><span class="mono">{p.data.year}</span><b>{p.data.title}</b><span class="d">{p.data.role}</span><span class="arr" aria-hidden="true">→</span></a></li>
           ))}
         </ul>
       </section>
@@ -61,8 +52,6 @@ const more = projects.filter((p) => p.data.tier === 'more' && p.url)
   section { margin-top: 72px; scroll-margin-top: 90px; }
   .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
   .head h2 { font-weight: 300; font-size: 26px; letter-spacing: -0.01em; }
-  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .games .main { grid-column: 1 / -1; }
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .more { list-style: none; padding: 0; margin: 0; }
   .more a { display: grid; grid-template-columns: 70px 220px 1fr 20px; gap: 16px; align-items: baseline; padding: 16px 4px; border-bottom: 1px solid var(--line); transition: background-color .2s; }
@@ -72,7 +61,7 @@ const more = projects.filter((p) => p.data.tier === 'more' && p.url)
   .more .arr { color: var(--faint); }
   @media (max-width: 900px) {
     .list { padding-top: 28px; }
-    .games, .grid { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr; }
     .more a { grid-template-columns: 1fr 20px; gap: 4px 12px; }
     .more .mono { grid-column: 1 / -1; }
     .more .d { grid-column: 1; }

@@ -27,7 +27,7 @@ const files = walk(dir)
 const htmls = files.filter((f) => f.endsWith('.html'))
 
 const PAGES = ['index.html', 'en/index.html', 'projects/index.html', 'en/projects/index.html',
-  'sobre-mi/index.html', 'en/about/index.html', 'contacto/index.html', 'en/contact/index.html']
+  'sobre-mi/index.html', 'en/about/index.html', 'juegos/index.html', 'en/games/index.html', 'contacto/index.html', 'en/contact/index.html']
 const missing = PAGES.filter((p) => !existsSync(join(dir, p)))
 check('existen todas las páginas', missing.length === 0, missing.join(', '))
 
@@ -87,6 +87,10 @@ check('los vídeos respetan «reducir movimiento»', autoplay.length === 0, [...
 
 const kiraFiles = files.filter((f) => /kira/i.test(relative(dir, f)) || (/\.(json|js|css|txt)$/.test(f) && /K\.?I\.?R\.?A/.test(readFileSync(f, 'utf8'))))
 check('ningún fichero de Kira en la build', kiraFiles.length === 0, kiraFiles.slice(0, 3).map((f) => relative(dir, f)).join(', '))
+
+// «Juegos» y «Proyectos» del menú no pueden llevar al mismo sitio.
+const navHrefs = [...home.matchAll(/<nav aria-label="Principal"[^>]*>([\s\S]*?)<\/nav>/g)].flatMap((m) => [...m[1].matchAll(/href="([^"]+)"/g)].map((h) => h[1].split('#')[0]))
+check('cada enlace del menú lleva a una página distinta', navHrefs.length >= 3 && new Set(navHrefs).size === navHrefs.length, navHrefs.join(' '))
 
 const undef = htmls.filter((f) => /href=["']undefined["']/.test(readFileSync(f, 'utf8'))).map((f) => relative(dir, f))
 check('ningún enlace a «undefined»', undef.length === 0, undef.join(', '))

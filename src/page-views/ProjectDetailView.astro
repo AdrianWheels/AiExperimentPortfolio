@@ -34,7 +34,7 @@ const extras = [
 
 <BaseLayout title={`${d.title} · Adrián Rueda`} description={d.description} image={d.heroImage.endsWith('.webp') ? undefined : d.heroImage} schema={schema} type="article">
   <article class="page detail">
-    <a class="back mono" href={getLocalizedUrl(locale, '/projects')}>← {t(locale, 'project.back')}</a>
+    <a class="back mono" href={getLocalizedUrl(locale, isGame ? '/juegos' : '/projects')}>← {t(locale, isGame ? 'games.title' : 'project.back')}</a>
 
     {isGame ? (
       <>

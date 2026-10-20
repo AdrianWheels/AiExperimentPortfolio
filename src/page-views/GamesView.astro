@@ -1,0 +1,36 @@
+---
+// Página de juegos: escaparate cinematográfico. El de menor `order` va en grande.
+import BaseLayout from '../layouts/BaseLayout.astro'
+import GameCard from '../components/projects/GameCard.astro'
+import { getLocaleFromUrl, t } from '../i18n'
+import { getProjects, byKind } from '../lib/projects'
+
+const locale = getLocaleFromUrl(Astro.url)
+const [mainGame, ...games] = byKind(await getProjects(locale), 'game')
+---
+
+<BaseLayout title={t(locale, 'seo.games.title')} description={t(locale, 'seo.games.description')}>
+  <div class="page games-page">
+    <header class="intro">
+      <span class="mono">{t(locale, 'projects.gamesNote')}</span>
+      <h1>{t(locale, 'games.title')}</h1>
+      <p>{t(locale, 'games.intro')}</p>
+    </header>
+    <div class="games">
+      {mainGame && <div class="main"><GameCard game={mainGame} big /></div>}
+      {games.map((g) => <GameCard game={g} />)}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .games-page { padding-top: 48px; padding-bottom: 40px; }
+  h1 { font-weight: 200; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.025em; margin: 10px 0 0; }
+  .intro p { color: var(--dim); font-size: 17px; margin-top: 10px; max-width: 560px; }
+  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .main { grid-column: 1 / -1; }
+  @media (max-width: 900px) {
+    .games-page { padding-top: 28px; }
+    .games { grid-template-columns: 1fr; }
+  }
+</style>
