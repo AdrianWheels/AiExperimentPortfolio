@@ -1,0 +1,9 @@
+---
+// Botón de un juego: enlace si tiene URL; si no (p. ej. «Próximamente en Steam»), una etiqueta sin enlace.
+interface Props { cta?: { label: string; url?: string } }
+const { cta } = Astro.props
+const external = cta?.url && /^https?:/.test(cta.url)
+---
+{cta && (cta.url
+  ? <a class="btn" href={cta.url} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>{cta.label} <span aria-hidden="true">↗</span></a>
+  : <span class="btn btn-static">{cta.label}</span>)}

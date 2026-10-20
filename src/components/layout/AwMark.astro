@@ -1,0 +1,14 @@
+---
+// Monograma AW: la misma geometría que la intro (public/intro/aw-intro.js) y el favicon.
+interface Props { width?: number; class?: string }
+const { width = 28, class: className } = Astro.props
+const id = `awc-${Math.random().toString(36).slice(2, 8)}`
+---
+<svg width={width} height={Math.round(width * 146 / 296)} viewBox="83 150 296 146" class={className} aria-hidden="true">
+  <defs><clipPath id={id}><path d="M0 0 H340 V189.5 H460 V293.5 H0 Z" /></clipPath></defs>
+  <g fill="none" stroke="currentColor" clip-path={`url(#${id})`}>
+    <path d="M 91.6 310 L 130.5 192 Q 147.4 140.9 164.3 192 L 203.2 310" stroke-width="29" />
+    <path d="M 100 254 L 190 254" stroke-width="24" />
+    <path d="M 199.7 310 L 218 234.6 C 223.2 213.3, 227.9 203.2, 242 203.2 C 279.3 203.2, 254.3 283.7, 312 283.7 C 335.5 283.7, 344.9 264.7, 354 232.2 L 372.8 165" stroke-width="24" />
+  </g>
+</svg>
