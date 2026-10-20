@@ -13,8 +13,6 @@ export const ui = {
     // BentoAbout
     'about.title': 'About',
     'about.location': 'Location',
-    'about.status': 'Status',
-    'about.employed': 'Employed',
 
     // BentoTimeline
     'timeline.title': 'Timeline',
@@ -99,8 +97,6 @@ export const ui = {
 
     'about.title': 'About',
     'about.location': 'Location',
-    'about.status': 'Status',
-    'about.employed': 'Employed',
 
     'timeline.title': 'Timeline',
 

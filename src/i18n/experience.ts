@@ -3,7 +3,8 @@ import type { Locale } from './utils'
 const i18n = {
   es: {
     timeline: [
-      { id: "exp-00", role: "Desarrollador Full Stack & SCADA", company: "GRS", period: "2023 — Presente", summary: "Desarrollo integral de soluciones industriales y web, especializándome en sistemas SCADA con Ignition, automatización con Python e interfaces modernas con React, Tailwind y TypeScript." },
+      { id: "exp-new", role: "Independiente", company: "Estudio propio y freelance", period: "2026 →", summary: "Desarrollo mis propios juegos y hago webs, apps y juegos a medida para negocios y estudios." },
+      { id: "exp-00", role: "Desarrollador Full Stack & SCADA", company: "GRS", period: "2023 — 2026", summary: "Desarrollo integral de soluciones industriales y web, especializándome en sistemas SCADA con Ignition, automatización con Python e interfaces modernas con React, Tailwind y TypeScript." },
       { id: "exp-01", role: "Técnico Informático", company: "Universidad de Almería - Dpto. Psicología", period: "2021 — 2023", summary: "Encargado de la parte tecnológica del departamento de Psicología en menores en infractores, con total independencia de trabajo." },
       { id: "exp-02", role: "Jefe de Tecnología", company: "StartUP CognitivART VR", period: "2020 — 2021", summary: "Encargado de la tecnología de la startup, administración de sistemas en la nube de Amazon (AWS) y desarrollo de software para clientes." },
       { id: "exp-03", role: "Técnico Informático", company: "Universidad de Almería - Dpto. Neurociencia", period: "2017 — 2018", summary: "Encargado de la parte tecnológica del departamento de Neurociencia, con total independencia de trabajo." },
@@ -17,7 +18,8 @@ const i18n = {
   },
   en: {
     timeline: [
-      { id: "exp-00", role: "Full Stack Developer & SCADA", company: "GRS", period: "2023 — Present", summary: "End-to-end development of industrial and web solutions, specializing in SCADA systems with Ignition, Python automation, and modern interfaces with React, Tailwind, and TypeScript." },
+      { id: "exp-new", role: "Independent", company: "Own studio & freelance", period: "2026 →", summary: "I make my own games and build websites, apps and games for businesses and studios." },
+      { id: "exp-00", role: "Full Stack Developer & SCADA", company: "GRS", period: "2023 — 2026", summary: "End-to-end development of industrial and web solutions, specializing in SCADA systems with Ignition, Python automation, and modern interfaces with React, Tailwind, and TypeScript." },
       { id: "exp-01", role: "IT Specialist", company: "University of Almería - Psychology Dept.", period: "2021 — 2023", summary: "In charge of the technology side for the Psychology department's research on juvenile offenders, with full autonomy." },
       { id: "exp-02", role: "Chief Technology Officer", company: "StartUP CognitivART VR", period: "2020 — 2021", summary: "Led the startup's technology, managed AWS cloud infrastructure, and developed VR software for clients." },
       { id: "exp-03", role: "IT Specialist", company: "University of Almería - Neuroscience Dept.", period: "2017 — 2018", summary: "In charge of the technology side for the Neuroscience department, with full autonomy." },
