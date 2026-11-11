@@ -23,17 +23,9 @@ const locale = getLocaleFromUrl(Astro.url)
 <!doctype html>
 <html lang={locale} class="scroll-smooth">
   <head>
-    <script is:inline>
-    (function(){
-      if(localStorage.getItem('lang-pref'))return;
-      if(location.pathname.startsWith('/en'))return;
-      if((navigator.language||'').startsWith('en')){
-        localStorage.setItem('lang-pref','en');
-        var R={'/contacto':'/contact','/sobre-mi':'/about','/juegos':'/games'},p=location.pathname,b=p.replace(/\/$/,''),t=R[b]?R[b]+(p.length>b.length?'/':''):p;
-        location.replace('/en'+t);
-      }else{localStorage.setItem('lang-pref','es')}
-    })();
-    </script>
+    <!-- Sin redirección automática por idioma del navegador: Googlebot navega en inglés y acababa
+         indexando las URL españolas con el contenido inglés. El idioma lo resuelven los hreflang
+         y el enlace EN/ES de la cabecera. -->
     <BaseHead
       title={title}
       description={description}
