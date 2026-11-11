@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions'
+import Analytics from '@vercel/analytics/astro'
 import BaseHead from '../components/layout/BaseHead.astro'
 import JsonLd from '../components/seo/JsonLd.astro'
 import SiteHeader from '../components/layout/SiteHeader.astro'
@@ -35,6 +36,8 @@ const locale = getLocaleFromUrl(Astro.url)
     />
     {schema && <JsonLd schema={schema} />}
     <ViewTransitions />
+    <!-- Vercel Web Analytics: sin cookies, por eso la web no lleva banner. Solo cuenta en el despliegue de Vercel. -->
+    <Analytics />
   </head>
   <body class="min-h-screen overflow-x-hidden flex flex-col">
     <!-- Intro de marca: síncrona para tapar la página desde el primer fotograma; una vez por sesión -->
